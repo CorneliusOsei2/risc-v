@@ -1,3 +1,5 @@
+open Utilities
+
 let register_num r = List.nth (String.split_on_char 'x' r) 1 |> int_of_string
 
 module RegisterKey = struct
