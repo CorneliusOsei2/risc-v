@@ -1,3 +1,5 @@
+open Utilities
+
 module MemoryKey = struct
   type t = int
 
@@ -26,9 +28,11 @@ let pp_memory memory =
     | [] -> ()
     | (r, v) :: t ->
         let dec = fst v in
-        let bin = dec in
-        let hex = dec in
-        print_endline (string_of_int r ^ "\t | " ^ string_of_int dec);
+        let bin = dec_to_bin dec in
+        let hex = dec_to_hex dec in
+        print_endline
+          (string_of_int r ^ "\t | " ^ string_of_int dec ^ "\t | " ^ bin
+         ^ "\t | " ^ hex);
         print t
   in
   print memory

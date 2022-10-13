@@ -13,3 +13,12 @@ val prep_registers :
 integers and returns a new register file with those integers.contents
   The registers are chosen in a consecutive order.
 *)
+
+val gen_register : int -> string
+val gen_imm : int -> int -> int
+val get_register : string -> 'a RegisterFile.t -> 'a
+val update_register : string -> 'a -> 'a RegisterFile.t -> 'a RegisterFile.t
+val reset_register : string -> int RegisterFile.t -> int RegisterFile.t
+
+val create_tests :
+  int -> (int * bool) RegisterFile.t -> (int * bool) RegisterFile.t
