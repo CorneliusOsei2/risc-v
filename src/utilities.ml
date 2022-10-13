@@ -12,8 +12,7 @@ let rec dec_to_bin_helper num acc =
   | 0 -> acc
   | _ ->
       dec_to_bin_helper (num / 2)
-        (if num mod 2 == 0 then string_of_int 0 ^ acc
-        else string_of_int 1 ^ acc)
+        (if num mod 2 = 0 then string_of_int 0 ^ acc else string_of_int 1 ^ acc)
 
 let dec_to_bin num =
   let is_neg = num < 0 in
