@@ -1,0 +1,4 @@
+(library
+ (name processor)
+ (public_name Processor)
+ (libraries yojson ANSITerminal))
