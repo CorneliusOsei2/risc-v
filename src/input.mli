@@ -1,5 +1,3 @@
-(* Functions to do:
-   write to a txt file: take in a list of elements (as the input) and need to
-   put each input on a separate line
-   read from txt file
-*)
+val file_to_list : string -> string list
+(*[file_to_list] takes a txt file with individual instructions and returns
+   a string list with each element being one instruction.contents *)
