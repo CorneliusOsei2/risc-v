@@ -17,7 +17,7 @@ let rec print_lst oc = function
       Printf.fprintf oc "%s\n" h;
       print_lst oc t
 
-let list_to_txt lst =
+let list_to_file lst =
   let oc = open_out "instructions.txt" in
   print_lst oc lst;
   close_out oc
