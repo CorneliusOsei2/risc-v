@@ -9,3 +9,7 @@ val pp_memory : (int * bool) Memory.t -> unit
 val get_memory : int -> ('a * bool) Memory.t -> 'a
 (** [get_memory addr mem] returns the first of the value stored at [addr] in memory 
     [mem] *)
+
+val update_memory : int -> 'a -> ('a * bool) Memory.t -> ('a * bool) Memory.t
+(** [update_memory addr mem] returns the first of the value stored at [addr] in memory 
+    [mem] *)

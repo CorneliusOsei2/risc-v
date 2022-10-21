@@ -37,3 +37,7 @@ let pp_memory memory =
         print t
   in
   print memory
+
+let update_memory addr v memory =
+  let open Memory in
+  add addr (v, true) memory
