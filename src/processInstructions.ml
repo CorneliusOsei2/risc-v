@@ -53,7 +53,11 @@ let rec evaluate_input_insns insns rfile =
   | [] -> pp_registers rfile
   | h :: t ->
       let op, rgs = split_instruction h in
-      if List.exists (fun x -> x = op) itype then
+      if List.exists (fun x -> x = op) rtype then
+        let rd, rs1, rs2 = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
+        let new_register_state = process_rtype op rd rs1 rs2 rfile in
+        evaluate_input_insns t new_register_state
+      else if List.exists (fun x -> x = op) itype then
         let rd, rs1, imm = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
         let new_register_state =
           process_itype op rd rs1 (int_of_string imm) rfile

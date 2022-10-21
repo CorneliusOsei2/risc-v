@@ -1,3 +1,6 @@
+val pp_string : int -> char -> string -> string
+(** [pp_string n] prints n padded with enough spaces for good output formatting *)
+
 val pow : int -> int -> int
 (** [pow] takes in an integer base and an integer exponent and calculates the 
     mathematical value of the base to the exponent. *)
@@ -16,3 +19,4 @@ val split_instruction : string -> string * string list
     op code and the registers to return a tuple of the (op code, registers) *)
 
 val pp_list : string list -> string
+(** [pp_list l] prints the string representation of list [l]*)
