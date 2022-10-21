@@ -24,12 +24,17 @@ let visited_registers rfile =
 
 let pp_registers registerfile =
   let registers = registerfile |> visited_registers in
-  print_endline "Register | Decimal | Binary | Hexadecimal";
+  print_endline "Register | Decimal \t | Binary \t\t\t\t\t | Hexadecimal";
   let rec print rs =
     match rs with
     | [] -> ()
     | (r, v) :: t ->
-        print_endline (r ^ "\t | " ^ string_of_int (fst v));
+        let bin = dec_to_bin (fst v) in
+        let hex = dec_to_hex (fst v) in
+        print_endline
+          (r ^ "\t | "
+          ^ string_of_int (fst v)
+          ^ "\t\t | " ^ bin ^ "\t\t | " ^ hex);
         print t
   in
   print registers

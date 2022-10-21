@@ -50,3 +50,9 @@ let split_instruction instruct =
     |> String.trim |> String.split_on_char ',' |> List.map String.trim
   in
   (op, args)
+
+let pp_list lst =
+  let start = "[" in
+  let e = "]" in
+  let rec print lst = match lst with [] -> "" | h :: t -> h ^ ";" ^ print t in
+  start ^ print lst ^ e

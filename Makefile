@@ -12,7 +12,7 @@ utop:
 	OCAMLRUNPARAM=b dune utop src
 
 processor:
-	OCAMLRUNPARAM=b dune exec bin/processor.exe
+	OCAMLRUNPARAM=b dune exec bin/system.exe
 
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
