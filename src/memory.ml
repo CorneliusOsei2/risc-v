@@ -1,3 +1,5 @@
+open Utilities
+
 module MemoryKey = struct
   type t = int
 
@@ -6,7 +8,7 @@ end
 
 module Memory = Map.Make (MemoryKey)
 
-let init =
+let memory_init =
   let open Memory in
   let empty_rom = empty in
   let rec helper rom n =
@@ -14,23 +16,28 @@ let init =
   in
   helper empty_rom 0
 
-let get_mem addr ram =
+let get_memory addr ram =
   let open Memory in
-  try find addr ram with Not_found -> failwith "Invalid memory address"
+  try fst (find addr ram) with Not_found -> failwith "Invalid memory address"
 
 let pp_memory memory =
   print_endline "Address |  Decimal |  Binary |  Hexadecimal ";
   print_endline "--------------------------------------------";
+  let memory = Memory.bindings memory in
   let rec print mem =
     match mem with
     | [] -> ()
     | (r, v) :: t ->
         let dec = fst v in
-        let bin = dec in
-        let hex = dec in
-        print_endline (string_of_int r ^ "\t | " ^ string_of_int dec);
+        let bin = dec_to_bin dec in
+        let hex = dec_to_hex dec in
+        print_endline
+          (string_of_int r ^ "\t | " ^ string_of_int dec ^ "\t | " ^ bin
+         ^ "\t | " ^ hex);
         print t
   in
   print memory
 
-let _ = init |> Memory.bindings |> pp_memory
+let update_memory addr v memory =
+  let open Memory in
+  add addr (v, true) memory

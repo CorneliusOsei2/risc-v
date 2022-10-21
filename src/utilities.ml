@@ -40,3 +40,19 @@ let dec_to_hex num =
   let n = if is_neg then pow 2 31 + num else num in
   let hex = dec_to_hex_helper n "" in
   "0x" ^ String.make (8 - String.length hex) (if is_neg then 'f' else '0') ^ hex
+
+let split_instruction instruct =
+  let s = String.trim instruct in
+  let op_idx = String.index_from s 0 ' ' in
+  let op = String.sub s 0 op_idx in
+  let args =
+    String.sub s (op_idx + 1) (String.length s - (op_idx + 1))
+    |> String.trim |> String.split_on_char ',' |> List.map String.trim
+  in
+  (op, args)
+
+let pp_instruction (op, args) =
+  let rec pp_rs rs acc =
+    match rs with [] -> acc | h :: t -> pp_rs t (acc ^ " " ^ h)
+  in
+  op ^ pp_rs args ""
