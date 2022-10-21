@@ -1,0 +1,3 @@
+(executable
+ (name system)
+ (libraries Processor ANSITerminal))
