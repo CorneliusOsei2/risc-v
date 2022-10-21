@@ -39,8 +39,10 @@ let test_split_instruction (name : string) (n : string)
 
 let split_instruction_tests =
   [
-    test_split_instruction "" "add x1, x2," ("add", [ "x1"; "x2" ]);
-    test_split_instruction "" "     sub x1, x2," ("sub", [ "x1"; "x2" ]);
+    test_split_instruction "no extra whitespaces" "add x1, x2, x3"
+      ("add", [ "x1"; "x2" ]);
+    test_split_instruction "extra whitespaces" "     sub x1, x2, x3"
+      ("sub", [ "x1"; "x2" ]);
   ]
 
 (************************************ IO Tests *********************************** *)
@@ -56,7 +58,7 @@ let data_dir_prefix = "data" ^ Filename.dir_sep
 let e1 = [ "addi x1, x1, 6"; "addi x1, x1, 6"; "addi x1, x1, 6" ]
 
 let file_to_list_tests =
-  [ test_file_to_list "" (data_dir_prefix ^ "test" ^ ".txt") e1 ]
+  [ test_file_to_list "file to list" (data_dir_prefix ^ "test" ^ ".txt") e1 ]
 
 (************************************ Registers Tests *********************************** *)
 
@@ -95,6 +97,13 @@ let memory_tests =
 
 let suite =
   "test suite for A2"
-  >::: List.flatten [ dec_conversions_tests; split_instruction_tests; file_to_list_tests; register_tests; memory_tests ]
+  >::: List.flatten
+         [
+           dec_conversions_tests;
+           split_instruction_tests;
+           file_to_list_tests;
+           register_tests;
+           memory_tests;
+         ]
 
 let _ = run_test_tt_main suite
