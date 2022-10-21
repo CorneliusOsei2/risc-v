@@ -44,6 +44,31 @@ let pp_registers registerfile =
   in
   print registers
 
+let visited_registers rfile =
+  List.filter (fun el -> snd (snd el) = true) (RegisterFile.bindings rfile)
+
+let pp_registers registerfile =
+  let registers = registerfile |> visited_registers in
+  print_endline
+    ("Register |"
+    ^ pp_string 10 ' ' " Decimal"
+    ^ " | " ^ pp_string 40 ' ' "Binary" ^ "|"
+    ^ pp_string 15 ' ' " Hexadecimal");
+  let rec print rs =
+    match rs with
+    | [] -> ()
+    | (r, v) :: t ->
+        let v = fst v in
+        let bin = dec_to_bin v in
+        let hex = dec_to_hex v in
+        print_endline
+          (r ^ "\t | "
+          ^ (v |> string_of_int |> pp_string 10 ' ')
+          ^ "| " ^ pp_string 40 ' ' bin ^ "| " ^ pp_string 15 ' ' hex);
+        print t
+  in
+  print registers
+
 let gen_register n = "x" ^ string_of_int (n + 1)
 
 let rec gen_imm lower_bound upper_bound =
