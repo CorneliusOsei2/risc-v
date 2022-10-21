@@ -5,36 +5,33 @@ let itype = [ "addi"; "andi"; "ori"; "xori" ]
 let utype = [ "lui" ]
 let stype = [ "sw"; "sb"; "lw"; "lb" ]
 
+let eval_ins rd rs1 rs2 rfile op =
+  update_register rd
+    (op (get_register rs1 rfile) (get_register rs2 rfile))
+    rfile
+
 let process_rtype op rd rs1 rs2 rfile =
   match String.lowercase_ascii op with
-  | "add" ->
-      update_register rd (get_register rs1 rfile + get_register rs2 rfile) rfile
-  | "sub" ->
-      update_register rd (get_register rs1 rfile - get_register rs2 rfile) rfile
-  | "and" ->
-      update_register rd
-        (get_register rs1 rfile land get_register rs2 rfile)
-        rfile
-  | "or" ->
-      update_register rd
-        (get_register rs1 rfile lor get_register rs2 rfile)
-        rfile
-  | "xor" ->
-      update_register rd
-        (get_register rs1 rfile lxor get_register rs2 rfile)
-        rfile
-  | "nor" ->
-      update_register rd
-        (get_register rs1 rfile lor get_register rs2 rfile)
-        rfile
-  | "sll" ->
-      update_register rd
-        (get_register rs1 rfile lsl get_register rs2 rfile)
-        rfile
-  | "slr" ->
-      update_register rd
-        (get_register rs1 rfile lsr get_register rs2 rfile)
-        rfile
+  | "add" -> eval_ins rd rs1 rs2 rfile ( + )
+  | "sub" -> eval_ins rd rs1 rs2 rfile ( - )
+  | "and" -> eval_ins rd rs1 rs2 rfile ( land )
+  | "or" -> eval_ins rd rs1 rs2 rfile ( lor )
+  | "xor" -> eval_ins rd rs1 rs2 rfile ( lxor )
+  | "nor" -> eval_ins rd rs1 rs2 rfile ( lxor )
+  | "sll" -> eval_ins rd rs1 rs2 rfile ( lsl )
+  | "slr" -> eval_ins rd rs1 rs2 rfile ( lsr )
+  | _ -> rfile
+
+let process_itype op rd rs imm rfile =
+  match String.lowercase_ascii op with
+  | "addi" -> eval_ins rd rs imm rfile ( + )
+  | "subi" -> eval_ins rd rs imm rfile ( - )
+  | "andi" -> eval_ins rd rs imm rfile ( land )
+  | "ori" -> eval_ins rd rs imm rfile ( lor )
+  | "xori" -> eval_ins rd rs imm rfile ( lxor )
+  | "nori" -> eval_ins rd rs imm rfile ( lxor )
+  | "slli" -> eval_ins rd rs imm rfile ( lsl )
+  | "slri" -> eval_ins rd rs imm rfile ( lsr )
   | _ -> rfile
 
 let rec gen_rtype op n acc =
