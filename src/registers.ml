@@ -19,8 +19,11 @@ let register_init =
   in
   helper empty_file 0
 
+let visited_registers rfile =
+  List.filter (fun el -> snd (snd el) = true) (RegisterFile.bindings rfile)
+
 let pp_registers registerfile =
-  let registers = RegisterFile.bindings registerfile in
+  let registers = registerfile |> visited_registers in
   print_endline "Register | Decimal | Binary | Hexadecima";
   let rec print rs =
     match rs with
@@ -30,9 +33,6 @@ let pp_registers registerfile =
         print t
   in
   print registers
-
-let visited_registers rfile =
-  List.filter (fun el -> snd (snd el) = true) (RegisterFile.bindings rfile)
 
 let gen_register n = "x" ^ string_of_int (n + 1)
 
