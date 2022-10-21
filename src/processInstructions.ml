@@ -29,9 +29,6 @@ let process_itype op rd rs imm rfile =
   | "andi" -> eval_r_i_ins rd rs imm rfile ( land )
   | "ori" -> eval_r_i_ins rd rs imm rfile ( lor )
   | "xori" -> eval_r_i_ins rd rs imm rfile ( lxor )
-  | "nori" -> eval_r_i_ins rd rs imm rfile ( lxor )
-  | "slli" -> eval_r_i_ins rd rs imm rfile ( lsl )
-  | "slri" -> eval_r_i_ins rd rs imm rfile ( lsr )
   | _ -> rfile
 
 let process_utype op rd rs imm rfile =
@@ -51,7 +48,7 @@ let rec evaluate_input_insns insns rfile =
   match insns with
   | [] -> pp_registers rfile
   | h :: t ->
-      let ins = String.split_on_char ',' h in
+      let ins = String.split_on_char ' ' h in
       let op = List.hd ins in
       if List.exists (fun x -> x = op) rtype then (
         let rd, rs1, rs2 = (List.nth ins 1, List.nth ins 2, List.nth ins 3) in
