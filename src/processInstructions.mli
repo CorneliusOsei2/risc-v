@@ -35,4 +35,5 @@ val process_stype :
   (int * bool) Registers.RegisterFile.t ->
   (int * bool) Registers.RegisterFile.t
 
-val process_input_insns : string list -> unit
+val process_input_insns :
+  string list -> (int * bool) Registers.RegisterFile.t list
