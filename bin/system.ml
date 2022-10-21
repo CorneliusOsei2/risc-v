@@ -8,16 +8,22 @@ open ProcessInstructions
 let data_dir_prefix = "data" ^ Filename.dir_sep
 let ansi_print color = ANSITerminal.print_string [ color ]
 
-(** [eval_step ]*)
+(** [eval_step n output] prints out the current state of 
+    the register at index [n] in [output] *)
 let eval_step n output =
   if n < List.length output then (
     pp_registers (List.nth output n);
     n + 1)
   else (
-    print_string "All instructions executed";
+    ansi_print ANSITerminal.green "All instructions executed";
     n + 1)
 
-let rec eval_pattern n output f =
+(** [eval_pattern n output] prints out the current state of 
+    the register depending on the user input pattern. 
+    If pattern is [s] or [step] the state at index [n] in [output] 
+    is printed. 
+    If pattern is [r] or [run all] the most current state is printed*)
+let rec eval_pattern n output =
   if n > List.length output then exit 0
   else ansi_print ANSITerminal.yellow ">> ";
   match read_line () with
@@ -29,12 +35,14 @@ let rec eval_pattern n output f =
           exit 0
       | "step" | "s" ->
           let output_rev = output |> List.rev in
-          eval_pattern (eval_step n output_rev) output f
+          eval_pattern (eval_step n output_rev) output
       | "q" | "quit" -> print_string "Hope you had fun! 😃 Bye! 👋👋🏽\n"
       | _ ->
           ansi_print ANSITerminal.red "Invalid option. Please try again: \n";
-          eval_pattern n output f)
+          eval_pattern n output)
 
+(** [eval_pattern_inpt f] executes the instructions in test file [f] and triggers
+    [eval_pattern]  *)
 let eval_pattern_inpt f =
   let output = process_input_insns (file_to_list f) in
   ansi_print ANSITerminal.green "\n .....file successfully loaded!\n";
@@ -43,8 +51,9 @@ let eval_pattern_inpt f =
      How will you like to visualize the execution? \n\
      You can hit [r] in the process of stepping to evaluate all!\n";
   print_endline "\t step (s) or run all (r)?";
-  eval_pattern 0 output f
+  eval_pattern 0 output
 
+(** [process f] initiates the processor system with test file [t] *)
 let process f = eval_pattern_inpt f
 
 let main () =

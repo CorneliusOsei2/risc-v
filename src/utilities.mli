@@ -20,3 +20,6 @@ val split_instruction : string -> string * string list
 
 val pp_list : string list -> string
 (** [pp_list l] prints the string representation of list [l]*)
+
+val pp_instruction : string * string list -> string
+(** [pp_instriction l] prints the string representation of instruction [l]*)
