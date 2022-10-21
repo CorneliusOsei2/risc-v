@@ -50,3 +50,9 @@ let split_instruction instruct =
     |> String.trim |> String.split_on_char ',' |> List.map String.trim
   in
   (op, args)
+
+let pp_instruction (op, args) =
+  let rec pp_rs rs acc =
+    match rs with [] -> acc | h :: t -> pp_rs t (acc ^ " " ^ h)
+  in
+  op ^ pp_rs args ""
