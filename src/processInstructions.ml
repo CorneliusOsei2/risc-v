@@ -48,21 +48,21 @@ let process_stype op rd rs imm rfile =
   | "lw" -> eval_r_ins rd rs imm rfile ( land )
   | _ -> rfile
 
-let rec evaluate_input_insns insns rfile =
+let rec evaluate_input_insns insns acc rfile =
   match insns with
-  | [] -> pp_registers rfile
+  | [] -> acc
   | h :: t ->
       let op, rgs = split_instruction h in
       if List.exists (fun x -> x = op) rtype then
         let rd, rs1, rs2 = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
         let new_register_state = process_rtype op rd rs1 rs2 rfile in
-        evaluate_input_insns t new_register_state
+        evaluate_input_insns t (new_register_state :: acc) new_register_state
       else if List.exists (fun x -> x = op) itype then
         let rd, rs1, imm = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
         let new_register_state =
           process_itype op rd rs1 (int_of_string imm) rfile
         in
-        evaluate_input_insns t new_register_state
-      else pp_registers rfile
+        evaluate_input_insns t (new_register_state :: acc) new_register_state
+      else acc
 
-let process_input_insns insns = register_init |> evaluate_input_insns insns
+let process_input_insns insns = register_init |> evaluate_input_insns insns []
