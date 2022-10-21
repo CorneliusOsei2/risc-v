@@ -1,11 +1,3 @@
 (executable
  (name main)
-<<<<<<< HEAD
-<<<<<<< HEAD
- (libraries Game ounit2))
-=======
  (libraries Processor ounit2))
->>>>>>> 4ae3f04 (Created starter files)
-=======
- (libraries Processor ounit2))
->>>>>>> 97308093e3b366943a6f3a467f90bbe7fa0114dc

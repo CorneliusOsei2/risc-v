@@ -1,0 +1,32 @@
+---
+# Members of your group.
+group:
+  - name: Shreya Kumar
+    netid: sk2329 
+  - name: Alice Ke
+    netid: alk248
+  - name: Cornelius Boateng
+    netid: cob32
+# Your PM.
+pm:
+  name: Zhiyuan Chen
+  netid: zc333
+# Set to false if you don't want your gallery entry to be public.
+publish: true
+# Pithy title
+title: "RISC-V-processor-generator"
+# OK if this is a Cornell Github link, but public gallery viewers won't be able to see it.
+git-repo: "https://github.com/CorneliusOsei2/risc-v-processor-generator"
+# If you have no demo screencast, replace the url string with an empty string ""
+demo-video-url: ""
+# Write a short, attention-grabbing description of your project.
+desc: >
+  The RISC-V-processor-generator will accept user input via the user typing into
+  the terminal in the form of instruction commands or giving the terminal a 
+  txt file with instruction. It will have the following functionality: 
+  running test cases the user gives or generating test cases for 
+  them. This means the test cases generator will generate test cases of the 
+  specified instruction for the user.
+
+  The interface of the RISC-V-processor generator is implemented using the
+  ANSITerminal. 

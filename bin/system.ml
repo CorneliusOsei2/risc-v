@@ -15,7 +15,7 @@ let rec eval_pattern f =
   | pat -> (
       match String.trim pat with
       | "run all" | "r" -> process_input_insns (file_to_list f)
-      | "step" -> ()
+      | "step" | "s" -> ()
       | "q" | "quit" -> print_string "Hope you had fun! 😃 Bye! 👋👋🏽\n"
       | _ ->
           ansi_print ANSITerminal.red "Invalid option. Please try again: \n";
