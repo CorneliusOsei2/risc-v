@@ -8,7 +8,7 @@ end
 
 module Memory = Map.Make (MemoryKey)
 
-let init =
+let memory_init =
   let open Memory in
   let empty_rom = empty in
   let rec helper rom n =
@@ -37,4 +37,4 @@ let pp_memory memory =
   in
   print memory
 
-let _ = init |> Memory.bindings |> pp_memory
+let _ = memory_init |> Memory.bindings |> pp_memory

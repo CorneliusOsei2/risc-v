@@ -10,7 +10,7 @@ end
 
 module RegisterFile = Map.Make (RegisterKey)
 
-let init =
+let register_init =
   let open RegisterFile in
   let empty_file = empty in
   let rec helper rom n =
@@ -19,7 +19,8 @@ let init =
   in
   helper empty_file 0
 
-let pp_registers registers =
+let pp_registers registerfile =
+  let registers = RegisterFile.bindings registerfile in
   print_endline "Register | Decimal | Binary | Hexadecima";
   let rec print rs =
     match rs with
@@ -65,6 +66,6 @@ let reset_register r rfile =
 
 let create_tests n rfile = prep_registers n rfile
 
-(* let _ = init |> RegisterFile.bindings |> pp_registers *)
-let _ = init |> create_tests 10 |> RegisterFile.bindings |> pp_registers
-(* let r = init |> create_tests  |> visited_registers |> pp_registers *)
+(* let _ = register_init |> RegisterFile.bindings |> pp_registers *)
+let _ = register_init |> create_tests 10 |> pp_registers
+(* let r = register_init |> create_tests  |> visited_registers |> pp_registers *)
