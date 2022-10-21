@@ -1,0 +1,3 @@
+(executable
+ (name main)
+ (libraries Processor ounit2))
