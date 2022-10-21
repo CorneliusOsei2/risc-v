@@ -67,5 +67,5 @@ let reset_register r rfile =
 let create_tests n rfile = prep_registers n rfile
 
 (* let _ = register_init |> RegisterFile.bindings |> pp_registers *)
-let _ = register_init |> create_tests 10 |> pp_registers
+(* let _ = register_init |> create_tests 10 |> pp_registers *)
 (* let r = register_init |> create_tests  |> visited_registers |> pp_registers *)

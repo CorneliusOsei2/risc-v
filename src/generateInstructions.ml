@@ -21,5 +21,3 @@ let rec insns fmts n acc =
   match fmts with
   | [] -> acc
   | h :: t -> gen_rtype h n [] :: acc |> insns t (n + 2)
-
-let ins = insns rtype 2 []
