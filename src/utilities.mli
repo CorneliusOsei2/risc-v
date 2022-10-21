@@ -18,5 +18,10 @@ val split_instruction : string -> string * string list
 (** [split_instruction] takes in an instruction and separates the 
     op code and the registers to return a tuple of the (op code, registers) *)
 
+
 val pp_list : string list -> string
 (** [pp_list l] prints the string representation of list [l]*)
+
+val pp_instruction: string * string list -> string
+(** [pp_instruction] pretty prints instruction. *)
+
