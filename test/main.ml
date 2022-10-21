@@ -43,6 +43,8 @@ let dec_conversions_tests =
     test_dec_to_hex "" 45 "0x0000002d";
   ]
 
-let suite = "test suite for A2" >::: List.flatten [ dec_conversions_tests; register_tests  ]
-let _ = run_test_tt_main suite
+let suite =
+  "test suite for A2"
+  >::: List.flatten [ dec_conversions_tests; register_tests ]
 
+let _ = run_test_tt_main suite
