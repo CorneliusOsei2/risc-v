@@ -1,6 +1,7 @@
 open OUnit2
 open Processor
 open Registers
+open Memory
 open Utilities
 open IO
 open ProcessInstructions
@@ -54,7 +55,7 @@ let rfile1 = update_register "x1" 5 rfile
 let test_register (name : string) (r : string)
     (rfile : (int * bool) RegisterFile.t) (expected_output : int) : test =
   name >:: fun _ ->
-  assert_equal (get_register "x1" rfile) expected_output ~printer:string_of_int
+  assert_equal (get_register r rfile) expected_output ~printer:string_of_int
 
 let register_tests =
   [
@@ -62,8 +63,24 @@ let register_tests =
     test_register "update register" "x1" rfile1 5;
   ]
 
+(************************************ Memory Tests *********************************** *)
+
+let mem = memory_init
+let mem1 = update_memory 0 5 mem
+
+(** [test_memory name addr expected_output] constructs an OUnit test named
+    [name] that asserts the quality of [expected_output] with
+    [Memory.get_memory addr mem]. *)
+let test_memory (name : string) (addr : int) (mem : (int * bool) Memory.t)
+    (expected_output : int) : test =
+  name >:: fun _ ->
+  assert_equal (get_memory addr mem) expected_output ~printer:string_of_int
+
+let memory_tests =
+  [ test_memory "init values" 0 mem 0; test_memory "update memory" 0 mem1 5 ]
+
 let suite =
   "test suite for A2"
-  >::: List.flatten [ dec_conversions_tests; register_tests ]
+  >::: List.flatten [ dec_conversions_tests; register_tests; memory_tests ]
 
 let _ = run_test_tt_main suite
