@@ -1,4 +1,4 @@
-(** TODO *)
+(** Pow *)
 val pow : int -> int -> int
 
 (** TODO *)
