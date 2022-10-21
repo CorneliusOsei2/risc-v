@@ -51,8 +51,16 @@ let split_instruction instruct =
   in
   (op, args)
 
+
 let pp_list lst =
   let start = "[" in
   let e = "]" in
   let rec print lst = match lst with [] -> "" | h :: t -> h ^ ";" ^ print t in
   start ^ print lst ^ e
+
+let pp_instruction (op, args) =
+  let rec pp_rs rs acc =
+    match rs with [] -> acc | h :: t -> pp_rs t (acc ^ " " ^ h)
+  in
+  op ^ pp_rs args ""
+

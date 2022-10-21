@@ -35,14 +35,15 @@ let dec_conversions_tests =
   named [name] that asserts the quality of expected output with [split_instruction n]*)
 let test_split_instruction (name : string) (n : string)
     (expected_output : string * string list) : test =
-  name >:: fun _ -> assert_equal expected_output (split_instruction n)
+  name >:: fun _ ->
+  assert_equal expected_output (split_instruction n) ~printer:pp_instruction
 
 let split_instruction_tests =
   [
     test_split_instruction "no extra whitespaces" "add x1, x2, x3"
-      ("add", [ "x1"; "x2" ]);
+      ("add", [ "x1"; "x2"; "x3" ]);
     test_split_instruction "extra whitespaces" "     sub x1, x2, x3"
-      ("sub", [ "x1"; "x2" ]);
+      ("sub", [ "x1"; "x2"; "x3" ]);
   ]
 
 (************************************ IO Tests *********************************** *)
