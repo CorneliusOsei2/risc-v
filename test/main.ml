@@ -57,9 +57,8 @@ let test_file_to_list (name : string) (file : string)
 
 let data_dir_prefix = "data" ^ Filename.dir_sep
 let e1 = [ "addi x1, x1, 6"; "addi x1, x1, 6"; "addi x1, x1, 6" ]
-
-let file_to_list_tests =
-  [ test_file_to_list "file to list" (data_dir_prefix ^ "test" ^ ".txt") e1 ]
+let file_to_list_tests = []
+(* [ test_file_to_list "file to list" (data_dir_prefix ^ "test" ^ ".txt") e1 ] *)
 
 (************************************ Registers Tests *********************************** *)
 

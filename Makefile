@@ -9,9 +9,6 @@ code:
 	! dune build --watch
 
 install:
-	opam switch create cs3110-2022fa ocaml-base-compiler.4.14.0
-	eval $(opam env)
-	opam switch list
 	opam install -y utop ounit2 ocamlformat ANSITerminal
 
 utop:

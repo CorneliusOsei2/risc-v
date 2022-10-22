@@ -9,4 +9,5 @@ Build the program for running:
 Run the program:
 -make processor
 
-Run [make clean] if encountering issues and retry.
+Clean up generated files:
+-make clean
