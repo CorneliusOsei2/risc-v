@@ -1,14 +1,12 @@
 # Install instructions for risc-v-processor-generator
 
-opam switch create cs3110-2022fa ocaml-base-compiler.4.14.0
-eval $(opam env)
-opam switch list
-opam install -y utop odoc ounit2 qcheck bisect_ppx menhir ocaml-lsp-server ocamlformat ocamlformat-rpc
+Installation of needed packages and libraries:
+-make install
 
-2.Install ANSITerminal
-opam update
-opam upgrade
-opam install AnSITerminal
+Build the program for running:
+-make build
 
-3.Start the RISC-V-processor-generator in root directory
-make processor
+Run the program:
+-make processor
+
+Run [make clean] if encountering issues and retry.

@@ -9,14 +9,16 @@ code:
 	! dune build --watch
 
 install:
-	opam update
-	opam upgrade
-	opam install ANSITerminal
+	opam switch create cs3110-2022fa ocaml-base-compiler.4.14.0
+	eval $(opam env)
+	opam switch list
+	opam install -y utop ounit2 ocamlformat ANSITerminal
 
 utop:
 	OCAMLRUNPARAM=b dune utop src
 
 processor:
+	dune clean
 	OCAMLRUNPARAM=b dune exec bin/system.exe
 
 test:
