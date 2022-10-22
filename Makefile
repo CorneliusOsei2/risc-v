@@ -8,6 +8,11 @@ code:
 	code .
 	! dune build --watch
 
+install:
+	opam update
+	opam upgrade
+	opam install ANSITerminal
+
 utop:
 	OCAMLRUNPARAM=b dune utop src
 
@@ -17,7 +22,20 @@ processor:
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
 
+clean:
+	dune clean
+	rm -f risc_v_processor_generator.zip
+
 check:
 	@bash check.sh
+
+finalcheck:
+	@bash check.sh final
+
+zip:
+	rm -f risc_v_processor_generator.zip
+	zip -r risc_v_processor_generator.zip . -x@exclude.lst
+
+
 
 
