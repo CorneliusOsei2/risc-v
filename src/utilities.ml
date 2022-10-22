@@ -1,4 +1,5 @@
 let pp_string n c v = v ^ String.make (n - String.length v) c
+let pp_string_rev n c v = String.make (n - String.length v) c ^ v
 
 let rec pow a n =
   match n with
@@ -20,7 +21,7 @@ let dec_to_bin num =
   let is_neg = num < 0 in
   let n = if is_neg then pow 2 31 + num else num in
   let bin = dec_to_bin_helper n "" in
-  "0b" ^ pp_string 32 (if is_neg then '1' else '0') bin
+  "0b" ^ pp_string_rev 32 (if is_neg then '1' else '0') bin
 
 let rec dec_to_hex_helper num acc =
   if num = 0 then acc
@@ -39,7 +40,7 @@ let dec_to_hex num =
   let is_neg = num < 0 in
   let n = if is_neg then pow 2 31 + num else num in
   let hex = dec_to_hex_helper n "" in
-  "0x" ^ pp_string 8 (if is_neg then 'f' else '0') hex
+  "0x" ^ pp_string_rev 8 (if is_neg then 'f' else '0') hex
 
 let split_instruction instruct =
   let s = String.trim instruct in
