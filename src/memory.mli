@@ -1,4 +1,5 @@
 module Memory : Map.S
+(* Simulates processor's memory *)
 
 val memory_init : (int * bool) Memory.t
 (** [init] returns a memory with all memory addresses initialized to 0*)

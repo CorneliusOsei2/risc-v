@@ -32,6 +32,7 @@ let rec eval_pattern n output =
       match String.trim pat with
       | "run all" | "r" ->
           pp_registers (List.nth output 0);
+          ansi_print ANSITerminal.green "All instructions executed";
           exit 0
       | "step" | "s" ->
           let output_rev = output |> List.rev in
