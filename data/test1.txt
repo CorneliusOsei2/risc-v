@@ -2,7 +2,8 @@ addi x1, x1, 612
 addi x2, x1, 5032
 and x3, x1, x2
 andi x4, x3, 10101
-ori x5, x4, 1
+or x5, x4, x3
+ori x7, x4, 10
 xor x6, x1, x2
 nor x8, x3, x5
-xori x8, x1, 5
+xori x9, x1, 190
