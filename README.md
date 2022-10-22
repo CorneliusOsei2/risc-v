@@ -1,4 +1,4 @@
 # risc-v-processor-generator
 
-Group members: sk2329
-Shreya Kumar (pja66), Alice Ke (alk248), Cornelius Boateng (cob32)
+Group members: 
+Shreya Kumar (sk2329), Alice Ke (alk248), Cornelius Boateng (cob32)
