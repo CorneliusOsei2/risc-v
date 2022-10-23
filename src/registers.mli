@@ -26,9 +26,4 @@ val get_register : string -> ('a * bool) RegisterFile.t -> 'a
 
 val update_register :
   string -> 'a -> ('a * bool) RegisterFile.t -> ('a * bool) RegisterFile.t
-(** [update_register r rfile] returns the first of the value stored at [r] in register 
-    [rfile] *)
-
-val reset_register : string -> int RegisterFile.t -> int RegisterFile.t
-(** [reset_register r rfile] sets the value stored at [r] in register 
-    [rfile] to 0 *)
+(** [update_register r rfile] returns the data stored by the register [r] *)
