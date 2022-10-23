@@ -19,6 +19,10 @@ let register_init =
   in
   helper empty_file 0
 
+let update_register r v rfile =
+  let open RegisterFile in
+  add r (v, true) rfile
+
 let visited_registers rfile =
   List.filter (fun el -> snd (snd el) = true) (RegisterFile.bindings rfile)
 
@@ -90,11 +94,3 @@ let get_register r rfile =
     let open RegisterFile in
     fst (find r rfile)
   with Not_found -> failwith "Invalid register access"
-
-let update_register r v rfile =
-  let open RegisterFile in
-  add r (v, true) rfile
-
-let reset_register r rfile =
-  let open RegisterFile in
-  add r 0 rfile
