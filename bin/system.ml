@@ -5,8 +5,17 @@ open Utilities
 open IO
 open ProcessInstructions
 
+exception NoSuchFile of string
+
 let data_dir_prefix = "data" ^ Filename.dir_sep
 let ansi_print style = ANSITerminal.print_string style
+
+let get_insns f =
+  try data_dir_prefix ^ f ^ ".txt" |> file_to_list
+  with _ ->
+    ansi_print [ ANSITerminal.red ]
+      ("No such file '" ^ f ^ ".txt' in the data/ directory\n");
+    exit 0
 
 (** [eval_step n output] prints out the current state of 
     the register at index [n] in [output] *)
@@ -15,7 +24,7 @@ let eval_step n output =
     pp_registers (List.nth output n);
     n + 1)
   else (
-    ansi_print [ ANSITerminal.green ] "All instructions executed";
+    ansi_print [ ANSITerminal.green ] "All instructions executed \n";
     n + 1)
 
 (** [eval_pattern n output] prints out the current state of 
@@ -32,7 +41,7 @@ let rec eval_pattern n output =
       match String.trim pat with
       | "run all" | "r" ->
           pp_registers (List.nth output 0);
-          ansi_print [ ANSITerminal.green ] "All instructions executed";
+          ansi_print [ ANSITerminal.green ] "All instructions executed \n";
           exit 0
       | "step" | "s" ->
           let output_rev = output |> List.rev in
@@ -44,8 +53,8 @@ let rec eval_pattern n output =
 
 (** [eval_pattern_inpt f] executes the instructions in test file [f] and triggers
     [eval_pattern]  *)
-let eval_pattern_inpt f =
-  let output = process_input_insns (file_to_list f) in
+let eval_pattern_inpt insns =
+  let output = process_input_insns insns in
   ansi_print [ ANSITerminal.green ] "\n .....file successfully loaded!\n";
   ansi_print [ ANSITerminal.blue ]
     "\n\
@@ -55,12 +64,12 @@ let eval_pattern_inpt f =
   eval_pattern 0 output
 
 (** [process f] initiates the processor system with test file [t] *)
-let process f = eval_pattern_inpt f
+let process f = f |> get_insns |> eval_pattern_inpt
 
 let main () =
   ansi_print
     [ ANSITerminal.red; ANSITerminal.Background White ]
-    "\n\n Welcome to The RISC-V Processor. \n";
+    "\n\n Welcome to The RISC-V Tests Executer and Generator. \n";
   ansi_print [ ANSITerminal.yellow ]
     "You can quit at any time with [q] or [quit]\n\n";
   ansi_print [ ANSITerminal.blue ]
@@ -68,6 +77,6 @@ let main () =
   ansi_print [ ANSITerminal.yellow ] ">> ";
   match read_line () with
   | exception End_of_file -> ()
-  | file_name -> process (data_dir_prefix ^ file_name ^ ".txt")
+  | file_name -> process file_name
 
 let () = main ()

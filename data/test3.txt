@@ -1,4 +1,4 @@
-addi x1, x1, 6
+addi   x1, x1, 6
 addi x2, x1, 1000
 add x3, x1, x2
 sll, x4, x1, x2
