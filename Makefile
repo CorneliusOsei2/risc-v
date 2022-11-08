@@ -19,10 +19,12 @@ processor:
 	OCAMLRUNPARAM=b dune exec bin/system.exe
 
 test:
-	OCAMLRUNPARAM=b dune exec test/main.exe
+	# OCAMLRUNPARAM=b dune exec test/main.exe
+	OCAMLRUNPARAM=b dune exec --instrument-with bisect_ppx test/main.exe
 
 clean:
 	dune clean
+	rm bisect*
 	rm -f risc_v_processor_generator.zip
 
 check:
