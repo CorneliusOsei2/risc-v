@@ -9,7 +9,7 @@ let register_init =
   let empty_file = empty in
   let rec helper rom n =
     let r = "x" ^ string_of_int n in
-    if n = 33 then rom else helper (add r (0, false) rom) (n + 1)
+    if n = 33 then rom else helper (add r (0l, false) rom) (n + 1)
   in
   helper empty_file 0
 
@@ -31,7 +31,7 @@ let pp_registers registerfile =
     match rs with
     | [] -> ()
     | (r, v) :: t ->
-        let v = fst v in
+        let v = Int32.to_int (fst v) in
         let bin = dec_to_bin v in
         let hex = dec_to_hex v in
         print_endline
@@ -56,7 +56,7 @@ let pp_registers registerfile =
     match rs with
     | [] -> ()
     | (r, v) :: t ->
-        let v = fst v in
+        let v = Int32.to_int (fst v) in
         let bin = dec_to_bin v in
         let hex = dec_to_hex v in
         print_endline
@@ -70,13 +70,13 @@ let pp_registers registerfile =
 let gen_register n = "x" ^ string_of_int (n + 1)
 
 let rec gen_imm lower_bound upper_bound =
-  let i = Random.int upper_bound in
+  let i = Random.int32 upper_bound in
   if i >= lower_bound && i < upper_bound then i
   else gen_imm upper_bound lower_bound
 
 let prep rfile n =
   let rnum = gen_register n in
-  let imm = gen_imm ~-2048 2047 in
+  let imm = gen_imm (-2048l) 2047l in
   let open RegisterFile in
   add rnum (imm, true) rfile
 
