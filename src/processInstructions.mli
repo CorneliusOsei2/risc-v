@@ -15,8 +15,8 @@ val process_rtype :
   string ->
   string ->
   string ->
-  (int * bool) Registers.RegisterFile.t ->
-  (int * bool) Registers.RegisterFile.t
+  (int32 * bool) Registers.RegisterFile.t ->
+  (int32 * bool) Registers.RegisterFile.t
 (** [process_rtype op rd rs1 rs2 rfile] processes the R-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register 
      [op] as the operator and [rfile] as the register file *)
@@ -26,8 +26,8 @@ val process_itype :
   string ->
   string ->
   string ->
-  (int * bool) Registers.RegisterFile.t ->
-  (int * bool) Registers.RegisterFile.t
+  (int32 * bool) Registers.RegisterFile.t ->
+  (int32 * bool) Registers.RegisterFile.t
 (** [process_itype op rd rs1 imm rfile] processes the I-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register 
      [op] as the operator and [rfile] as the register file *)
@@ -37,8 +37,8 @@ val process_utype :
   string ->
   string ->
   string ->
-  (int * bool) Registers.RegisterFile.t ->
-  (int * bool) Registers.RegisterFile.t
+  (int32 * bool) Registers.RegisterFile.t ->
+  (int32 * bool) Registers.RegisterFile.t
 (** [process_utype op rd rs1 rs2 rfile] processes the U-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register 
      [op] as the operator and [rfile] as the register file *)
@@ -48,14 +48,19 @@ val process_stype :
   string ->
   string ->
   string ->
-  (int * bool) Registers.RegisterFile.t ->
-  (int * bool) Registers.RegisterFile.t
+  (int32 * bool) Registers.RegisterFile.t ->
+  (int32 * bool) Registers.RegisterFile.t
 (** [process_stype op rd rs1 rs2 rfile] processes the S-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register 
      [op] as the operator and [rfile] as the register file *)
 
 val process_input_insns :
-  string list -> (int * bool) Registers.RegisterFile.t list
+  string list -> (int32 * bool) Registers.RegisterFile.t list
 (** [process_rtype insns] processes input instructions from the test file and returns 
   and returns the states of the register after each instruction execution
 *)
+
+val process_step_instructions :
+  string ->
+  ?rfile:(int32 * bool) Registers.RegisterFile.t ->
+  (int32 * bool) Registers.RegisterFile.t
