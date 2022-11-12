@@ -1,3 +1,5 @@
+let test_file = "data" ^ Filename.dir_sep ^ "instructions.txt"
+
 let file_to_list file =
   let ic = open_in file in
   let rec loop acc =
@@ -16,6 +18,6 @@ let rec print_lst oc = function
       print_lst oc t
 
 let list_to_file lst =
-  let oc = open_out "instructions.txt" in
+  let oc = open_out test_file in
   print_lst oc lst;
   close_out oc
