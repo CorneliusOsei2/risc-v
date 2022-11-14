@@ -23,3 +23,5 @@ val pp_list : string list -> string
 
 val pp_instruction : string * string list -> string
 (** [pp_instriction l] prints the string representation of instruction [l]*)
+
+val string_of_list : string list -> string

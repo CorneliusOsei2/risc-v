@@ -63,3 +63,16 @@ let pp_instruction (op, args) =
     match rs with [] -> acc | h :: t -> pp_rs t (acc ^ " " ^ h)
   in
   op ^ pp_rs args ""
+
+let string_of_list lst =
+  let len = List.length lst in
+  let open Buffer in
+  let buf = create (3 * len) in
+  add_string buf "[";
+  List.iteri
+    (fun i v ->
+      add_string buf (String.escaped v);
+      if i < len - 1 then add_string buf ", ")
+    lst;
+  add_string buf "]";
+  contents buf

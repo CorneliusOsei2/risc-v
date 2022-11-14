@@ -62,5 +62,5 @@ val process_input_insns :
 
 val process_step_instructions :
   string ->
-  ?rfile:(int32 * bool) Registers.RegisterFile.t ->
+  (int32 * bool) Registers.RegisterFile.t ->
   (int32 * bool) Registers.RegisterFile.t
