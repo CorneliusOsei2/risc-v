@@ -62,14 +62,15 @@ module UtilityTests = struct
 end
 
 (************************************ IO Tests *********************************** *)
-module IOTests = struct
-  (** [test_file_to_list name file expected_output] constructs an OUnit test named
+
+(** [test_file_to_list name file expected_output] constructs an OUnit test named
     [name] that asserts the quality of [expected_output] with
     [file_to_list file]. *)
-  let test_file_to_list (name : string) (file : string)
-      (expected_output : string list) : test =
-    name >:: fun _ -> assert_equal expected_output (file_to_list file)
+let test_file_to_list (name : string) (file : string)
+    (expected_output : string list) : test =
+  name >:: fun _ -> assert_equal expected_output (file_to_list file)
 
+module IOTests = struct
   let data_dir_prefix = "data" ^ Filename.dir_sep
   let e1 = [ "addi x1, x1, 6"; "addi x1, x1, 6"; "addi x1, x1, 6" ]
   let file_to_list_tests = []
@@ -115,6 +116,8 @@ end
 
 let mem = memory_init
 let mem1 = update_memory 0 5 mem
+let mem2 = update_memory 1 2 mem
+let mem3 = update_memory 15 5 mem
 
 (** [test_memory name addr expected_output] constructs an OUnit test named
     [name] that asserts the quality of [expected_output] with
@@ -127,7 +130,12 @@ let test_memory (name : string) (addr : int) (mem : (int * bool) Memory.t)
 module MemoryTests = struct
   let memory_tests =
     let _ = GenerateInstructions.gen_itype "subi" 15 [] in
-    [ test_memory "init values" 0 mem 0; test_memory "update memory" 0 mem1 5 ]
+    [
+      test_memory "init values" 0 mem 0;
+      test_memory "update memory" 0 mem1 5;
+      test_memory "update memory" 1 mem2 2;
+      test_memory "update memory" 15 mem3 5;
+    ]
 end
 (************************************ Memory Tests *********************************** *)
 
