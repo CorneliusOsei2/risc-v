@@ -5,6 +5,8 @@ open Memory
 open Utilities
 open IO
 open ProcessInstructions
+open GenerateInstructions
+open Utilities
 
 (************************************ Utilities Tests *********************************** *)
 
@@ -63,20 +65,20 @@ let file_to_list_tests = []
 (************************************ Registers Tests *********************************** *)
 
 let rfile = register_init
-let rfile1 = update_register "x1" 5 rfile
+let rfile1 = update_register "x1" 5l rfile
 
 (** [test_register name r expected_output] constructs an OUnit test named
     [name] that asserts the quality of [expected_output] with
     [Registers.get_register r rfile]. *)
 let test_register (name : string) (r : string)
-    (rfile : (int * bool) RegisterFile.t) (expected_output : int) : test =
+    (rfile : (int32 * bool) RegisterFile.t) (expected_output : int32) : test =
   name >:: fun _ ->
-  assert_equal (get_register r rfile) expected_output ~printer:string_of_int
+  assert_equal expected_output (get_register r rfile) ~printer:Int32.to_string
 
 let register_tests =
   [
-    test_register "init values" "x1" rfile 0;
-    test_register "update register" "x1" rfile1 5;
+    test_register "init values" "x1" rfile 0l;
+    test_register "update register" "x1" rfile1 5l;
   ]
 
 (************************************ Memory Tests *********************************** *)
@@ -93,7 +95,10 @@ let test_memory (name : string) (addr : int) (mem : (int * bool) Memory.t)
   assert_equal (get_memory addr mem) expected_output ~printer:string_of_int
 
 let memory_tests =
+  let _ = GenerateInstructions.gen_itype "subi" 15 [] in
   [ test_memory "init values" 0 mem 0; test_memory "update memory" 0 mem1 5 ]
+
+(************************************ Memory Tests *********************************** *)
 
 let suite =
   "test suite for A2"

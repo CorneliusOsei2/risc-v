@@ -3,7 +3,7 @@ open Utilities
 open Int32
 
 let rtype = [ "add"; "sub"; "and"; "or"; "xor"; "nor"; "sll"; "srl" ]
-let itype = [ "addi"; "andi"; "ori"; "xori" ]
+let itype = [ "addi"; "andi"; "ori"; "xori"; "subi" ]
 let utype = [ "lui" ]
 let stype = [ "sw"; "sb"; "lw"; "lb" ]
 
@@ -73,5 +73,5 @@ let rec evaluate_input_insns insns acc rfile =
 
 let process_input_insns insns = register_init |> evaluate_input_insns insns []
 
-let process_step_instructions insn ?(rfile = register_init) =
+let process_step_instructions insn rfile =
   List.nth (evaluate_input_insns [ insn ] [] rfile) 0
