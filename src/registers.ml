@@ -2,7 +2,13 @@ open Utilities
 
 let register_num r = List.nth (String.split_on_char 'x' r) 1 |> int_of_string
 
-module RegisterFile = Map.Make (String)
+module StringComp = struct
+  type t = string
+
+  let compare r1 r2 = compare (register_num r1) (register_num r2)
+end
+
+module RegisterFile = Map.Make (StringComp)
 
 let register_init =
   let open RegisterFile in
