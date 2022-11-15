@@ -52,6 +52,22 @@ let split_instruction instruct =
   in
   (op, args)
 
+let split_offset off =
+  match off with
+  | [] -> []
+  | [ x ] ->
+      String.sub x 0 (String.index_from x 0 '(')
+      :: [
+           String.sub x
+             (String.index_from x 0 '(' + 1)
+             (String.length x - (String.index_from x 0 '(' + 2));
+         ]
+  | h :: t -> failwith "Invalid form"
+
+let split_stype instruct =
+  let op, args = split_instruction instruct in
+  (op, List.hd args :: split_offset (List.tl args))
+
 let pp_list lst =
   let start = "[" in
   let e = "]" in

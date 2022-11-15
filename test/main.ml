@@ -24,6 +24,18 @@ let test_dec_to_hex (name : string) (n : int) (expected_output : string) : test
   name >:: fun _ ->
   assert_equal expected_output (dec_to_hex n) ~printer:String.escaped
 
+(*[test_split_instruction name n expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [split_instruction n]*)
+let test_split_instruction (name : string) (n : string)
+    (expected_output : string * string list) : test =
+  name >:: fun _ ->
+  assert_equal expected_output (split_instruction n) ~printer:pp_instruction
+
+let test_split_stype (name : string) (n : string)
+    (expected_output : string * string list) : test =
+  name >:: fun _ ->
+  assert_equal expected_output (split_stype n) ~printer:pp_instruction
+
 module UtilityTests = struct
   let dec_conversions_tests =
     [
@@ -34,13 +46,6 @@ module UtilityTests = struct
       test_dec_to_hex "convert 26 to binary" 26 "0x0000001a";
       test_dec_to_hex "convert 45 to binary" 45 "0x0000002d";
     ]
-
-  (*[test_split_instruction name n expected_output] constructs an OUnit test
-    named [name] that asserts the quality of expected output with [split_instruction n]*)
-  let test_split_instruction (name : string) (n : string)
-      (expected_output : string * string list) : test =
-    name >:: fun _ ->
-    assert_equal expected_output (split_instruction n) ~printer:pp_instruction
 
   let split_instruction_tests =
     [
@@ -58,6 +63,16 @@ module UtilityTests = struct
         ("lui", [ "x1"; "12" ]);
       test_split_instruction "andi instruction" "andi x1, x2, 12"
         ("andi", [ "x1"; "x2"; "12" ]);
+      test_split_instruction "lui instruction" "lui x2, 0xfffff000"
+        ("lui", [ "x2"; "0xfffff000" ]);
+    ]
+
+  let split_stype_tests =
+    [
+      test_split_stype "valid sw instruction" "sw x2, 0x45(x4)"
+        ("sw", [ "x2"; "0x45"; "x4" ]);
+      test_split_stype "binary" "sw x3, 0b10111(x6)"
+        ("sw", [ "x3"; "0b10111"; "x6" ]);
     ]
 end
 
@@ -145,6 +160,7 @@ let suite =
          [
            UtilityTests.dec_conversions_tests;
            UtilityTests.split_instruction_tests;
+           UtilityTests.split_stype_tests;
            IOTests.file_to_list_tests;
            RegisterTests.register_tests;
            MemoryTests.memory_tests;
