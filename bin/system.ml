@@ -49,7 +49,7 @@ and eval_step n output =
     | _ -> n + 1)
 
 and eval_insn_file_format insns =
-  let output = process_input_insns insns in
+  let output = process_file_insns insns in
   ansi_print [ ANSITerminal.green ] "\n .....file successfully loaded!\n";
   ansi_print [ ANSITerminal.red ]
     "\n\
@@ -86,7 +86,7 @@ and eval_insn_step_format rfile =
       | "m" | "menu" -> main ()
       | f -> (
           try
-            let output = process_step_instructions f rfile in
+            let output = process_step_insns f rfile in
             ignore (eval_step 0 [ output ]);
             eval_insn_step_format output
           with _ ->
@@ -101,7 +101,7 @@ and process f =
   | "2" ->
       ansi_print [ ANSITerminal.red ]
         "Enter the instruction. Hit the Return Key when done\n";
-      eval_insn_step_format register_init
+      eval_insn_step_format Registers.init
   | "3" -> ()
   | _ -> ()
 
