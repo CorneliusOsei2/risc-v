@@ -70,23 +70,24 @@ end
 (************************************ Registers Tests *********************************** *)
 
 module RegisterTests = struct
-  let rfile = register_init
-  let rfile1 = update_register "x1" 5l rfile
-  let rfile2 = update_register "x2" 7l rfile
-  let rfile3 = update_register "x3" 56l rfile
-  let rfile4 = update_register "x4" 112l rfile
-  let rfile5 = update_register "x5" 320l rfile
-  let rfile6 = update_register "x6" 97l rfile
+  let rfile = Registers.init
+  let rfile1 = update_register "x1" 5 rfile
+  let rfile2 = update_register "x2" 7 rfile
+  let rfile3 = update_register "x3" 56 rfile
+  let rfile4 = update_register "x4" 112 rfile
+  let rfile5 = update_register "x5" 320 rfile
+  let rfile6 = update_register "x6" 97 rfile
   let lower_bound = (pow 2 31 - 1) * -1 |> of_int
   let upper_bound = pow 2 31 - 1 |> of_int
-  let rfile7 = update_register "x7" lower_bound rfile
-  let rfile8 = update_register "x8" upper_bound rfile
+  let rfile7 = update_register "x7" (to_int lower_bound) rfile
+  let rfile8 = update_register "x8" (to_int upper_bound) rfile
 
   (** [test_register name r expected_output] constructs an OUnit test named
     [name] that asserts the quality of [expected_output] with
     [Registers.get_register r rfile]. *)
   let test_register (name : string) (r : string)
-      (rfile : (int32 * bool) RegisterFile.t) (expected_output : int32) : test =
+      (rfile : (Stdint.int32 * bool) RegisterFile.t)
+      (expected_output : Stdint.int32) : test =
     name >:: fun _ ->
     assert_equal expected_output (get_register r rfile) ~printer:Int32.to_string
 
@@ -117,7 +118,7 @@ end
        [name] that asserts the quality of [expected_output] with
        [Memory.get_memory addr mem]. *)
      let test_memory (name : string) (addr : int)
-         (mem : (Stdint.Int8.t * bool) Memory.t) (expected_output : int) : test =
+         (mem : (Stdint.Int32.t * bool) Memory.t) (expected_output : int) : test =
        name >:: fun _ ->
        assert_equal (get_memory addr mem) expected_output ~printer:string_of_int
 

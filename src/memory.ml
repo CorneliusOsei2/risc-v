@@ -13,7 +13,7 @@ let init =
   let open Memory in
   let empty_rom = empty in
   let rec helper rom n =
-    if n = 36 then rom else helper (add n (Int8.of_int 0, false) rom) (n + 4)
+    if n = 36 then rom else helper (add n (Int32.of_int 0, false) rom) (n + 4)
   in
   helper empty_rom 0
 
@@ -26,7 +26,7 @@ let pp_memory memory =
   print_endline "--------------------------------------------";
   let memory = Memory.bindings memory in
   let rec print mem =
-    let open Int8 in
+    let open Int32 in
     match mem with
     | [] -> ()
     | (r, v) :: t ->
@@ -42,4 +42,4 @@ let pp_memory memory =
 
 let update_memory addr v memory =
   let open Memory in
-  add addr (Int8.of_int v, true) memory
+  add addr (Int32.of_int v, true) memory
