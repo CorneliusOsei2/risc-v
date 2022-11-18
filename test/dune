@@ -1,5 +1,4 @@
 (executable
  (name main)
  (libraries Processor ounit2)
- (instrumentation
-  (backend bisect_ppx)))
+)

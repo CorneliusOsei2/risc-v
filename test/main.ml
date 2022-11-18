@@ -73,6 +73,8 @@ module UtilityTests = struct
         ("sw", [ "x2"; "0x45"; "x4" ]);
       test_split_stype "binary" "sw x3, 0b10111(x6)"
         ("sw", [ "x3"; "0b10111"; "x6" ]);
+      test_split_stype "lw instruction" "lw x3, 0(x2)"
+        ("lw", [ "x3"; "0"; "x2" ]);
     ]
 end
 
