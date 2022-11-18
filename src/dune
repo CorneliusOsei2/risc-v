@@ -1,6 +1,8 @@
 (library
  (name processor)
  (public_name Processor)
- (libraries ANSITerminal)
+ (libraries ANSITerminal stdint)
  (instrumentation
- (backend bisect_ppx)))
+ (backend bisect_ppx))
+ )
+
