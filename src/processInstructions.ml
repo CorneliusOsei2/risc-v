@@ -43,17 +43,28 @@ let process_itype op rd rs imm rfile =
   | "xori" -> eval_ri_ins rd rs imm rfile logxor false
   | _ -> rfile
 
-let process_utype op rd rs imm rfile = failwith "Unimplemented"
-(* match String.lowercase_ascii op with
-   | "lui" -> eval_ri_ins rd rs imm rfile ( + )
-   | _ -> rfile *)
+let parse_immediate imm is_lui =
+  if is_lui then ("0xfffff" |> int_of_string) land (imm |> int_of_string)
+  else ("0xfff" |> int_of_string) land (imm |> int_of_string)
 
-let process_stype op rd rs imm rfile = failwith "Unimplemented"
+let sign_extend_immediate (imm : int) =
+  let sxtn = int_of_string "0x800" in
+  let res = imm land sxtn in
+  if res = sxtn then logor (imm |> of_int) (of_string "0xfffff000")
+  else of_int imm
+
+let process_utype op rd rs imm rfile =
+  match String.lowercase_ascii op with
+  | "lui" -> failwith "Todo"
+  (*  update_register rd res rfile *)
+  | _ -> rfile
+
+let process_stype op rd rs imm rfile = failwith "TODO"
 (* match String.lowercase_ascii op with
-   | "sb" -> eval_ri_ins rd rs imm rfile ( + )
-   | "sw" -> eval_ri_ins rd rs imm rfile ( - )
-   | "lb" -> eval_ri_ins rd rs imm rfile ( land )
-   | "lw" -> eval_ri_ins rd rs imm rfile ( land )
+   | "sb" -> failwith "Unimplemented"
+   | "sw" -> failwith "Unimplemented"
+   | "lb" -> failwith "Unimplemented"
+   | "lw" -> failwith "Unimplemented"
    | _ -> rfile *)
 
 let rec evaluate_input_insns insns acc rfile =
