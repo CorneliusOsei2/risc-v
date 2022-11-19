@@ -11,6 +11,10 @@ val get_memory : Memory.key -> ('a * bool) Memory.t -> 'a
 (** [get_memory addr mem] returns the first of the value stored at [addr] in memory 
     [mem] *)
 
-val update_memory : Memory.key -> int -> (Stdint.Int32.t * bool) Memory.t -> (Stdint.Int32.t * bool) Memory.t
+val update_memory :
+  int ->
+  int ->
+  (Stdint.Int32.t * bool) Memory.t ->
+  (Stdint.Int32.t * bool) Memory.t
 (** [update_memory addr mem] returns the first of the value stored at [addr] in memory 
     [mem] *)

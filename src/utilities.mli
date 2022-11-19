@@ -22,10 +22,8 @@ val split_stype : string -> string * string list
 (** [split_stype] takes in an instruction and separates the 
     op code and the registers to return a tuple of the (op code, registers + offset) *)
 
-val pp_list : string list -> string
+val string_of_list : string list -> string
 (** [pp_list l] prints the string representation of list [l]*)
 
-val pp_instruction : string * string list -> string
+val string_of_insn : string * string list -> string
 (** [pp_instriction l] prints the string representation of instruction [l]*)
-
-val string_of_list : string list -> string

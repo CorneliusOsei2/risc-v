@@ -1,6 +1,5 @@
 open Processor
 open Registers
-open Memory
 open Utilities
 open IO
 open ProcessInstructions
@@ -12,7 +11,6 @@ let ansi_print style = ANSITerminal.print_string style
 
 (** [eval_step n output] prints out the current state of 
     the register at index [n] in [output] *)
-
 let rec eval_pattern n output =
   if n > List.length output then exit 0
   else ansi_print [ ANSITerminal.yellow ] ">> ";
@@ -21,7 +19,7 @@ let rec eval_pattern n output =
   | pat -> (
       match String.trim pat with
       | "run" | "r" ->
-          pp_registers (List.nth output 0);
+          pp_registers (List.nth (List.map (fun out -> fst out) output) 0);
           ansi_print [ ANSITerminal.green ] "All instructions executed \n";
           exit 0
       | "step" | "s" ->
@@ -36,7 +34,10 @@ let rec eval_pattern n output =
 
 and eval_step n output =
   if n < List.length output then (
-    pp_registers (List.nth output n);
+    ansi_print [ ANSITerminal.green ] "\nRegister File\n";
+    pp_registers (List.nth (List.map (fun out -> fst out) output) n);
+    ansi_print [ ANSITerminal.green ] "\nMemory\n";
+    Memory.pp_memory (List.nth (List.map (fun out -> snd out) output) n);
     n + 1)
   else (
     ansi_print [ ANSITerminal.green ]
@@ -76,7 +77,7 @@ and get_insns_from_file () =
           "Please enter valid file name or [q] to quit\n";
         get_insns_from_file ())
 
-and eval_insn_step_format rfile =
+and eval_insn_step_format (rfile, mem) =
   ansi_print [ ANSITerminal.yellow ] ">> ";
   match read_line () with
   | exception End_of_file -> ()
@@ -86,24 +87,29 @@ and eval_insn_step_format rfile =
       | "m" | "menu" -> main ()
       | f -> (
           try
-            let output = process_step_insns f rfile in
+            let output = process_step_insns f rfile mem in
             ignore (eval_step 0 [ output ]);
-            eval_insn_step_format output
+            eval_insn_step_format (rfile, mem)
           with _ ->
             ansi_print [ ANSITerminal.yellow ] "Enter valid instruction \n";
-            eval_insn_step_format rfile))
+            eval_insn_step_format (rfile, mem)))
 
 and process f =
-  match f with
-  | "1" ->
-      ansi_print [ ANSITerminal.red ] "Enter the name of test file\n";
-      get_insns_from_file () |> eval_insn_file_format
-  | "2" ->
-      ansi_print [ ANSITerminal.red ]
-        "Enter the instruction. Hit the Return Key when done\n";
-      eval_insn_step_format Registers.init
-  | "3" -> ()
-  | _ -> ()
+  try
+    match f with
+    | "1" ->
+        ansi_print [ ANSITerminal.red ] "Enter the name of test file\n";
+        get_insns_from_file () |> eval_insn_file_format
+    | "2" ->
+        ansi_print [ ANSITerminal.red ]
+          "Enter the instruction. Hit the Return Key when done\n";
+        eval_insn_step_format (Registers.init, Memory.init)
+    | "3" -> ()
+    | _ -> ()
+  with NotWordAligned ->
+    ansi_print [ ANSITerminal.red ]
+      "Your [sw] instructions are not word-aliged. Returning you to Main Menu\n\n";
+    main ()
 
 and main () =
   ansi_print [ ANSITerminal.red ] "What would you like to do? \n";

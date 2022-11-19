@@ -21,21 +21,25 @@ let get_memory addr ram =
   let open Memory in
   try fst (find addr ram) with Not_found -> failwith "Invalid memory address"
 
+let visited_memory mem = List.filter (fun (k, v) -> snd v = true) mem
+
 let pp_memory memory =
-  print_endline "Address |  Decimal |  Binary |  Hexadecimal ";
+  let memory = visited_memory (Memory.bindings memory) in
+  if memory = [] then
+    print_endline "No change to memory. All addresses set to 0"
+  else print_endline "Address |  Decimal |  Binary |  Hexadecimal ";
   print_endline "--------------------------------------------";
-  let memory = Memory.bindings memory in
   let rec print mem =
     let open Int32 in
     match mem with
     | [] -> ()
     | (r, v) :: t ->
-        let dec = fst v in
-        let bin = to_string_bin dec in
-        let hex = to_string_hex dec in
+        let dec = Int32.to_int (fst v) in
+        let bin = dec_to_bin dec in
+        let hex = dec_to_hex dec in
         print_endline
-          (string_of_int r ^ "\t | " ^ to_string dec ^ "\t | " ^ bin ^ "\t | "
-         ^ hex);
+          (string_of_int r ^ "\t | " ^ string_of_int dec ^ "\t | " ^ bin
+         ^ "\t | " ^ hex);
         print t
   in
   print memory
