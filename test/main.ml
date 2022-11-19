@@ -70,27 +70,27 @@ module IOTests = struct
 end
 (************************************ Registers Tests *********************************** *)
 
-let rfile = Registers.init
-let rfile1 = update_register "x1" 5 rfile
-let rfile2 = update_register "x2" 7 rfile
-let rfile3 = update_register "x3" 56 rfile
-let rfile4 = update_register "x4" 112 rfile
-let rfile5 = update_register "x5" 320 rfile
-let rfile6 = update_register "x6" 97 rfile
-let lower_bound = (pow 2 31 - 1) * -1 |> of_int
-let upper_bound = pow 2 31 - 1 |> of_int
-let rfile7 = update_register "x7" (Int32.to_int lower_bound) rfile
-let rfile8 = update_register "x8" (Int32.to_int upper_bound) rfile
+module RegisterTests = struct
+  let rfile = Registers.init
+  let rfile1 = update_register "x1" 5 rfile
+  let rfile2 = update_register "x2" 7 rfile
+  let rfile3 = update_register "x3" 56 rfile
+  let rfile4 = update_register "x4" 112 rfile
+  let rfile5 = update_register "x5" 320 rfile
+  let rfile6 = update_register "x6" 97 rfile
+  let lower_bound = (pow 2 31 - 1) * -1 |> of_int
+  let upper_bound = pow 2 31 - 1 |> of_int
+  let rfile7 = update_register "x7" (Int32.to_int lower_bound) rfile
+  let rfile8 = update_register "x8" (Int32.to_int upper_bound) rfile
 
-(** [test_register name r expected_output] constructs an OUnit test named
+  (** [test_register name r expected_output] constructs an OUnit test named
     [name] that asserts the quality of [expected_output] with
     [Registers.get_register r rfile]. *)
-let test_register (name : string) (r : string)
-    (rfile : (int32 * bool) RegisterFile.t) (expected_output : int32) : test =
-  name >:: fun _ ->
-  assert_equal expected_output (get_register r rfile) ~printer:Int32.to_string
+  let test_register (name : string) (r : string)
+      (rfile : (int32 * bool) RegisterFile.t) (expected_output : int32) : test =
+    name >:: fun _ ->
+    assert_equal expected_output (get_register r rfile) ~printer:Int32.to_string
 
-module RegisterTests = struct
   let register_tests =
     [
       test_register "init values" "x1" rfile 0l;

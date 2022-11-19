@@ -1,11 +1,11 @@
 open Registers
 open Utilities
-open Stdint
 
 let rtype = [ "add"; "sub"; "and"; "or"; "xor"; "nor"; "sll"; "srl" ]
 let itype = [ "addi"; "andi"; "ori"; "xori"; "subi" ]
 let utype = [ "lui" ]
 let stype = [ "sw"; "sb"; "lw"; "lb" ]
+let mem_bitmask = 255l
 
 exception NotWordAligned
 
@@ -16,7 +16,7 @@ let eval_ri_insns rd rs1 rs2 rfile op r_type =
       if r_type then get_register rs2 rfile else of_string rs2 )
   in
   let res = op in1 in2 in
-  update_register rd (Stdint.Int32.to_int res) rfile
+  update_register rd (Int32.to_int res) rfile
 
 let eval_shift_insns rd rs1 rs2 rfile op r_type =
   let open Int32 in
@@ -25,13 +25,22 @@ let eval_shift_insns rd rs1 rs2 rfile op r_type =
       if r_type then get_register rs2 rfile else of_string rs2 )
   in
   let res = op in1 (to_int in2) in
-  update_register rd (Stdint.Int32.to_int res) rfile
+  update_register rd (Int32.to_int res) rfile
 
 let eval_store_insns op rs1 offset rs2 rfile mem =
+  let open Int32 in
   let v = get_register rs1 rfile in
-  let addr = int_of_string offset + Int32.to_int (get_register rs2 rfile) in
+  let byte_one = logand (shift_right v 0) mem_bitmask in
+  let byte_two = logand (shift_right v 8) mem_bitmask in
+  let byte_three = logand (shift_right v 16) mem_bitmask in
+  let byte_four = logand (shift_right v 24) mem_bitmask in
+  let addr = int_of_string offset + to_int (get_register rs2 rfile) in
   if addr mod 4 <> 0 then raise NotWordAligned
-  else Memory.update_memory addr (Int32.to_int v) mem
+  else
+    Memory.update_memory addr byte_one mem
+    |> Memory.update_memory (addr + 1) byte_two
+    |> Memory.update_memory (addr + 2) byte_three
+    |> Memory.update_memory (addr + 3) byte_four
 
 let process_rtype op rd rs1 rs2 rfile =
   let open Int32 in
@@ -91,16 +100,15 @@ let rec process_insns insns acc rfile mem =
         process_insns t
           ((new_register_state, mem) :: acc)
           new_register_state mem
-      else if List.exists (fun x -> x = op) stype then (
+      else if List.exists (fun x -> x = op) stype then
         let op, rgs = split_stype h in
-        print_endline (string_of_list (op :: rgs));
         let rs1, offset, rs2 =
           (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
         in
         let new_memory_state = process_stype op rs1 offset rs2 rfile mem in
         process_insns t
           ((rfile, new_memory_state) :: acc)
-          rfile new_memory_state)
+          rfile new_memory_state
       else acc
 
 let process_file_insns insns =

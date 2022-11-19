@@ -1,15 +1,19 @@
+exception FileDoesNotExist
+
 let test_file = "data" ^ Filename.dir_sep ^ "instructions.txt"
 
 let file_to_list file =
-  let ic = open_in file in
-  let rec loop acc =
-    match try Some (input_line ic) with End_of_file -> None with
-    | Some a -> loop (a :: acc)
-    | None ->
-        close_in ic;
-        List.rev acc
-  in
-  loop []
+  try
+    let ic = open_in file in
+    let rec loop acc =
+      match try Some (input_line ic) with End_of_file -> None with
+      | Some a -> loop (a :: acc)
+      | None ->
+          close_in ic;
+          List.rev acc
+    in
+    loop []
+  with _ -> raise FileDoesNotExist
 
 let rec print_lst oc = function
   | [] -> ()

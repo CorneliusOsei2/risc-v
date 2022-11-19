@@ -1,5 +1,4 @@
 open Utilities
-open Stdint
 open Random
 
 let register_num r = List.nth (String.split_on_char 'x' r) 1 |> int_of_string
@@ -23,7 +22,7 @@ let init =
 
 let update_register r v rfile =
   let open RegisterFile in
-  add r (Stdint.Int32.of_int v, true) rfile
+  add r (Int32.of_int v, true) rfile
 
 let visited_registers rfile =
   List.filter (fun el -> snd (snd el) = true) (RegisterFile.bindings rfile)
@@ -41,7 +40,7 @@ let pp_registers registerfile =
     | [] -> ()
     | (r, v) :: t ->
         let v = to_int (fst v) in
-        let bin = to_string_bin (of_int v) in
+        let bin = dec_to_bin v in
         let hex = dec_to_hex v in
         print_endline
           (r ^ "\t | "
