@@ -68,13 +68,7 @@ let split_stype instruct =
   let op, args = split_instruction instruct in
   (op, List.hd args :: split_offset (List.tl args))
 
-let pp_list lst =
-  let start = "[" in
-  let e = "]" in
-  let rec print lst = match lst with [] -> "" | h :: t -> h ^ ";" ^ print t in
-  start ^ print lst ^ e
-
-let pp_instruction (op, args) =
+let string_of_insn (op, args) =
   let rec pp_rs rs acc =
     match rs with [] -> acc | h :: t -> pp_rs t (acc ^ " " ^ h)
   in

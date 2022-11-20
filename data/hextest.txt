@@ -1,5 +1,0 @@
-addi x1, x1, 0x5
-addi x2, x1, 0x5
-addi x3, x1, 0x17
-addi x2, x0, -0x6
-addi x5, x0, -0x800
