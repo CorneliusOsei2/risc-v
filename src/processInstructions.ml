@@ -8,7 +8,6 @@ let stype = [ "sw"; "sb"; "lw"; "lb" ]
 let mem_bitmask = 255l
 
 exception WrongFormat
-exception EmptySpace
 exception NotWordAligned
 
 let eval_ri_insns rd rs1 rs2 rfile op r_type =

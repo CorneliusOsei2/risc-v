@@ -12,7 +12,6 @@ val utype : string list
 
 exception WrongFormat
 exception NotWordAligned
-exception EmptySpace
 
 val process_rtype :
   string ->
