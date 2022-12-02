@@ -54,11 +54,6 @@ and eval_step n output =
         n + 1
     | _ -> n + 1)
 
-and invalid_instructions insns =
-  match eval_insn_file_format insns with
-  | exception _ -> "Hello"
-  | _ -> failwith "Impossible"
-
 and eval_insn_file_format insns =
   try
     let output = process_file_insns insns in
