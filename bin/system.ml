@@ -55,14 +55,22 @@ and eval_step n output =
     | _ -> n + 1)
 
 and eval_insn_file_format insns =
-  let output = process_file_insns insns in
-  ansi_print [ ANSITerminal.green ] "\n .....file successfully loaded!\n";
-  ansi_print [ ANSITerminal.red ] "PROMPT";
-  ansi_print [ ANSITerminal.blue ]
-    "\tHow will you like to visualize the execution? \n\
-     \tYou can hit [r] in the process of stepping to evaluate all!\n";
-  ansi_print [ ANSITerminal.yellow ] "\tstep (s) or run all (r)?\n";
-  eval_pattern 0 output
+  try
+    let output = process_file_insns insns in
+    ansi_print [ ANSITerminal.green ] "\n .....file successfully loaded!\n";
+    ansi_print [ ANSITerminal.red ] "PROMPT";
+    ansi_print [ ANSITerminal.blue ]
+      "\tHow will you like to visualize the execution? \n\
+       \tYou can hit [r] in the process of stepping to evaluate all!\n";
+    ansi_print [ ANSITerminal.yellow ] "\tstep (s) or run all (r)?\n";
+    eval_pattern 0 output
+  with _ ->
+    ansi_print [ ANSITerminal.blue ]
+      "\tInvalid instructions or an invalid instruction format exist in this \
+       test file \n";
+    ansi_print [ ANSITerminal.yellow ]
+      "\tPlease enter a test file with valid instructions \n";
+    eval_insn_file_format (get_insns_from_file ())
 
 and get_insns_from_file () =
   ansi_print [ ANSITerminal.yellow ] ">> ";

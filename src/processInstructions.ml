@@ -7,6 +7,7 @@ let utype = [ "lui" ]
 let stype = [ "sw"; "sb"; "lw"; "lb" ]
 let mem_bitmask = 255l
 
+exception WrongFormat
 exception NotWordAligned
 
 let eval_ri_insns rd rs1 rs2 rfile op r_type =
@@ -84,11 +85,15 @@ let process_stype op rs1 offset rs2 rfile mem =
 let rec process_insns insns acc rfile mem =
   match insns with
   | [] -> acc
-  | h :: t ->
+  | h :: t -> (
       let op, rgs = split_instruction h in
       if List.exists (fun x -> x = op) rtype then
         (* R-Type Instructions *)
-        let rd, rs1, rs2 = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
+        let rd, rs1, rs2 =
+          match (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) with
+          | exception _ -> raise WrongFormat
+          | _ -> (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
+        in
         let new_register_state = process_rtype op rd rs1 rs2 rfile in
         process_insns t
           ((new_register_state, mem) :: acc)
@@ -109,10 +114,13 @@ let rec process_insns insns acc rfile mem =
         process_insns t
           ((rfile, new_memory_state) :: acc)
           rfile new_memory_state
-      else acc
+      else match op with exception End_of_file -> acc | _ -> raise WrongFormat)
 
 let process_file_insns insns =
-  Memory.init |> process_insns insns [] Registers.init
+  Memory.init
+  |>
+  try process_insns insns [] Registers.init
+  with WrongFormat -> raise WrongFormat
 
 let process_step_insns insn rfile mem =
   List.nth (process_insns [ insn ] [] rfile mem) 0

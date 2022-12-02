@@ -10,6 +10,7 @@ val stype : string list
 val utype : string list
 (* Suported U-type instruction operators *)
 
+exception WrongFormat
 exception NotWordAligned
 
 val process_rtype :
