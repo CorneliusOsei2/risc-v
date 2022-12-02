@@ -54,6 +54,11 @@ and eval_step n output =
         n + 1
     | _ -> n + 1)
 
+and invalid_instructions insns =
+  match eval_insn_file_format insns with
+  | exception _ -> "Hello"
+  | _ -> failwith "Impossible"
+
 and eval_insn_file_format insns =
   try
     let output = process_file_insns insns in
@@ -65,12 +70,12 @@ and eval_insn_file_format insns =
     ansi_print [ ANSITerminal.yellow ] "\tstep (s) or run all (r)?\n";
     eval_pattern 0 output
   with _ ->
-    ansi_print [ ANSITerminal.red ]
-      "\tInvalid instructions exist in this test file";
-    ansi_print [ ANSITerminal.red ]
-      "\t\n\
-      \       Your instructions are not valid. Returning you to Main Menu\n\n";
-    main ()
+    ansi_print [ ANSITerminal.blue ]
+      "\tInvalid instructions or an invalid instruction format exist in this \
+       test file \n";
+    ansi_print [ ANSITerminal.yellow ]
+      "\tPlease enter a test file with valid instructions \n";
+    eval_insn_file_format (get_insns_from_file ())
 
 and get_insns_from_file () =
   ansi_print [ ANSITerminal.yellow ] ">> ";
