@@ -95,4 +95,4 @@ let get_register r rfile =
   try
     let open RegisterFile in
     fst (find r rfile)
-  with Not_found -> failwith "Invalid register access"
+  with Not_found -> failwith "Invalud register"
