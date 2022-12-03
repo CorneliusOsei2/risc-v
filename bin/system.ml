@@ -35,6 +35,8 @@ let rec eval_pattern n output =
           ansi_print [ ANSITerminal.red ] "Invalid option. Please try again: \n";
           eval_pattern n output)
 
+(** [eval_step n output] prints out the current state of 
+    the register and memory at index [n] in [output]. *)
 and eval_step n output =
   if n < List.length output then (
     ansi_print [ ANSITerminal.green ] "\nRegister File\n";
@@ -64,12 +66,11 @@ and eval_insn_file_format insns =
        \tYou can hit [r] in the process of stepping to evaluate all!\n";
     ansi_print [ ANSITerminal.yellow ] "\tstep (s) or run all (r)?\n";
     eval_pattern 0 output
-  with _ ->
+  with WrongFormat i ->
     ansi_print [ ANSITerminal.blue ]
-      "\tInvalid instructions or an invalid instruction format exist in this \
-       test file \n";
+      ("\tInstruction " ^ string_of_int i ^ " is invalid\n");
     ansi_print [ ANSITerminal.yellow ]
-      "\tPlease enter a test file with valid instructions \n";
+      "\tPlease choose a test file with valid instructions \n";
     eval_insn_file_format (get_insns_from_file ())
 
 and get_insns_from_file () =
