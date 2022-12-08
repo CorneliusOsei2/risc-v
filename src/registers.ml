@@ -75,7 +75,7 @@ let pp_registers registerfile =
   in
   print registers
 
-let gen_register n = "x" ^ string_of_int (n + 1)
+let gen_register n = "x" ^ string_of_int ((n + 1) mod 31 + 1)
 
 let rec gen_imm lower_bound upper_bound =
   let i = Random.int32 upper_bound in

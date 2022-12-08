@@ -7,8 +7,10 @@ let utype = [ "lui" ]
 let stype = [ "sw"; "sb"; "lw"; "lb" ]
 let mem_bitmask = 255l
 
-exception WrongFormat
+exception WrongFormat of int
 exception NotWordAligned
+
+let ins_track = ref 0
 
 let eval_ri_insns rd rs1 rs2 rfile op r_type =
   let open Int32 in
@@ -86,41 +88,37 @@ let rec process_insns insns acc rfile mem =
   match insns with
   | [] -> acc
   | h :: t -> (
-      let op, rgs = split_instruction h in
-      if List.exists (fun x -> x = op) rtype then
-        (* R-Type Instructions *)
-        let rd, rs1, rs2 =
-          match (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) with
-          | exception _ -> raise WrongFormat
-          | _ -> (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
-        in
-        let new_register_state = process_rtype op rd rs1 rs2 rfile in
-        process_insns t
-          ((new_register_state, mem) :: acc)
-          new_register_state mem
-      else if List.exists (fun x -> x = op) itype then
-        (* I-Type Instructions *)
-        let rd, rs1, imm = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
-        let new_register_state = process_itype op rd rs1 imm rfile in
-        process_insns t
-          ((new_register_state, mem) :: acc)
-          new_register_state mem
-      else if List.exists (fun x -> x = op) stype then
-        let op, rgs = split_stype h in
-        let rs1, offset, rs2 =
-          (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
-        in
-        let new_memory_state = process_stype op rs1 offset rs2 rfile mem in
-        process_insns t
-          ((rfile, new_memory_state) :: acc)
-          rfile new_memory_state
-      else match op with exception End_of_file -> acc | _ -> raise WrongFormat)
+      try(
+        ins_track := !ins_track + 1;
+        let op, rgs = split_instruction h in
+        if List.exists (fun x -> x = op) rtype then
+          (* R-Type Instructions *)
+          let rd, rs1, rs2 = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
+          let new_register_state = process_rtype op rd rs1 rs2 rfile in
+          process_insns t
+            ((new_register_state, mem) :: acc)
+            new_register_state mem
+        else if List.exists (fun x -> x = op) itype then
+          (* I-Type Instructions *)
+          let rd, rs1, imm = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
+          let new_register_state = process_itype op rd rs1 imm rfile in
+          process_insns t
+            ((new_register_state, mem) :: acc)
+            new_register_state mem
+        else if List.exists (fun x -> x = op) stype then
+          let op, rgs = split_stype h in
+          let rs1, offset, rs2 =
+            (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
+          in
+          let new_memory_state = process_stype op rs1 offset rs2 rfile mem in
+          process_insns t
+            ((rfile, new_memory_state) :: acc)
+            rfile new_memory_state
+        else acc)
+      with _ -> raise (WrongFormat !ins_track))
 
 let process_file_insns insns =
-  Memory.init
-  |>
-  try process_insns insns [] Registers.init
-  with WrongFormat -> raise WrongFormat
+  Memory.init |> process_insns insns [] Registers.init
 
 let process_step_insns insn rfile mem =
   List.nth (process_insns [ insn ] [] rfile mem) 0

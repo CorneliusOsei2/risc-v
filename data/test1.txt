@@ -5,6 +5,7 @@ andi x4, x3, 10101
 or x5, x4, x3
 ori x7, x4, 10
 xor x6, x1, x2
+
 nor x8, x3, x5
 xori x9, x1, 190
 add x10, x5, x7

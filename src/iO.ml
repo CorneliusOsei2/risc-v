@@ -7,7 +7,7 @@ let file_to_list file =
     let ic = open_in file in
     let rec loop acc =
       match try Some (input_line ic) with End_of_file -> None with
-      | Some a -> loop (a :: acc)
+      | Some a -> if a <> "" then loop (a :: acc) else loop acc
       | None ->
           close_in ic;
           List.rev acc
