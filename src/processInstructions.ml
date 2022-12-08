@@ -88,7 +88,7 @@ let rec process_insns insns acc rfile mem =
   match insns with
   | [] -> acc
   | h :: t -> (
-      try
+      try(
         ins_track := !ins_track + 1;
         let op, rgs = split_instruction h in
         if List.exists (fun x -> x = op) rtype then
@@ -105,8 +105,7 @@ let rec process_insns insns acc rfile mem =
           process_insns t
             ((new_register_state, mem) :: acc)
             new_register_state mem
-        else
-          (*if List.exists (fun x -> x = op) stype then*)
+        else if List.exists (fun x -> x = op) stype then
           let op, rgs = split_stype h in
           let rs1, offset, rs2 =
             (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
@@ -115,6 +114,7 @@ let rec process_insns insns acc rfile mem =
           process_insns t
             ((rfile, new_memory_state) :: acc)
             rfile new_memory_state
+        else acc)
       with _ -> raise (WrongFormat !ins_track))
 
 let process_file_insns insns =

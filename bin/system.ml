@@ -3,7 +3,7 @@ open Registers
 open Utilities
 open IO
 open ProcessInstructions
-
+open GenerateInstructions
 exception NoSuchFile of string
 
 let data_dir_prefix = "data" ^ Filename.dir_sep
@@ -59,7 +59,7 @@ and eval_step n output =
 and eval_insn_file_format insns =
   try
     let output = process_file_insns insns in
-    ansi_print [ ANSITerminal.green ] "\n .....file successfully loaded!\n";
+    ansi_print [ ANSITerminal.green ] "\n .....file successfully loaded!\n\n";
     ansi_print [ ANSITerminal.red ] "PROMPT";
     ansi_print [ ANSITerminal.blue ]
       "\tHow will you like to visualize the execution? \n\
@@ -110,6 +110,23 @@ and eval_insn_step_format (rfile, mem) =
             ansi_print [ ANSITerminal.yellow ] "Enter valid instruction \n";
             eval_insn_step_format (rfile, mem)))
 
+and gen_insns_handler () =  ansi_print [ ANSITerminal.red ] "PROMPT";
+ansi_print [ ANSITerminal.blue ]
+  "\tDo you have specific instructions you want to generate?\n\
+   \tYou can hit [y] or [yes] to choose specific instructions or [n] or [no] to generate for all currently supported instructions\n";
+   ansi_print [ ANSITerminal.blue ] ">> ";
+   match read_line () with
+   | exception End_of_file -> ()
+   | f -> (
+       match String.trim f with
+       | "n" | "no" -> gen_insns (); 
+                  ansi_print [ ANSITerminal.green ] "\t..... instructions successfully generated in data/instructions.txt.\n\tReturning to main menu\n\n"; 
+                  main()
+       | "y" | "yes" -> gen_insns_handler ()
+       | "m" | "menu" -> main ()
+       | _ -> (ansi_print [ ANSITerminal.red ] "ALERT";
+       ansi_print [ ANSITerminal.yellow ] "\tPlease enter valid command \n"; gen_insns_handler ()))
+
 and process f =
   try
     match f with
@@ -122,7 +139,8 @@ and process f =
         ansi_print [ ANSITerminal.blue ]
           "\tEnter the instruction. Hit the Return Key when done\n";
         eval_insn_step_format (Registers.init, Memory.init)
-    | "3" -> ()
+    | "3" -> gen_insns_handler ()
+    | "m" | "menu" -> main()
     | _ -> ()
   with NotWordAligned ->
     ansi_print [ ANSITerminal.red ]
