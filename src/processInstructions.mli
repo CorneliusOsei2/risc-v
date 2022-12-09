@@ -38,8 +38,6 @@ val process_itype :
 val process_utype :
   string ->
   string ->
-  string ->
-  string ->
   (Int32.t * bool) Registers.RegisterFile.t ->
   (Int32.t * bool) Registers.RegisterFile.t
 (** [process_utype op rd rs1 rs2 rfile] processes the U-format instruction
