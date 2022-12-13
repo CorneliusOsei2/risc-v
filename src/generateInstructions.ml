@@ -40,6 +40,21 @@ let gen_specific_insns ops =
         (match h with
         | "1" | "addi" -> gen_itype "addi" 1
         | "2" | "andi" -> gen_itype "andi" 1
+        | "3" | "ori" -> gen_itype "ori" 1
+        | "4" | "xori" -> gen_itype "xori" 1
+        | "5" | "slli" -> gen_itype "slli" 1
+        | "6" | "slri" -> gen_itype "slri" 1
+        | "7" | "add" -> gen_rtype "add" 1
+        | "8" | "and" -> gen_rtype "and" 1
+        | "9" | "or" -> gen_rtype "or" 1
+        | "10" | "xor" -> gen_rtype "xor" 1
+        | "11" | "sll" -> gen_rtype "sll" 1
+        | "12" | "srl" -> gen_rtype "srl" 1
+        | "13" | "lui" -> gen_stype "lui" 1
+        | "14" | "sw" -> gen_stype "sw" 1
+        | "15" | "sb" -> gen_stype "sb" 1
+        | "16" | "lw" -> gen_stype "lw" 1
+        | "17" | "lb" -> gen_stype "lb" 1
         | _ -> ());
         helper t
   in
