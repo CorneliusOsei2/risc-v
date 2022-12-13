@@ -37,8 +37,8 @@ let rec gen_sbtype op n =
   if n mod 15 = 0 then ()
   else
     let rd = gen_register n in
-    let rs1 = gen_register (n + 1) in
-    let imm = Int32.mul (gen_imm 0l 7l) 4l in
+    let rs1 = "x0" in
+    let imm = gen_imm 0l 31l in
     acc :=
       (op ^ " " ^ rd ^ ", " ^ Int32.to_string imm ^ "(" ^ rs1 ^ ")") :: !acc;
     gen_swtype op (n + 1)
@@ -86,5 +86,7 @@ let rec gen_insns () =
   ignore (List.map (fun op -> gen_itype op 1) rtype);
   ignore (List.map (fun op -> gen_rtype op 1) rtype);
   ignore (List.map (fun op -> gen_swtype op 1) rtype);
+  ignore (List.map (fun op -> gen_sbtype op 1) rtype);
+  ignore (List.map (fun op -> gen_utype op 1) rtype);
   list_to_file (List.rev !acc);
   acc := []
