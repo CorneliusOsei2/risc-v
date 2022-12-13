@@ -27,8 +27,13 @@ let pp_memory memory =
   let memory = visited_memory memory in
   if memory = [] then
     print_endline "No change to memory. All addresses set to 0"
-  else print_endline "Address |  Decimal |  Binary |  Hexadecimal ";
-  print_endline "--------------------------------------------";
+  else
+    print_endline
+      ("Address  |" ^ pp_string 8 ' ' " Decimal" ^ " | "
+     ^ pp_string 36 ' ' "Binary" ^ "|"
+      ^ pp_string 18 ' ' " Hexadecimal");
+  print_endline
+    "------------------------------------------------------------------------";
   let rec print mem =
     let open Int32 in
     match mem with
