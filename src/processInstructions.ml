@@ -70,19 +70,19 @@ let eval_load_insns op rs1 offset rs2 rfile mem =
     update_register rs1 (to_int v) rfile
   else if addr mod 4 <> 0 then raise NotWordAligned
   else
-    let v =
-      add
-        (shift_left (logand (Memory.get_memory addr mem) mem_bitmask) 0)
-        (shift_left (logand (Memory.get_memory (addr + 1) mem) mem_bitmask) 8)
-      |> add
-           (shift_left
-              (logand (Memory.get_memory (addr + 2) mem) mem_bitmask)
-              16)
-      |> add
-           (shift_left
-              (logand (Memory.get_memory (addr + 3) mem) mem_bitmask)
-              24)
+    let byte_one =
+      shift_left (logand (Memory.get_memory addr mem) mem_bitmask) 0
     in
+    let byte_two =
+      shift_left (logand (Memory.get_memory (addr + 1) mem) mem_bitmask) 8
+    in
+    let byte_three =
+      shift_left (logand (Memory.get_memory (addr + 2) mem) mem_bitmask) 16
+    in
+    let byte_four =
+      shift_left (logand (Memory.get_memory (addr + 3) mem) mem_bitmask) 24
+    in
+    let v = add byte_one byte_two |> add byte_three |> add byte_four in
     update_register rs1 (Int32.to_int v) rfile
 
 let process_rtype op rd rs1 rs2 rfile =
@@ -94,7 +94,8 @@ let process_rtype op rd rs1 rs2 rfile =
   | "or" -> eval_r_insns rd rs1 rs2 rfile logor true
   | "xor" -> eval_r_insns rd rs1 rs2 rfile logxor true
   | "sll" -> eval_shift_insns rd rs1 rs2 rfile shift_left true
-  | "srl" -> eval_shift_insns rd rs1 rs2 rfile shift_right true
+  | "srl" -> eval_shift_insns rd rs1 rs2 rfile shift_right_logical true
+  | "sra" -> eval_shift_insns rd rs1 rs2 rfile shift_right true
   | _ -> rfile
 
 let process_itype op rd rs imm rfile =
@@ -105,7 +106,8 @@ let process_itype op rd rs imm rfile =
   | "ori" -> eval_i_insns rd rs imm rfile logor false
   | "xori" -> eval_i_insns rd rs imm rfile logxor false
   | "slli" -> eval_shift_insns rd rs imm rfile shift_left true
-  | "srli" -> eval_shift_insns rd rs imm rfile shift_right true
+  | "srli" -> eval_shift_insns rd rs imm rfile shift_right_logical true
+  | "srai" -> eval_shift_insns rd rs imm rfile shift_right true
   | _ -> rfile
 
 let process_utype rd imm rfile =
