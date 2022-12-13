@@ -8,6 +8,8 @@ let stype = [ "sw"; "sb"; "lw"; "lb" ]
 let mem_bitmask = 255l
 let max_i = 2047l
 let min_i = -2048l
+let max_u = 4096l (* TODO:*)
+let min_u = -4097 (* TODO:*)
 
 exception WrongFormat of int
 exception NotWordAligned
@@ -27,7 +29,6 @@ let eval_r_insns rd rs1 rs2 rfile op r_type =
   let res = op in1 in2 in
   update_register rd (Int32.to_int res) rfile
 
-(* TODO: *)
 let eval_i_insns rd rs imm rfile op r_type =
   let open Int32 in
   let in1, in2 = (get_register rs rfile, of_string imm) in
@@ -61,21 +62,22 @@ let eval_store_insns op rs1 offset rs2 rfile mem =
     |> Memory.update_memory (addr + 2) byte_three
     |> Memory.update_memory (addr + 3) byte_four
 
-(* let eval_load_insns op rs1 offset rs2 rfile mem =
-   let open Int32 in
-   let v = get_register rs1 rfile in
-   let byte_one = logand (shift_right v 0) mem_bitmask in
-   let byte_two = logand (shift_right v 8) mem_bitmask in
-   let byte_three = logand (shift_right v 16) mem_bitmask in
-   let byte_four = logand (shift_right v 24) mem_bitmask in
-   let addr = int_of_string offset + to_int (get_register rs2 rfile) in
-   if addr mod 4 <> 0 then raise NotWordAligned
-   else if op = "sb" then Memory.update_memory addr byte_one mem
-   else
-     Memory.update_memory addr byte_one mem
-     |> Memory.update_memory (addr + 1) byte_two
-     |> Memory.update_memory (addr + 2) byte_three
-     |> Memory.update_memory (addr + 3) byte_four *)
+(* TODO: Test and Prove*)
+let eval_load_insns op rs1 offset rs2 rfile mem =
+  let open Int32 in
+  let addr = int_of_string offset + to_int (get_register rs2 rfile) in
+  if addr mod 4 <> 0 then raise NotWordAligned
+  else if op = "lb" then
+    let v = Memory.get_memory addr mem in
+    update_register rs1 v rfile
+  else
+    let v =
+      Memory.get_memory addr mem
+      + Memory.get_memory (addr + 1) mem
+      + Memory.get_memory (addr + 2) mem
+      + Memory.get_memory (addr + 3) mem
+    in
+    update_register rs1 v rfile
 
 let process_rtype op rd rs1 rs2 rfile =
   let open Int32 in

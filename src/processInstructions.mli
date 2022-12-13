@@ -10,6 +10,9 @@ val stype : string list
 val utype : string list
 (* Suported U-type instruction operators *)
 
+val min_i : int32
+val max_i : int32
+
 exception WrongFormat of int
 exception NotWordAligned
 exception IncorrectRTypeFormat of int
