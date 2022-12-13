@@ -4,6 +4,7 @@ open Utilities
 open IO
 open ProcessInstructions
 open GenerateInstructions
+
 exception NoSuchFile of string
 
 let data_dir_prefix = "data" ^ Filename.dir_sep
@@ -13,7 +14,10 @@ let ansi_print style = ANSITerminal.print_string style
 
 (** [eval_step n output] handles the execution pattern: either step-wise or a run-all *)
 let rec eval_pattern n output =
-  if n > List.length output then (ansi_print [ANSITerminal.green] "...... returning you to the Main Menu\n\n"; main())
+  if n > List.length output then (
+    ansi_print [ ANSITerminal.green ]
+      "...... returning you to the Main Menu\n\n";
+    main ())
   else ansi_print [ ANSITerminal.yellow ] ">> ";
   match read_line () with
   | exception End_of_file -> ()
@@ -24,8 +28,10 @@ let rec eval_pattern n output =
           pp_registers (List.nth (List.map (fun out -> fst out) output) 0);
           ansi_print [ ANSITerminal.green ] "\nMemory\n";
           Memory.pp_memory (List.nth (List.map (fun out -> snd out) output) 0);
-          ansi_print [ ANSITerminal.green ] "All instructions executed.\n...... returning you to the Main Menu\n\n";
-          main()
+          ansi_print [ ANSITerminal.green ]
+            "All instructions executed.\n\
+             ...... returning you to the Main Menu\n\n";
+          main ()
       | "step" | "s" ->
           let output_rev = output |> List.rev in
           eval_pattern (eval_step n output_rev) output
@@ -110,36 +116,64 @@ and eval_insn_step_format (rfile, mem) =
             eval_insn_step_format (fst output, snd output)
           with _ ->
             ansi_print [ ANSITerminal.red ] "ALERT";
-            ansi_print [ ANSITerminal.yellow ] "Enter valid instruction \n";
+            ansi_print [ ANSITerminal.yellow ] "\tEnter valid instruction \n";
             eval_insn_step_format (rfile, mem)))
 
-and gen_specific_insns_handler () = ansi_print [ ANSITerminal.blue ]
-  "\tPlease choose the operations [corresponding numbers] you want instructions generated for.\n\tYou can choose multiple operations by separating their numbers with a comma.\n\tRegisters will be initialized with [addi] instructions first\n";
-  ansi_print [ANSITerminal.yellow] "\n\tI-Type:\n\t1. addi\t 2. andi\t 3. ori\n\t4. xori\t 5. slli\t 5. srli\n\n\tR-Type:\n\t1. add\t 2. and\t 3. or\n\t4. xor\t 5. sll\t 5. srl\n\n";           
-match read_line () with
-   | exception End_of_file -> ()
-   | f -> (try let ops = f |> list_of_string in gen_specific_insns ops with _ -> gen_specific_insns_handler ())
+and gen_specific_insns_handler () =
+  ansi_print [ ANSITerminal.blue ]
+    "\tPlease choose the operations [corresponding numbers] you want \
+     instructions generated for.\n\
+     \tYou can choose multiple operations by separating their numbers with a \
+     comma.\n\
+     \tRegisters will be initialized with [addi] instructions first\n";
+  ansi_print [ ANSITerminal.yellow ]
+    "\n\
+     \tI-Type:\n\
+     \t1. addi\t 2. andi\t 3. ori\n\
+     \t4. xori\t 5. slli\t 6. srli\n\n\
+     \tR-Type:\n\
+     \t7. add\t 8. and\t 9. or\n\
+     \t10. xor\t 11. sll\t 12. srl\n\n\
+     \tU-Type:\n\
+     \t13. lui\n\n\
+     \tS-Type:\n\
+     \t14. sw\t 15. sb\t 16. lw\n\
+     \t17. lb\n\n";
+  match read_line () with
+  | exception End_of_file -> ()
+  | f ->
+      (try
+         let ops = f |> String.trim in
+         gen_specific_insns []
+       with _ -> gen_specific_insns_handler ());
+      gen_insns ()
 
 
-
-
-and gen_insns_handler () =  ansi_print [ ANSITerminal.red ] "PROMPT";
-ansi_print [ ANSITerminal.blue ]
-  "\tDo you have specific instructions you want to generate?\n";
-  ansi_print [ ANSITerminal.yellow ] "\tYou can hit [y] or [yes] to choose specific instructions or [n] or [no] to generate for all currently supported instructions\n";
-   ansi_print [ ANSITerminal.blue ] ">> ";
-   match read_line () with
-   | exception End_of_file -> ()
-   | f -> (
-       match String.trim f with
-       | "n" | "no" -> gen_insns_handler (); 
-                  ansi_print [ ANSITerminal.green ] "\t..... instructions successfully generated in data/instructions.txt.\n\tReturning to main menu\n\n"; 
-                  main()
-       | "y" | "yes" -> 
-        gen_specific_insns_handler ()
-       | "m" | "menu" -> main ()
-       | _ -> (ansi_print [ ANSITerminal.red ] "ALERT";
-       ansi_print [ ANSITerminal.yellow ] "\tPlease enter valid command \n"; gen_insns_handler ()))
+and gen_insns_handler () =
+  ansi_print [ ANSITerminal.red ] "PROMPT";
+  ansi_print [ ANSITerminal.blue ]
+    "\tDo you have specific instructions you want to generate?\n";
+  ansi_print [ ANSITerminal.yellow ]
+    "\tYou can hit [y] or [yes] to choose specific instructions or [n] or [no] \
+     to generate for all currently supported instructions\n";
+  ansi_print [ ANSITerminal.blue ] ">> ";
+  match read_line () with
+  | exception End_of_file -> ()
+  | f -> (
+      match String.trim f with
+      | "n" | "no" ->
+          gen_insns_handler ();
+          ansi_print [ ANSITerminal.green ]
+            "\t..... instructions successfully generated in \
+             data/instructions.txt.\n\
+             \tReturning to main menu\n\n";
+          main ()
+      | "y" | "yes" -> gen_specific_insns_handler ()
+      | "m" | "menu" -> main ()
+      | _ ->
+          ansi_print [ ANSITerminal.red ] "ALERT";
+          ansi_print [ ANSITerminal.yellow ] "\tPlease enter valid command \n";
+          gen_insns_handler ())
 
 and process f =
   try
@@ -154,7 +188,7 @@ and process f =
           "\tEnter the instruction. Hit the Return Key when done\n";
         eval_insn_step_format (Registers.init, Memory.init)
     | "3" -> gen_insns_handler ()
-    | "m" | "menu" -> main()
+    | "m" | "menu" -> main ()
     | _ -> ()
   with NotWordAligned ->
     ansi_print [ ANSITerminal.red ]
