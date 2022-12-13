@@ -1,3 +1,4 @@
+val gen_specific_insns : string list -> unit
 val gen_insns : unit -> unit
 
 val gen_rtype : unit -> unit list
