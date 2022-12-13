@@ -116,9 +116,11 @@ and eval_insn_step_format (rfile, mem) =
 and gen_specific_insns_handler () = ansi_print [ ANSITerminal.blue ]
   "\tPlease choose the operations [corresponding numbers] you want instructions generated for.\n\tYou can choose multiple operations by separating their numbers with a comma.\n\tRegisters will be initialized with [addi] instructions first\n";
   ansi_print [ANSITerminal.yellow] "\n\tI-Type:\n\t1. addi\t 2. andi\t 3. ori\n\t4. xori\t 5. slli\t 5. srli\n\n\tR-Type:\n\t1. add\t 2. and\t 3. or\n\t4. xor\t 5. sll\t 5. srl\n\n";           
-match read_line () with
+  ansi_print [ ANSITerminal.blue ] ">> ";
+  match read_line () with
    | exception End_of_file -> ()
-   | f -> (try let ops = f |> list_of_string in gen_specific_insns ops with _ -> gen_specific_insns_handler ())
+   | f -> (try (let ops = f |> list_of_string in gen_specific_insns ops; ansi_print [ ANSITerminal.green ] "\t..... instructions successfully generated in data/instructions.txt.\n\tReturning to main menu\n\n"; 
+                  main()  ) with _ -> gen_specific_insns_handler ())
 
 
 
@@ -132,7 +134,7 @@ ansi_print [ ANSITerminal.blue ]
    | exception End_of_file -> ()
    | f -> (
        match String.trim f with
-       | "n" | "no" -> gen_insns_handler (); 
+       | "n" | "no" -> gen_insns (); 
                   ansi_print [ ANSITerminal.green ] "\t..... instructions successfully generated in data/instructions.txt.\n\tReturning to main menu\n\n"; 
                   main()
        | "y" | "yes" -> 
