@@ -1,7 +1,9 @@
 open Registers
 open Utilities
 
-let rtype = [ "add"; "sub"; "and"; "or"; "xor"; "nor"; "sll"; "srl" ]
+let rtype =
+  [ "add"; "sub"; "and"; "or"; "xor"; "nor"; "sll"; "srl"; "slt"; "sltu" ]
+
 let itype = [ "addi"; "andi"; "ori"; "xori"; "slli"; "srli" ]
 let utype = [ "lui" ]
 let stype = [ "sw"; "sb"; "lw"; "lb" ]
@@ -20,16 +22,18 @@ exception IncorrectSTypeFormat of int
 
 let ins_track = ref 0
 
-let eval_r_insns rd rs1 rs2 rfile op r_type =
+let compare_int32 n1 n2 =
   let open Int32 in
-  let in1, in2 =
-    ( get_register rs1 rfile,
-      if r_type then get_register rs2 rfile else of_string rs2 )
-  in
+  let n = compare n1 n2 in
+  if n = 1 then 0l else 1l
+
+let eval_r_insns rd rs1 rs2 rfile op =
+  let open Int32 in
+  let in1, in2 = (get_register rs1 rfile, get_register rs2 rfile) in
   let res = op in1 in2 in
   update_register rd (Int32.to_int res) rfile
 
-let eval_i_insns rd rs imm rfile op r_type =
+let eval_i_insns rd rs imm rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs rfile, of_string imm) in
   if in2 > max_i || in2 < min_i then raise (IncorrectITypeFormat !ins_track)
@@ -37,14 +41,19 @@ let eval_i_insns rd rs imm rfile op r_type =
     let res = op in1 in2 in
     update_register rd (Int32.to_int res) rfile
 
-let eval_shift_insns rd rs1 rs2 rfile op r_type =
+let eval_shift_r_insns rd rs1 rs2 rfile op =
   let open Int32 in
-  let in1, in2 =
-    ( get_register rs1 rfile,
-      if r_type then get_register rs2 rfile else of_string rs2 )
-  in
+  let in1, in2 = (get_register rs1 rfile, get_register rs2 rfile) in
   let res = op in1 (to_int in2) in
   update_register rd (Int32.to_int res) rfile
+
+let eval_shift_i_insns rd rs imm rfile op =
+  let open Int32 in
+  let in1, in2 = (get_register rs rfile, of_string rs) in
+  if in2 > max_i || in2 < min_i then raise (IncorrectITypeFormat !ins_track)
+  else
+    let res = op in1 (to_int in2) in
+    update_register rd (Int32.to_int res) rfile
 
 let eval_store_insns op rs1 offset rs2 rfile mem =
   let open Int32 in
@@ -88,26 +97,28 @@ let eval_load_insns op rs1 offset rs2 rfile mem =
 let process_rtype op rd rs1 rs2 rfile =
   let open Int32 in
   match String.lowercase_ascii op with
-  | "add" -> eval_r_insns rd rs1 rs2 rfile add true
-  | "sub" -> eval_r_insns rd rs1 rs2 rfile sub true
-  | "and" -> eval_r_insns rd rs1 rs2 rfile logand true
-  | "or" -> eval_r_insns rd rs1 rs2 rfile logor true
-  | "xor" -> eval_r_insns rd rs1 rs2 rfile logxor true
-  | "sll" -> eval_shift_insns rd rs1 rs2 rfile shift_left true
-  | "srl" -> eval_shift_insns rd rs1 rs2 rfile shift_right_logical true
-  | "sra" -> eval_shift_insns rd rs1 rs2 rfile shift_right true
+  | "add" -> eval_r_insns rd rs1 rs2 rfile add
+  | "sub" -> eval_r_insns rd rs1 rs2 rfile sub
+  | "and" -> eval_r_insns rd rs1 rs2 rfile logand
+  | "or" -> eval_r_insns rd rs1 rs2 rfile logor
+  | "xor" -> eval_r_insns rd rs1 rs2 rfile logxor
+  | "sll" -> eval_shift_r_insns rd rs1 rs2 rfile shift_left
+  | "srl" -> eval_shift_r_insns rd rs1 rs2 rfile shift_right_logical
+  | "sra" -> eval_shift_r_insns rd rs1 rs2 rfile shift_right
+  | "slt" -> eval_r_insns rd rs1 rs2 rfile compare_int32
   | _ -> rfile
 
 let process_itype op rd rs imm rfile =
   let open Int32 in
   match String.lowercase_ascii op with
-  | "addi" -> eval_i_insns rd rs imm rfile add false
-  | "andi" -> eval_i_insns rd rs imm rfile logand false
-  | "ori" -> eval_i_insns rd rs imm rfile logor false
-  | "xori" -> eval_i_insns rd rs imm rfile logxor false
-  | "slli" -> eval_shift_insns rd rs imm rfile shift_left true
-  | "srli" -> eval_shift_insns rd rs imm rfile shift_right_logical true
-  | "srai" -> eval_shift_insns rd rs imm rfile shift_right true
+  | "addi" -> eval_i_insns rd rs imm rfile add
+  | "andi" -> eval_i_insns rd rs imm rfile logand
+  | "ori" -> eval_i_insns rd rs imm rfile logor
+  | "xori" -> eval_i_insns rd rs imm rfile logxor
+  | "slli" -> eval_shift_i_insns rd rs imm rfile shift_left
+  | "srli" -> eval_shift_i_insns rd rs imm rfile shift_right_logical
+  | "srai" -> eval_shift_i_insns rd rs imm rfile shift_right
+  | "slti" -> eval_r_insns rd rs imm rfile compare_int32
   | _ -> rfile
 
 let process_utype rd imm rfile =
