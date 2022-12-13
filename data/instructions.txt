@@ -12,3 +12,17 @@ addi x6, x7, 339
 addi x5, x6, 1467
 addi x4, x5, 1812
 addi x3, x4, 1569
+sll x16, x17, x18
+sll x15, x16, x17
+sll x14, x15, x16
+sll x13, x14, x15
+sll x12, x13, x14
+sll x11, x12, x13
+sll x10, x11, x12
+sll x9, x10, x11
+sll x8, x9, x10
+sll x7, x8, x9
+sll x6, x7, x8
+sll x5, x6, x7
+sll x4, x5, x6
+sll x3, x4, x5
