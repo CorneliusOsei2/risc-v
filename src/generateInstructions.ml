@@ -57,7 +57,6 @@ let gen_specific_insns ops =
     | [] -> ()
     | h :: t ->
         (match h with
-        | "1" | "addi" -> gen_itype "addi" 1
         | "2" | "andi" -> gen_itype "andi" 1
         | "3" | "ori" -> gen_itype "ori" 1
         | "4" | "xori" -> gen_itype "xori" 1
@@ -71,11 +70,11 @@ let gen_specific_insns ops =
         | "12" | "sll" -> gen_rtype "sll" 1
         | "13" | "srl" -> gen_rtype "srl" 1
         | "14" | "slt" -> gen_rtype "slt" 1
-        | "15" | "lui" -> gen_utype "lui" 1
-        | "16" | "sw" -> gen_swtype "sw" 1
-        | "17" | "sb" -> gen_swtype "sb" 1
-        | "18" | "lw" -> gen_sbtype "lw" 1
-        | "19" | "lb" -> gen_sbtype "lb" 1
+        | "15" | "sw" -> gen_swtype "sw" 1
+        | "16" | "sb" -> gen_sbtype "sb" 1
+        | "17" | "lw" -> gen_swtype "lw" 1
+        | "18" | "lb" -> gen_sbtype "lb" 1
+        | "19" | "lui" -> gen_utype "lui" 1
         | _ -> failwith "WrongInput");
 
         helper t
