@@ -57,22 +57,27 @@ let gen_specific_insns ops =
     | [] -> ()
     | h :: t ->
         (match h with
+        | "1" | "addi" -> gen_itype "addi" 1
         | "2" | "andi" -> gen_itype "andi" 1
         | "3" | "ori" -> gen_itype "ori" 1
         | "4" | "xori" -> gen_itype "xori" 1
         | "5" | "slli" -> gen_itype "slli" 1
         | "6" | "slri" -> gen_itype "slri" 1
-        | "7" | "add" -> gen_rtype "add" 1
-        | "8" | "and" -> gen_rtype "and" 1
-        | "9" | "or" -> gen_rtype "or" 1
-        | "10" | "xor" -> gen_rtype "xor" 1
-        | "11" | "sll" -> gen_rtype "sll" 1
-        | "12" | "srl" -> gen_rtype "srl" 1
-        | "13" | "lui" -> gen_utype "lui" 1
-        | "14" | "sw" -> gen_swtype "sw" 1
-        | "15" | "sb" -> gen_swtype "sb" 1
-        | "16" | "lw" -> gen_sbtype "lw" 1
-        | "17" | "lb" -> gen_sbtype "lb" 1
+        | "7" | "slti" -> gen_rtype "slti" 1
+        | "8" | "sltiu" -> gen_rtype "sltiu" 1
+        | "9" | "add" -> gen_rtype "add" 1
+        | "10" | "and" -> gen_rtype "and" 1
+        | "11" | "or" -> gen_rtype "or" 1
+        | "12" | "xor" -> gen_rtype "xor" 1
+        | "13" | "sll" -> gen_rtype "sll" 1
+        | "14" | "srl" -> gen_rtype "srl" 1
+        | "15" | "slt" -> gen_rtype "slt" 1
+        | "16" | "sltu" -> gen_rtype "sltu" 1
+        | "17" | "lui" -> gen_utype "lui" 1
+        | "18" | "sw" -> gen_swtype "sw" 1
+        | "19" | "sb" -> gen_swtype "sb" 1
+        | "20" | "lw" -> gen_sbtype "lw" 1
+        | "21" | "lb" -> gen_sbtype "lb" 1
         | _ -> ());
 
         helper t
