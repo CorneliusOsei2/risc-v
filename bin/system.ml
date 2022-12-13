@@ -139,6 +139,7 @@ and gen_specific_insns_handler () =
      \tS-Type:\n\
      \t14. sw\t 15. sb\t 16. lw\n\
      \t17. lb\n\n";
+  ansi_print [ ANSITerminal.blue ] ">> ";
   match read_line () with
   | exception End_of_file -> ()
   | f ->
