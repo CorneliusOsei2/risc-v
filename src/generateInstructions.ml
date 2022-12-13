@@ -28,7 +28,7 @@ let rec gen_stype op n = if n mod 65 = 0 then ()
     let rs2 = gen_register (n + 2) in
     acc := (op ^ " " ^ rd ^ ", " ^ rs1 ^ ", " ^ rs2) :: !acc; gen_stype op (n + 1)
 
-let gen_specific_insns ops = let rec helper ops = match ops with [] -> () | h :: t -> (match h with  "1" | "addi" -> gen_itype "addi" 1 | "2" | "andi" -> gen_itype "andi" 1); helper t  
+let gen_specific_insns ops = let rec helper ops = match ops with [] -> () | h :: t -> (match h with  "1" | "addi" -> gen_itype "addi" 1 | "2" | "andi" -> gen_itype "andi" 1 | _ -> ()); helper t  
 in helper ops; list_to_file (List.rev !acc) 
 
 

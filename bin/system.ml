@@ -148,6 +148,7 @@ and gen_specific_insns_handler () =
        with _ -> gen_specific_insns_handler ());
       gen_insns ()
 
+
 and gen_insns_handler () =
   ansi_print [ ANSITerminal.red ] "PROMPT";
   ansi_print [ ANSITerminal.blue ]
