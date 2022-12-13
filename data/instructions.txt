@@ -1,28 +1,28 @@
-addi x16, x17, 919
-addi x15, x16, 428
-addi x14, x15, 1403
-addi x13, x14, 587
-addi x12, x13, 1999
-addi x11, x12, 2031
-addi x10, x11, 1405
-addi x9, x10, 1623
-addi x8, x9, 1403
-addi x7, x8, 1084
-addi x6, x7, 339
-addi x5, x6, 1467
-addi x4, x5, 1812
-addi x3, x4, 1569
-sll x16, x17, x18
-sll x15, x16, x17
-sll x14, x15, x16
-sll x13, x14, x15
-sll x12, x13, x14
-sll x11, x12, x13
-sll x10, x11, x12
-sll x9, x10, x11
-sll x8, x9, x10
-sll x7, x8, x9
-sll x6, x7, x8
-sll x5, x6, x7
-sll x4, x5, x6
-sll x3, x4, x5
+addi x16, x17, 1492
+addi x15, x16, 1679
+addi x14, x15, 1468
+addi x13, x14, 1953
+addi x12, x13, 1641
+addi x11, x12, 1290
+addi x10, x11, 1872
+addi x9, x10, 1637
+addi x8, x9, 968
+addi x7, x8, 1950
+addi x6, x7, 1799
+addi x5, x6, 1492
+addi x4, x5, 495
+addi x3, x4, 1891
+lui x16, 919
+lui x15, 428
+lui x14, 1403
+lui x13, 587
+lui x12, 1999
+lui x11, 2031
+lui x10, 1405
+lui x9, 1623
+lui x8, 1403
+lui x7, 1084
+lui x6, 339
+lui x5, 1467
+lui x4, 1812
+lui x3, 1569
