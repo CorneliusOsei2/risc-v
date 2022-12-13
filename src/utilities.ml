@@ -101,4 +101,4 @@ let gen_ops () =
    \t13. lui\n\n"
 
 (* TODO: *)
-let register_check r = ()
+let register_check r = true
