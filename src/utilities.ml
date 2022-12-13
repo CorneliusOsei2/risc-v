@@ -86,3 +86,5 @@ let string_of_list lst =
     lst;
   add_string buf "]";
   contents buf
+
+let list_of_string s = s |> String.split_on_char ',' |> List.map String.trim
