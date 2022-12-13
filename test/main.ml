@@ -52,11 +52,15 @@ module UtilityTests = struct
         ("sw", [ "x2"; "0x45"; "x4" ]);
       test_split_stype "binary" "sw x3, 0b10111(x6)"
         ("sw", [ "x3"; "0b10111"; "x6" ]);
+      test_split_stype "decimal" "sw x3, 45(x6)" ("sw", [ "x3"; "45"; "x6" ]);
     ]
 
   let valid_register_tests =
     [
+      test_valid_register "valid" "x0" true;
       test_valid_register "valid" "x13" true;
+      test_valid_register "valid" "x31" true;
+      test_valid_register "invalid" "x32" false;
       test_valid_register "invalid" "x145" false;
       test_valid_register "invalid" "x-145" false;
     ]
