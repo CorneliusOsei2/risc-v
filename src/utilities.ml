@@ -92,13 +92,15 @@ let list_of_string s = s |> String.split_on_char ',' |> List.map String.trim
 let gen_ops () =
   "\n\
    \tI-Type:\n\
-   \t1. addi    2. andi    3. ori    4. xori    5. slli    6. srli\n\n\
+   \t1. addi    2. andi    3. ori    4. xori  \n\
+   \t5. slli    6. srli    7. slti   8. sltiu\n\n\
    \tR-Type:\n\
-   \t7. add    8. and    9. or    10. xor    11. sll    12. srl\n\n\
+   \t9. add    10. and    11. or    12. xor   \n\
+   \t13. sll   14. srl    15. slt   16. sltu \n\n\
    \tS-Type:\n\
-   \t14. sw    15. sb    16. lw    17. lb\n\n\
+   \t17. sw    18. sb    19. lw    20. lb\n\n\
    \tU-Type:\n\
-   \t13. lui\n\n"
+   \t21. lui\n\n"
 
 let register_check r =
   if String.length r < 2 then false
@@ -106,4 +108,3 @@ let register_check r =
     let digits = String.sub r 1 (String.length r - 1) |> int_of_string_opt in
     match digits with Some x -> x >= 0 && x < 32 | None -> false
   else false
-
