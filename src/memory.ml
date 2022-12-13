@@ -21,10 +21,10 @@ let get_memory addr ram =
   let open Memory in
   try fst (find addr ram) with Not_found -> failwith "Invalid memory address"
 
-let visited_memory mem = mem
+let visited_memory mem =   (Memory.bindings mem)
 
 let pp_memory memory =
-  let memory = visited_memory (Memory.bindings memory) in
+  let memory = visited_memory (memory) in
   if memory = [] then
     print_endline "No change to memory. All addresses set to 0"
   else print_endline "Address |  Decimal |  Binary |  Hexadecimal ";
