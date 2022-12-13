@@ -19,7 +19,7 @@ let rec gen_itype op n =
   else
     let rd = gen_register n in
     let rs1 = gen_register (n + 1) in
-    let imm = gen_imm (Int32.of_int ~-2048) 2047l in
+    let imm = gen_imm min_i max_i in
     acc := (op ^ " " ^ rd ^ ", " ^ rs1 ^ ", " ^ Int32.to_string imm) :: !acc;
     gen_itype op (n + 1)
 
