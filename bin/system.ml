@@ -144,6 +144,12 @@ and gen_specific_insns_handler () =
   ansi_print_blue ">> ";
   match read_line () with
   | exception End_of_file -> ()
+  | "q" | "quit" ->
+      ansi_print_green quit_msg;
+      exit 0
+  | "m" | "menu" ->
+      ansi_print_green return_msg;
+      main ()
   | f ->
       (try
          let ops = f |> list_of_string in
@@ -156,11 +162,13 @@ and gen_specific_insns_handler () =
          ansi_print_yellow end_prompt;
          ansi_print [ ANSITerminal.blue ] ">> ";
          match read_line () with
-         | "m" -> main ()
+         | "m" | "menu" -> main ()
          | _ ->
              ansi_print_green quit_msg;
              exit 0
-       with _ -> gen_specific_insns_handler ());
+       with _ ->
+         ansi_print_red invalid_msg;
+         gen_specific_insns_handler ());
       gen_insns ()
 
 and gen_insns_handler () =

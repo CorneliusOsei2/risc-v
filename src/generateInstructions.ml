@@ -76,7 +76,7 @@ let gen_specific_insns ops =
         | "17" | "sb" -> gen_swtype "sb" 1
         | "18" | "lw" -> gen_sbtype "lw" 1
         | "19" | "lb" -> gen_sbtype "lb" 1
-        | _ -> ());
+        | _ -> failwith "WrongInput");
 
         helper t
   in
