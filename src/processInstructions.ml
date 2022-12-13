@@ -6,6 +6,8 @@ let itype = [ "addi"; "andi"; "ori"; "xori"; "slli"; "srli" ]
 let utype = [ "lui" ]
 let stype = [ "sw"; "sb"; "lw"; "lb" ]
 let mem_bitmask = 255l
+let max_i = 2047l
+let min_i = -2048l
 
 exception WrongFormat of int
 exception NotWordAligned
@@ -16,7 +18,7 @@ exception IncorrectSTypeFormat of int
 
 let ins_track = ref 0
 
-let eval_ri_insns rd rs1 rs2 rfile op r_type =
+let eval_r_insns rd rs1 rs2 rfile op r_type =
   let open Int32 in
   let in1, in2 =
     ( get_register rs1 rfile,
@@ -24,6 +26,15 @@ let eval_ri_insns rd rs1 rs2 rfile op r_type =
   in
   let res = op in1 in2 in
   update_register rd (Int32.to_int res) rfile
+
+(* TODO: *)
+let eval_i_insns rd rs imm rfile op r_type =
+  let open Int32 in
+  let in1, in2 = (get_register rs rfile, of_string imm) in
+  if in2 > max_i || in2 < min_i then raise (IncorrectITypeFormat !ins_track)
+  else
+    let res = op in1 in2 in
+    update_register rd (Int32.to_int res) rfile
 
 let eval_shift_insns rd rs1 rs2 rfile op r_type =
   let open Int32 in
@@ -50,14 +61,30 @@ let eval_store_insns op rs1 offset rs2 rfile mem =
     |> Memory.update_memory (addr + 2) byte_three
     |> Memory.update_memory (addr + 3) byte_four
 
+(* let eval_load_insns op rs1 offset rs2 rfile mem =
+   let open Int32 in
+   let v = get_register rs1 rfile in
+   let byte_one = logand (shift_right v 0) mem_bitmask in
+   let byte_two = logand (shift_right v 8) mem_bitmask in
+   let byte_three = logand (shift_right v 16) mem_bitmask in
+   let byte_four = logand (shift_right v 24) mem_bitmask in
+   let addr = int_of_string offset + to_int (get_register rs2 rfile) in
+   if addr mod 4 <> 0 then raise NotWordAligned
+   else if op = "sb" then Memory.update_memory addr byte_one mem
+   else
+     Memory.update_memory addr byte_one mem
+     |> Memory.update_memory (addr + 1) byte_two
+     |> Memory.update_memory (addr + 2) byte_three
+     |> Memory.update_memory (addr + 3) byte_four *)
+
 let process_rtype op rd rs1 rs2 rfile =
   let open Int32 in
   match String.lowercase_ascii op with
-  | "add" -> eval_ri_insns rd rs1 rs2 rfile add true
-  | "sub" -> eval_ri_insns rd rs1 rs2 rfile sub true
-  | "and" -> eval_ri_insns rd rs1 rs2 rfile logand true
-  | "or" -> eval_ri_insns rd rs1 rs2 rfile logor true
-  | "xor" -> eval_ri_insns rd rs1 rs2 rfile logxor true
+  | "add" -> eval_r_insns rd rs1 rs2 rfile add true
+  | "sub" -> eval_r_insns rd rs1 rs2 rfile sub true
+  | "and" -> eval_r_insns rd rs1 rs2 rfile logand true
+  | "or" -> eval_r_insns rd rs1 rs2 rfile logor true
+  | "xor" -> eval_r_insns rd rs1 rs2 rfile logxor true
   | "sll" -> eval_shift_insns rd rs1 rs2 rfile shift_left true
   | "srl" -> eval_shift_insns rd rs1 rs2 rfile shift_right true
   | _ -> rfile
@@ -65,10 +92,10 @@ let process_rtype op rd rs1 rs2 rfile =
 let process_itype op rd rs imm rfile =
   let open Int32 in
   match String.lowercase_ascii op with
-  | "addi" -> eval_ri_insns rd rs imm rfile add false
-  | "andi" -> eval_ri_insns rd rs imm rfile logand false
-  | "ori" -> eval_ri_insns rd rs imm rfile logor false
-  | "xori" -> eval_ri_insns rd rs imm rfile logxor false
+  | "addi" -> eval_i_insns rd rs imm rfile add false
+  | "andi" -> eval_i_insns rd rs imm rfile logand false
+  | "ori" -> eval_i_insns rd rs imm rfile logor false
+  | "xori" -> eval_i_insns rd rs imm rfile logxor false
   | "slli" -> eval_shift_insns rd rs imm rfile shift_left true
   | "srli" -> eval_shift_insns rd rs imm rfile shift_right true
   | _ -> rfile
