@@ -105,9 +105,13 @@ and eval_insn_step_format (rfile, mem) =
   ansi_print [ ANSITerminal.yellow ] ">> ";
   match read_line () with
   | exception End_of_file -> ()
+  | "q" | "quit" ->
+      ansi_print [ ANSITerminal.green ] "Hope you had fun! 😃 Bye! 👋👋🏽\n"
   | f -> (
       match f with
-      | "q" | "quit" -> exit 0
+      | "q" | "quit" ->
+          ansi_print [ ANSITerminal.green ] "Hope you had fun! 😃 Bye! 👋👋🏽\n";
+          exit 0
       | "m" | "menu" -> main ()
       | f -> (
           try
@@ -152,6 +156,8 @@ and gen_insns_handler () =
   ansi_print [ ANSITerminal.blue ] ">> ";
   match read_line () with
   | exception End_of_file -> ()
+  | "q" | "quit" ->
+      ansi_print [ ANSITerminal.green ] "Hope you had fun! 😃 Bye! 👋👋🏽\n"
   | f -> (
       match String.trim f with
       | "n" | "no" ->
@@ -163,6 +169,8 @@ and gen_insns_handler () =
           main ()
       | "y" | "yes" -> gen_specific_insns_handler ()
       | "m" | "menu" -> main ()
+      | "q" | "quit" ->
+          ansi_print [ ANSITerminal.green ] "Hope you had fun! 😃 Bye! 👋👋🏽\n"
       | _ ->
           ansi_print [ ANSITerminal.red ] "ALERT";
           ansi_print [ ANSITerminal.yellow ] "\tPlease enter valid command \n";
@@ -182,6 +190,8 @@ and process f =
         eval_insn_step_format (Registers.init, Memory.init)
     | "3" -> gen_insns_handler ()
     | "m" | "menu" -> main ()
+    | "q" | "quit" ->
+        ansi_print [ ANSITerminal.green ] "Hope you had fun! 😃 Bye! 👋👋🏽\n"
     | _ -> ()
   with NotWordAligned ->
     ansi_print [ ANSITerminal.red ]
