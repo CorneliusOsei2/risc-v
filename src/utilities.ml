@@ -95,12 +95,12 @@ let gen_ops () =
    \t1. addi    2. andi    3. ori    4. xori  \n\
    \t5. slli    6. srli    7. slti\n\n\
    \tR-Type:\n\
-   \t9. add    10. and    11. or    12. xor   \n\
-   \t13. sll   14. srl    15. slt\n\n\
+   \t8. add    9. and    10. or    11. xor   \n\
+   \t12. sll   13. srl   14. slt\n\n\
    \tS-Type:\n\
-   \t17. sw    18. sb    19. lw    20. lb\n\n\
+   \t15. sw    16. sb    17. lw    18. lb\n\n\
    \tU-Type:\n\
-   \t21. lui\n\n"
+   \t19. lui\n\n"
 
 let register_check r =
   if String.length r < 2 then false
