@@ -93,10 +93,10 @@ let gen_ops () =
   "\n\
    \tI-Type:\n\
    \t1. addi    2. andi    3. ori    4. xori  \n\
-   \t5. slli    6. srli    7. slti   8. sltiu\n\n\
+   \t5. slli    6. srli    7. slti\n\n\
    \tR-Type:\n\
    \t9. add    10. and    11. or    12. xor   \n\
-   \t13. sll   14. srl    15. slt   16. sltu \n\n\
+   \t13. sll   14. srl    15. slt\n\n\
    \tS-Type:\n\
    \t17. sw    18. sb    19. lw    20. lb\n\n\
    \tU-Type:\n\
