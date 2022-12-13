@@ -88,3 +88,14 @@ let string_of_list lst =
   contents buf
 
 let list_of_string s = s |> String.split_on_char ',' |> List.map String.trim
+
+let gen_ops () =
+  "\n\
+   \tI-Type:\n\
+   \t1. addi    2. andi    3. ori    4. xori    5. slli    6. srli\n\n\
+   \tR-Type:\n\
+   \t7. add    8. and    9. or    10. xor    11. sll    12. srl\n\n\
+   \tS-Type:\n\
+   \t14. sw    15. sb    16. lw    17. lb\n\n\
+   \tU-Type:\n\
+   \t13. lui\n\n"

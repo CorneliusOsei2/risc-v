@@ -28,5 +28,7 @@ val string_of_list : string list -> string
 val string_of_insn : string * string list -> string
 (** [pp_instriction l] prints the string representation of instruction [l]*)
 
-val list_of_string: string -> string list
+val list_of_string : string -> string list
 (** [ist_of_string s] converts the string representation to a list [l]*)
+
+val gen_ops : unit -> string
