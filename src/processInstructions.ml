@@ -54,30 +54,36 @@ let eval_store_insns op rs1 offset rs2 rfile mem =
   let byte_three = logand (shift_right v 16) mem_bitmask in
   let byte_four = logand (shift_right v 24) mem_bitmask in
   let addr = int_of_string offset + to_int (get_register rs2 rfile) in
-  if addr mod 4 <> 0 then raise NotWordAligned
-  else if op = "sb" then Memory.update_memory addr byte_one mem
+  if op = "sb" then Memory.update_memory addr byte_one mem
+  else if addr mod 4 <> 0 then raise NotWordAligned
   else
     Memory.update_memory addr byte_one mem
     |> Memory.update_memory (addr + 1) byte_two
     |> Memory.update_memory (addr + 2) byte_three
     |> Memory.update_memory (addr + 3) byte_four
 
-(* TODO: Test and Prove*)
 let eval_load_insns op rs1 offset rs2 rfile mem =
   let open Int32 in
   let addr = int_of_string offset + to_int (get_register rs2 rfile) in
-  if addr mod 4 <> 0 then raise NotWordAligned
-  else if op = "lb" then
+  if op = "lb" then
     let v = Memory.get_memory addr mem in
-    update_register rs1 v rfile
+    update_register rs1 (to_int v) rfile
+  else if addr mod 4 <> 0 then raise NotWordAligned
   else
     let v =
-      Memory.get_memory addr mem
-      + Memory.get_memory (addr + 1) mem
-      + Memory.get_memory (addr + 2) mem
-      + Memory.get_memory (addr + 3) mem
+      add
+        (shift_left (logand (Memory.get_memory addr mem) mem_bitmask) 0)
+        (shift_left (logand (Memory.get_memory (addr + 1) mem) mem_bitmask) 8)
+      |> add
+           (shift_left
+              (logand (Memory.get_memory (addr + 2) mem) mem_bitmask)
+              16)
+      |> add
+           (shift_left
+              (logand (Memory.get_memory (addr + 3) mem) mem_bitmask)
+              24)
     in
-    update_register rs1 v rfile
+    update_register rs1 (Int32.to_int v) rfile
 
 let process_rtype op rd rs1 rs2 rfile =
   let open Int32 in
@@ -110,9 +116,11 @@ let process_utype rd imm rfile =
 let process_stype op rs1 offset rs2 rfile mem =
   let open Int32 in
   match String.lowercase_ascii op with
-  | s when s = "sw" || s = "sb" -> eval_store_insns s rs1 offset rs2 rfile mem
-  (* | s when s = "lw" || s = "lb"  -> eval_load_insns op rs1 offset rs2 rfile mem *)
-  | _ -> mem
+  | s when s = "sw" || s = "sb" ->
+      (rfile, eval_store_insns s rs1 offset rs2 rfile mem)
+  | s when s = "lw" || s = "lb" ->
+      (eval_load_insns op rs1 offset rs2 rfile mem, mem)
+  | _ -> (rfile, mem)
 
 let rec process_insns insns acc rfile mem =
   match insns with
@@ -150,10 +158,8 @@ let rec process_insns insns acc rfile mem =
             let rs1, offset, rs2 =
               (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
             in
-            let new_memory_state = process_stype op rs1 offset rs2 rfile mem in
-            process_insns t
-              ((rfile, new_memory_state) :: acc)
-              rfile new_memory_state
+            let rfile, mem = process_stype op rs1 offset rs2 rfile mem in
+            process_insns t ((rfile, mem) :: acc) rfile mem
           with _ -> raise (IncorrectSTypeFormat !ins_track)
         else if List.exists (fun x -> x = op) utype then
           try
