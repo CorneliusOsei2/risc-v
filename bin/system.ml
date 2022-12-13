@@ -18,6 +18,8 @@ let ansi_print_yellow s = ansi_print [ ANSITerminal.yellow ] s
 let ansi_print_blue s = ansi_print [ ANSITerminal.blue ] s
 let quit_msg = "Hope you had fun! 😃 Bye! 👋👋🏽\n"
 let return_msg = "Returning to the Main Menu\n\n"
+let invalid_msg = "\tInvalid option; please try again: \n\n"
+let executed_msg = "All instructions executed.\n"
 
 (** [eval_step n output] handles the execution pattern: either step-wise or a run-all *)
 let rec eval_pattern n output =
@@ -34,7 +36,7 @@ let rec eval_pattern n output =
           pp_registers (List.nth (List.map (fun out -> fst out) output) 0);
           ansi_print_green "\nMemory\n";
           Memory.pp_memory (List.nth (List.map (fun out -> snd out) output) 0);
-          ansi_print_green (".... all instructions executed.\n" ^ return_msg);
+          ansi_print_green (executed_msg ^ return_msg);
           main ()
       | "step" | "s" ->
           let output_rev = output |> List.rev in
@@ -42,7 +44,7 @@ let rec eval_pattern n output =
       | "q" | "quit" -> ansi_print_green quit_msg
       | "m" | "menu" -> main ()
       | _ ->
-          ansi_print_red "Invalid option. Please try again: \n";
+          ansi_print_red invalid_msg;
           eval_pattern n output)
 
 (** [eval_step n output] prints out the current state of 
@@ -55,7 +57,7 @@ and eval_step n output =
     Memory.pp_memory (List.nth (List.map (fun out -> snd out) output) n);
     n + 1)
   else (
-    ansi_print_green "All instructions executed \n";
+    ansi_print_green executed_msg;
     ansi_print_red "PROMPT ";
     ansi_print_yellow
       "\tPress [m] to return to main menu or any other key to quit\n";
@@ -106,15 +108,15 @@ and eval_insn_step_format (rfile, mem) =
   match read_line () with
   | exception End_of_file -> ()
   | "q" | "quit" -> ansi_print_green quit_msg
-  | f -> (
-      match f with
+  | cmd -> (
+      match cmd with
       | "q" | "quit" ->
           ansi_print_green quit_msg;
           exit 0
       | "m" | "menu" -> main ()
-      | f -> (
+      | cmd -> (
           try
-            let output = process_step_insns f rfile mem in
+            let output = process_step_insns cmd rfile mem in
             ignore (eval_step 0 [ output ]);
             eval_insn_step_format (fst output, snd output)
           with _ ->
@@ -149,8 +151,8 @@ and gen_insns_handler () =
   ansi_print_red "PROMPT";
   ansi_print_blue "\tDo you have specific instructions you want to generate?\n";
   ansi_print_yellow
-    "\tYou can hit [y] or [yes] to choose specific instructions or [n] or [no] \
-     to generate for all currently supported instructions\n";
+    "\tYou can hit [y] or [yes] to choose specific instructions or \n\
+    \ [n] or [no] to generate for all currently supported instructions\n";
   ansi_print_blue ">> ";
   match read_line () with
   | exception End_of_file -> ()
@@ -187,7 +189,9 @@ and process f =
     | "3" -> gen_insns_handler ()
     | "m" | "menu" -> main ()
     | "q" | "quit" -> ansi_print_green quit_msg
-    | _ -> ()
+    | _ ->
+        ansi_print_red invalid_msg;
+        main ()
   with NotWordAligned ->
     ansi_print_red ("Your [sw] instructions are not word-aligned." ^ return_msg);
     main ()
