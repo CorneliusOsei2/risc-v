@@ -118,7 +118,7 @@ and gen_specific_insns_handler () = ansi_print [ ANSITerminal.blue ]
   ansi_print [ANSITerminal.yellow] "\n\tI-Type:\n\t1. addi\t 2. andi\t 3. ori\n\t4. xori\t 5. slli\t 5. srli\n\n\tR-Type:\n\t1. add\t 2. and\t 3. or\n\t4. xor\t 5. sll\t 5. srl\n\n";           
 match read_line () with
    | exception End_of_file -> ()
-   | f -> (try let ops = f |> String.trim in gen_specific_insns [] with _ -> gen_specific_insns_handler ());gen_insns ()
+   | f -> (try let ops = f |> list_of_string in gen_specific_insns ops with _ -> gen_specific_insns_handler ())
 
 
 
