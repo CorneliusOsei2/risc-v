@@ -2,7 +2,7 @@ open Registers
 open Utilities
 
 let rtype = [ "add"; "sub"; "and"; "or"; "xor"; "nor"; "sll"; "srl" ]
-let itype = [ "addi"; "andi"; "ori"; "xori"; "subi" ]
+let itype = [ "addi"; "andi"; "ori"; "xori"; "slli"; "srli" ]
 let utype = [ "lui" ]
 let stype = [ "sw"; "sb"; "lw"; "lb" ]
 let mem_bitmask = 255l
@@ -55,17 +55,18 @@ let process_rtype op rd rs1 rs2 rfile =
   | "or" -> eval_ri_insns rd rs1 rs2 rfile logor true
   | "xor" -> eval_ri_insns rd rs1 rs2 rfile logxor true
   | "sll" -> eval_shift_insns rd rs1 rs2 rfile shift_left true
-  | "slr" -> eval_shift_insns rd rs1 rs2 rfile shift_right true
+  | "srl" -> eval_shift_insns rd rs1 rs2 rfile shift_right true
   | _ -> rfile
 
 let process_itype op rd rs imm rfile =
   let open Int32 in
   match String.lowercase_ascii op with
   | "addi" -> eval_ri_insns rd rs imm rfile add false
-  | "subi" -> eval_ri_insns rd rs imm rfile sub false
   | "andi" -> eval_ri_insns rd rs imm rfile logand false
   | "ori" -> eval_ri_insns rd rs imm rfile logor false
   | "xori" -> eval_ri_insns rd rs imm rfile logxor false
+    | "slli" -> eval_shift_insns rd rs imm rfile shift_left true
+  | "srli" -> eval_shift_insns rd rs imm rfile shift_right true
   | _ -> rfile
 
 let process_utype rd imm rfile = let open Int32 in let v = shift_left (of_string imm) 12 in update_register rd (Int32.to_int v) rfile
