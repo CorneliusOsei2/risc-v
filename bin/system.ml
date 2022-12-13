@@ -126,29 +126,21 @@ and gen_specific_insns_handler () =
      \tYou can choose multiple operations by separating their numbers with a \
      comma.\n\
      \tRegisters will be initialized with [addi] instructions first\n";
-  ansi_print [ ANSITerminal.yellow ]
-    "\n\
-     \tI-Type:\n\
-     \t1. addi\t 2. andi\t 3. ori\n\
-     \t4. xori\t 5. slli\t 6. srli\n\n\
-     \tR-Type:\n\
-     \t7. add\t 8. and\t 9. or\n\
-     \t10. xor\t 11. sll\t 12. srl\n\n\
-     \tU-Type:\n\
-     \t13. lui\n\n\
-     \tS-Type:\n\
-     \t14. sw\t 15. sb\t 16. lw\n\
-     \t17. lb\n\n";
+  ansi_print [ ANSITerminal.yellow ] (gen_ops ());
   ansi_print [ ANSITerminal.blue ] ">> ";
   match read_line () with
   | exception End_of_file -> ()
   | f ->
       (try
-         let ops = f |> String.trim in
-         gen_specific_insns []
+         let ops = f |> list_of_string in
+         gen_specific_insns ops;
+         ansi_print [ ANSITerminal.green ]
+           "\t..... instructions successfully generated in \
+            data/instructions.txt.\n\
+            \tReturning to main menu\n\n";
+         main ()
        with _ -> gen_specific_insns_handler ());
       gen_insns ()
-
 
 and gen_insns_handler () =
   ansi_print [ ANSITerminal.red ] "PROMPT";
