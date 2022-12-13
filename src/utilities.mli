@@ -23,7 +23,10 @@ val split_stype : string -> string * string list
     op code and the registers to return a tuple of the (op code, registers + offset) *)
 
 val string_of_list : string list -> string
-(** [pp_list l] prints the string representation of list [l]*)
+(** [string_of_list ] converts the string representation of list [l]*)
 
 val string_of_insn : string * string list -> string
 (** [pp_instriction l] prints the string representation of instruction [l]*)
+
+val list_of_string: string -> string list
+(** [ist_of_string s] converts the string representation to a list [l]*)
