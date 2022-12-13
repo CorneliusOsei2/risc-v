@@ -39,6 +39,7 @@ let eval_store_insns op rs1 offset rs2 rfile mem =
   let byte_four = logand (shift_right v 24) mem_bitmask in
   let addr = int_of_string offset + to_int (get_register rs2 rfile) in
   if addr mod 4 <> 0 then raise NotWordAligned
+  else if op = "sb" then ( Memory.update_memory addr byte_one mem)
   else
     Memory.update_memory addr byte_one mem
     |> Memory.update_memory (addr + 1) byte_two
@@ -67,23 +68,15 @@ let process_itype op rd rs imm rfile =
   | "xori" -> eval_ri_insns rd rs imm rfile logxor false
   | _ -> rfile
 
-let process_utype op rd rs imm rfile = failwith "Unimplemented"
+let process_utype rd imm rfile = let open Int32 in let v = shift_left (of_string imm) 12 in update_register rd (Int32.to_int v) rfile
 
-(* match String.lowercase_ascii op with
-   | "lui" -> eval_ri_insns rd rs imm rfile ( + )
-   | _ -> rfile *)
 let process_stype op rs1 offset rs2 rfile mem =
   let open Int32 in
   match String.lowercase_ascii op with
-  | "sw" -> eval_store_insns op rs1 offset rs2 rfile mem
-  | _ -> mem
+  | s when s = "sw" || s = "sb" ->  eval_store_insns s rs1 offset rs2 rfile mem
+  (* | s when s = "lw" || s = "lb"  -> eval_load_insns op rs1 offset rs2 rfile mem *)
+  |_ -> mem
 
-(* match String.lowercase_ascii op with
-   | "sb" -> eval_ri_insns rd rs imm rfile ( + )
-   | "sw" -> eval_ri_insns rd rs imm rfile ( - )
-   | "lb" -> eval_ri_insns rd rs imm rfile ( land )
-   | "lw" -> eval_ri_insns rd rs imm rfile ( land )
-   | _ -> rfile *)
 let rec process_insns insns acc rfile mem =
   match insns with
   | [] -> acc
@@ -106,6 +99,7 @@ let rec process_insns insns acc rfile mem =
             ((new_register_state, mem) :: acc)
             new_register_state mem
         else if List.exists (fun x -> x = op) stype then
+           (* S-Type Instructions: op rs1 offset(rs2) *)
           let op, rgs = split_stype h in
           let rs1, offset, rs2 =
             (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
@@ -114,6 +108,17 @@ let rec process_insns insns acc rfile mem =
           process_insns t
             ((rfile, new_memory_state) :: acc)
             rfile new_memory_state
+        else if List.exists (fun x -> x = op) utype then
+          try(
+          (* U-Type Instructions: op rs1 offset(rs2) *)
+          let op, rgs = split_instruction h in
+          let rd, imm =
+            (List.nth rgs 0, List.nth rgs 1)
+          in
+            let new_register_state = process_utype rd imm rfile in 
+            process_insns t
+            ((new_register_state, mem) :: acc)
+            new_register_state mem) with _ -> failwith "Error: Invalid U-Type Instruction"
         else acc)
       with _ -> raise (WrongFormat !ins_track))
 

@@ -7,12 +7,13 @@ open GenerateInstructions
 exception NoSuchFile of string
 
 let data_dir_prefix = "data" ^ Filename.dir_sep
+
+(** [ansi_print style s] prints s after applying [style] to it*)
 let ansi_print style = ANSITerminal.print_string style
 
-(** [eval_step n output] prints out the current state of 
-    the register at index [n] in [output] *)
+(** [eval_step n output] handles the execution pattern: either step-wise or a run-all *)
 let rec eval_pattern n output =
-  if n > List.length output then exit 0
+  if n > List.length output then (ansi_print [ANSITerminal.green] "...... returning you to the Main Menu\n\n"; main())
   else ansi_print [ ANSITerminal.yellow ] ">> ";
   match read_line () with
   | exception End_of_file -> ()
@@ -23,8 +24,8 @@ let rec eval_pattern n output =
           pp_registers (List.nth (List.map (fun out -> fst out) output) 0);
           ansi_print [ ANSITerminal.green ] "\nMemory\n";
           Memory.pp_memory (List.nth (List.map (fun out -> snd out) output) 0);
-          ansi_print [ ANSITerminal.green ] "All instructions executed \n";
-          exit 0
+          ansi_print [ ANSITerminal.green ] "All instructions executed.\n...... returning you to the Main Menu\n\n";
+          main()
       | "step" | "s" ->
           let output_rev = output |> List.rev in
           eval_pattern (eval_step n output_rev) output
@@ -56,6 +57,7 @@ and eval_step n output =
         n + 1
     | _ -> n + 1)
 
+(** [eval_insn_file_format insns] evaluates all instructions in an uploaded file  *)
 and eval_insn_file_format insns =
   try
     let output = process_file_insns insns in
@@ -73,6 +75,7 @@ and eval_insn_file_format insns =
       "\tPlease choose a test file with valid instructions \n";
     eval_insn_file_format (get_insns_from_file ())
 
+(** [get_insns_from_file ()] requests the name of the test file *)
 and get_insns_from_file () =
   ansi_print [ ANSITerminal.yellow ] ">> ";
   match read_line () with
@@ -104,7 +107,7 @@ and eval_insn_step_format (rfile, mem) =
           try
             let output = process_step_insns f rfile mem in
             ignore (eval_step 0 [ output ]);
-            eval_insn_step_format (rfile, mem)
+            eval_insn_step_format (fst output, snd output)
           with _ ->
             ansi_print [ ANSITerminal.red ] "ALERT";
             ansi_print [ ANSITerminal.yellow ] "Enter valid instruction \n";
