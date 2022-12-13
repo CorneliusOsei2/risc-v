@@ -32,6 +32,8 @@ let rec gen_stype op n =
     acc := (op ^ " " ^ rd ^ ", " ^ rs1 ^ ", " ^ rs2) :: !acc;
     gen_stype op (n + 1)
 
+let rec gen_utype op n = ()
+
 let gen_specific_insns ops =
   let rec helper ops =
     match ops with

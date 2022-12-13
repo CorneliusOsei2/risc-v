@@ -9,6 +9,10 @@ let mem_bitmask = 255l
 
 exception WrongFormat of int
 exception NotWordAligned
+exception IncorrectRTypeFormat of int
+exception IncorrectITypeFormat of int
+exception IncorrectUTypeFormat of int
+exception IncorrectSTypeFormat of int
 
 let ins_track = ref 0
 
@@ -90,28 +94,38 @@ let rec process_insns insns acc rfile mem =
         let op, rgs = split_instruction h in
         if List.exists (fun x -> x = op) rtype then
           (* R-Type Instructions *)
-          let rd, rs1, rs2 = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
-          let new_register_state = process_rtype op rd rs1 rs2 rfile in
-          process_insns t
-            ((new_register_state, mem) :: acc)
-            new_register_state mem
+          try
+            let rd, rs1, rs2 =
+              (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
+            in
+            let new_register_state = process_rtype op rd rs1 rs2 rfile in
+            process_insns t
+              ((new_register_state, mem) :: acc)
+              new_register_state mem
+          with _ -> raise (IncorrectRTypeFormat !ins_track)
         else if List.exists (fun x -> x = op) itype then
           (* I-Type Instructions *)
-          let rd, rs1, imm = (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2) in
-          let new_register_state = process_itype op rd rs1 imm rfile in
-          process_insns t
-            ((new_register_state, mem) :: acc)
-            new_register_state mem
+          try
+            let rd, rs1, imm =
+              (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
+            in
+            let new_register_state = process_itype op rd rs1 imm rfile in
+            process_insns t
+              ((new_register_state, mem) :: acc)
+              new_register_state mem
+          with _ -> raise (IncorrectITypeFormat !ins_track)
         else if List.exists (fun x -> x = op) stype then
           (* S-Type Instructions: op rs1 offset(rs2) *)
-          let op, rgs = split_stype h in
-          let rs1, offset, rs2 =
-            (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
-          in
-          let new_memory_state = process_stype op rs1 offset rs2 rfile mem in
-          process_insns t
-            ((rfile, new_memory_state) :: acc)
-            rfile new_memory_state
+          try
+            let op, rgs = split_stype h in
+            let rs1, offset, rs2 =
+              (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
+            in
+            let new_memory_state = process_stype op rs1 offset rs2 rfile mem in
+            process_insns t
+              ((rfile, new_memory_state) :: acc)
+              rfile new_memory_state
+          with _ -> raise (IncorrectSTypeFormat !ins_track)
         else if List.exists (fun x -> x = op) utype then
           try
             (* U-Type Instructions: op rs1 offset(rs2) *)
@@ -121,7 +135,7 @@ let rec process_insns insns acc rfile mem =
             process_insns t
               ((new_register_state, mem) :: acc)
               new_register_state mem
-          with _ -> failwith "Error: Invalid U-Type Instruction"
+          with _ -> raise (IncorrectUTypeFormat !ins_track)
         else acc
       with _ -> raise (WrongFormat !ins_track))
 

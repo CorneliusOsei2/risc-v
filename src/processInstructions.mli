@@ -12,6 +12,10 @@ val utype : string list
 
 exception WrongFormat of int
 exception NotWordAligned
+exception IncorrectRTypeFormat of int
+exception IncorrectITypeFormat of int
+exception IncorrectUTypeFormat of int
+exception IncorrectSTypeFormat of int
 
 val process_rtype :
   string ->
