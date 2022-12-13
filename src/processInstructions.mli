@@ -58,7 +58,7 @@ val process_stype :
   string ->
   (Int32.t * bool) Registers.RegisterFile.t ->
   (Int32.t * bool) Memory.Memory.t ->
-  (Int32.t * bool) Memory.Memory.t
+  (Int32.t * bool) Registers.RegisterFile.t * (Int32.t * bool) Memory.Memory.t
 (** [process_stype op rd rs1 rs2 rfile] processes the S-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register
      [op] as the operator and [rfile] as the register file *)
