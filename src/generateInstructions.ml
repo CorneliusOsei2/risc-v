@@ -32,7 +32,13 @@ let rec gen_stype op n =
     acc := (op ^ " " ^ rd ^ ", " ^ rs1 ^ ", " ^ rs2) :: !acc;
     gen_stype op (n + 1)
 
-let rec gen_utype op n = ()
+let rec gen_utype op n =
+  if n mod 15 = 0 then ()
+  else
+    let rd = gen_register n in
+    let imm = gen_imm (Int32.of_int ~-2048) 2047l in
+    acc := (op ^ " " ^ rd ^ ", " ^ Int32.to_string imm) :: !acc;
+    gen_stype op (n + 1)
 
 let gen_specific_insns ops =
   let rec helper ops =

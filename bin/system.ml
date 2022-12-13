@@ -20,6 +20,7 @@ let quit_msg = "Hope you had fun! 😃 Bye! 👋👋🏽\n"
 let return_msg = "Returning to the Main Menu\n\n"
 let invalid_msg = "\tInvalid option; please try again: \n\n"
 let executed_msg = "All instructions executed.\n"
+let end_prompt = "\tPress [m] to return to main menu or any other key to quit\n"
 
 (** [eval_step n output] handles the execution pattern: either step-wise or a run-all *)
 let rec eval_pattern n output =
@@ -31,13 +32,20 @@ let rec eval_pattern n output =
   | exception End_of_file -> ()
   | pat -> (
       match String.trim pat with
-      | "run" | "r" ->
+      | "run" | "r" -> (
           ansi_print_green "\nRegister File\n";
           pp_registers (List.nth (List.map (fun out -> fst out) output) 0);
           ansi_print_green "\nMemory\n";
           Memory.pp_memory (List.nth (List.map (fun out -> snd out) output) 0);
-          ansi_print_green (executed_msg ^ return_msg);
-          main ()
+          ansi_print_green executed_msg;
+          ansi_print_red "PROMPT ";
+          ansi_print_yellow end_prompt;
+          ansi_print [ ANSITerminal.blue ] ">> ";
+          match read_line () with
+          | "m" -> main ()
+          | _ ->
+              ansi_print_green quit_msg;
+              exit 0)
       | "step" | "s" ->
           let output_rev = output |> List.rev in
           eval_pattern (eval_step n output_rev) output
@@ -59,14 +67,15 @@ and eval_step n output =
   else (
     ansi_print_green executed_msg;
     ansi_print_red "PROMPT ";
-    ansi_print_yellow
-      "\tPress [m] to return to main menu or any other key to quit\n";
+    ansi_print_yellow end_prompt;
     ansi_print [ ANSITerminal.blue ] ">> ";
     match read_line () with
     | "m" ->
         main ();
         n + 1
-    | _ -> n + 1)
+    | _ ->
+        ansi_print_green quit_msg;
+        exit 0)
 
 (** [eval_insn_file_format insns] evaluates all instructions in an uploaded file  *)
 and eval_insn_file_format insns =
@@ -143,7 +152,14 @@ and gen_specific_insns_handler () =
            ("\t..... instructions successfully generated in \
              data/instructions.txt.\n\
              \t" ^ return_msg);
-         main ()
+         ansi_print_red "PROMPT ";
+         ansi_print_yellow end_prompt;
+         ansi_print [ ANSITerminal.blue ] ">> ";
+         match read_line () with
+         | "m" -> main ()
+         | _ ->
+             ansi_print_green quit_msg;
+             exit 0
        with _ -> gen_specific_insns_handler ());
       gen_insns ()
 
@@ -156,7 +172,9 @@ and gen_insns_handler () =
   ansi_print_blue ">> ";
   match read_line () with
   | exception End_of_file -> ()
-  | "q" | "quit" -> ansi_print_green quit_msg
+  | "q" | "quit" ->
+      ansi_print_green quit_msg;
+      exit 0
   | f -> (
       match String.trim f with
       | "n" | "no" ->
@@ -168,7 +186,9 @@ and gen_insns_handler () =
           main ()
       | "y" | "yes" -> gen_specific_insns_handler ()
       | "m" | "menu" -> main ()
-      | "q" | "quit" -> ansi_print_green quit_msg
+      | "q" | "quit" ->
+          ansi_print_green quit_msg;
+          exit 0
       | _ ->
           ansi_print_red "ALERT";
           ansi_print_yellow "\tPlease enter valid command \n";
@@ -188,7 +208,9 @@ and process f =
         eval_insn_step_format (Registers.init, Memory.init)
     | "3" -> gen_insns_handler ()
     | "m" | "menu" -> main ()
-    | "q" | "quit" -> ansi_print_green quit_msg
+    | "q" | "quit" ->
+        ansi_print_green quit_msg;
+        exit 0
     | _ ->
         ansi_print_red invalid_msg;
         main ()

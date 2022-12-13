@@ -99,3 +99,6 @@ let gen_ops () =
    \t14. sw    15. sb    16. lw    17. lb\n\n\
    \tU-Type:\n\
    \t13. lui\n\n"
+
+(* TODO: *)
+let register_check r = ()
