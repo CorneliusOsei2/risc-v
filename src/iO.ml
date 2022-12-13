@@ -1,9 +1,6 @@
 exception FileDoesNotExist
 
-let count = ref 0
-
-let test_file =
-  "data" ^ Filename.dir_sep ^ "instructions-" ^ string_of_int !count ^ ".txt"
+let test_file = "data" ^ Filename.dir_sep ^ "instructions.txt"
 
 let file_to_list file =
   try
@@ -27,5 +24,4 @@ let rec print_lst oc = function
 let list_to_file lst =
   let oc = open_out test_file in
   print_lst oc lst;
-  close_out oc;
-  count := !count + 1
+  close_out oc
