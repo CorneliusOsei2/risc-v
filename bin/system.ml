@@ -178,7 +178,7 @@ and gen_insns_handler () =
   | f -> (
       match String.trim f with
       | "n" | "no" ->
-          gen_insns_handler ();
+          gen_insns ();
           ansi_print_green
             ("\t..... instructions successfully generated in \
               data/instructions.txt.\n\

@@ -1,0 +1,28 @@
+addi x16, x17, 1492
+addi x15, x16, 1679
+addi x14, x15, 1468
+addi x13, x14, 1953
+addi x12, x13, 1641
+addi x11, x12, 1290
+addi x10, x11, 1872
+addi x9, x10, 1637
+addi x8, x9, 968
+addi x7, x8, 1950
+addi x6, x7, 1799
+addi x5, x6, 1492
+addi x4, x5, 495
+addi x3, x4, 1891
+sw x16, 24(x0)
+sw x15, 0(x0)
+sw x14, 20(x0)
+sw x13, 0(x0)
+sw x12, 12(x0)
+sw x11, 8(x0)
+sw x10, 0(x0)
+sw x9, 20(x0)
+sw x8, 12(x0)
+sw x7, 8(x0)
+sw x6, 16(x0)
+sw x5, 12(x0)
+sw x4, 24(x0)
+sw x3, 12(x0)
