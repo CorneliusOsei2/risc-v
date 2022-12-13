@@ -1,0 +1,71 @@
+addi x16, x17, 1506
+addi x15, x16, 805
+addi x14, x15, 1548
+addi x13, x14, 916
+addi x12, x13, 1991
+addi x11, x12, 554
+addi x10, x11, 1589
+addi x9, x10, 902
+addi x8, x9, 318
+addi x7, x8, 181
+addi x6, x7, 2006
+addi x5, x6, 44
+addi x4, x5, 272
+addi x3, x4, 31
+
+sb x16, 0(x0)
+sb x15, 20(x0)
+sb x14, 24(x0)
+sb x13, 16(x0)
+sb x12, 24(x0)
+sb x11, 0(x0)
+sb x10, 12(x0)
+sb x9, 20(x0)
+sb x8, 0(x0)
+sb x7, 16(x0)
+sb x6, 24(x0)
+sb x5, 8(x0)
+sb x4, 24(x0)
+sb x3, 8(x0)
+sw x16, 24(x0)
+sw x15, 0(x0)
+sw x14, 20(x0)
+sw x13, 0(x0)
+sw x12, 12(x0)
+sw x11, 8(x0)
+sw x10, 0(x0)
+sw x9, 20(x0)
+sw x8, 12(x0)
+sw x7, 8(x0)
+sw x6, 16(x0)
+sw x5, 12(x0)
+sw x4, 24(x0)
+sw x3, 12(x0)
+lb x16, 8(x0)
+lb x15, 4(x0)
+lb x14, 0(x0)
+lb x13, 16(x0)
+lb x12, 8(x0)
+lb x11, 4(x0)
+lb x10, 16(x0)
+lb x9, 16(x0)
+lb x8, 4(x0)
+lb x7, 0(x0)
+lb x6, 4(x0)
+lb x5, 12(x0)
+lb x4, 24(x0)
+lb x3, 29(x0)
+lw x16, 0(x0)
+lw x15, 4(x0)
+lw x14, 20(x0)
+lw x13, 0(x0)
+lw x12, 24(x0)
+lw x11, 20(x0)
+lw x10, 20(x0)
+lw x9, 24(x0)
+lw x8, 4(x0)
+lw x7, 20(x0)
+lw x6, 16(x0)
+lw x5, 20(x0)
+lw x4, 0(x0)
+lw x3, 12(x0)

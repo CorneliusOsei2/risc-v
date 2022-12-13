@@ -29,11 +29,10 @@ let pp_memory memory =
     print_endline "No change to memory. All addresses set to 0"
   else
     print_endline
-      ("Address  |" ^ pp_string 8 ' ' " Decimal" ^ " | "
-     ^ pp_string 36 ' ' "Binary" ^ "|"
-      ^ pp_string 18 ' ' " Hexadecimal");
-  print_endline
-    "------------------------------------------------------------------------";
+      (pp_string 10 ' ' "Address" ^ "| "
+      ^ pp_string 10 ' ' " Decimal"
+      ^ "| " ^ pp_string 40 ' ' "Binary" ^ "| "
+      ^ pp_string 15 ' ' " Hexadecimal");
   let rec print mem =
     let open Int32 in
     match mem with
@@ -48,8 +47,10 @@ let pp_memory memory =
         let bin = dec_to_bin dec in
         let hex = dec_to_hex dec in
         print_endline
-          (string_of_int m1 ^ "\t | " ^ string_of_int dec ^ "\t | " ^ bin
-         ^ "\t | " ^ hex);
+          (pp_string 10 ' ' (string_of_int m1)
+          ^ "| "
+          ^ pp_string 10 ' ' (string_of_int dec)
+          ^ "| " ^ pp_string 40 ' ' bin ^ "| " ^ pp_string 15 ' ' hex);
         print t
     | _ -> ()
   in
