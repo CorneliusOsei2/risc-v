@@ -6,7 +6,7 @@ open Utilities
 let acc = ref []
 
 let rec gen_rtype op n =
-  if n mod 65 = 0 then ()
+  if n mod 15 = 0 then ()
   else
     let rd = gen_register n in
     let rs1 = gen_register (n + 1) in
@@ -15,7 +15,7 @@ let rec gen_rtype op n =
     gen_rtype op (n + 1)
 
 let rec gen_itype op n =
-  if n mod 65 = 0 then ()
+  if n mod 15 = 0 then ()
   else
     let rd = gen_register n in
     let rs1 = gen_register (n + 1) in
@@ -24,7 +24,7 @@ let rec gen_itype op n =
     gen_itype op (n + 1)
 
 let rec gen_stype op n =
-  if n mod 65 = 0 then ()
+  if n mod 15 = 0 then ()
   else
     let rd = gen_register n in
     let rs1 = gen_register (n + 1) in
