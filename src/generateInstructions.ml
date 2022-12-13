@@ -28,8 +28,9 @@ let rec gen_stype op n =
   else
     let rd = gen_register n in
     let rs1 = gen_register (n + 1) in
-    let rs2 = gen_register (n + 2) in
-    acc := (op ^ " " ^ rd ^ ", " ^ rs1 ^ ", " ^ rs2) :: !acc;
+    let imm = gen_imm min_i max_i in
+    acc :=
+      (op ^ " " ^ rd ^ ", " ^ Int32.to_string imm ^ "(" ^ rs1 ^ ")") :: !acc;
     gen_stype op (n + 1)
 
 let rec gen_utype op n =

@@ -58,6 +58,7 @@ module UtilityTests = struct
     [
       test_valid_register "valid" "x13" true;
       test_valid_register "invalid" "x145" false;
+      test_valid_register "invalid" "x-145" false;
     ]
 
   let tests =
