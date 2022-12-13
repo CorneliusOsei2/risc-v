@@ -22,6 +22,10 @@ module UtilityTests = struct
     name >:: fun _ ->
     assert_equal expected_output (split_stype n) ~printer:string_of_insn
 
+  let test_valid_register (name : string) (r : string) (expected_output : bool)
+      : test =
+    name >:: fun _ -> assert_equal expected_output (register_check r)
+
   let split_riu_instruction_tests =
     [
       test_split_instruction "no extra whitespaces" "add x1, x2, x3"
@@ -50,7 +54,15 @@ module UtilityTests = struct
         ("sw", [ "x3"; "0b10111"; "x6" ]);
     ]
 
-  let tests = List.flatten [ split_riu_instruction_tests; split_stype_tests ]
+  let valid_register_tests =
+    [
+      test_valid_register "valid" "x13" true;
+      test_valid_register "invalid" "x145" false;
+    ]
+
+  let tests =
+    List.flatten
+      [ split_riu_instruction_tests; split_stype_tests; valid_register_tests ]
 end
 
 (************************************ IO Tests *********************************** *)
