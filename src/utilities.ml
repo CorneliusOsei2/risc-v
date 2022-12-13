@@ -100,5 +100,10 @@ let gen_ops () =
    \tU-Type:\n\
    \t13. lui\n\n"
 
-(* TODO: *)
-let register_check r = true
+let register_check r =
+  if String.length r < 2 then false
+  else if String.starts_with "x" r then
+    let digits = String.sub r 1 (String.length r - 1) |> int_of_string_opt in
+    match digits with Some x -> x >= 0 && x < 32 | None -> false
+  else false
+

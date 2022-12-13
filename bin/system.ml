@@ -168,7 +168,7 @@ and gen_insns_handler () =
   ansi_print_blue "\tDo you have specific instructions you want to generate?\n";
   ansi_print_yellow
     "\tYou can hit [y] or [yes] to choose specific instructions or \n\
-    \ [n] or [no] to generate for all currently supported instructions\n";
+     \t[n] or [no] to generate for all currently supported instructions\n";
   ansi_print_blue ">> ";
   match read_line () with
   | exception End_of_file -> ()
@@ -212,6 +212,7 @@ and process f =
         ansi_print_green quit_msg;
         exit 0
     | _ ->
+        ansi_print_red "ALERT";
         ansi_print_red invalid_msg;
         main ()
   with NotWordAligned ->
