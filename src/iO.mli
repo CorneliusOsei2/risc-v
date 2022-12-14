@@ -2,7 +2,7 @@
    and writing instructions to a file. *)
 
 exception FileDoesNotExist
-(** Raised when an invalid or non-existent file is encoutered. *)
+(** Raised when an invalid or non-existent file is encountered. *)
 
 val file_to_list : string -> string list
 (** [file_to_list filename] parses the content of [filename].txt into 

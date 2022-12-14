@@ -1,7 +1,8 @@
 (** Implements a RISC-V Processor Memory. *)
 
 module Memory : Map.S
-(** Simulates exec_gen's 32-bit memory. Memory addresses are word-aligned. *)
+(** Simulates a byte-addressable 32-bit memory. 
+  Memory addresses are word-aligned. *)
 
 val init : unit -> (Int32.t * bool) Memory.t
 (** [init ()] is a memory with all memory addresses initialized to 0.*)
