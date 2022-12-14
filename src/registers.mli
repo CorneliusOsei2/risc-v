@@ -11,9 +11,6 @@ val pp_registers : (Int32.t * bool) RegisterFile.t -> unit
 val gen_register : int -> string
 (** [gen_register n] a random register identifier x[n]. *)
 
-val gen_imm : Int32.t -> Int32.t -> Int32.t
-(** [gen_imm n hi lo] returns a random int between [lo] and [hi] inclusive. *)
-
 val get_register : string -> (Int32.t * bool) RegisterFile.t -> Int32.t
 (** [get_register r rfile] returns the integer value stored at [r] in register 
     [rfile].*)

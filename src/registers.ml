@@ -1,6 +1,7 @@
 open Utilities
 open Random
 
+(* TODO: *)
 let register_num r = List.nth (String.split_on_char 'x' r) 1 |> int_of_string
 
 module StringComp = struct
@@ -37,35 +38,6 @@ let pp_registers registerfile =
     ^ "|"
     ^ fill_string_rev 15 ' ' " Hexadecimal");
   let rec print rs =
-    let open Int32 in
-    match rs with
-    | [] -> ()
-    | (r, v) :: t ->
-        let v = to_int (fst v) in
-        let bin = dec_to_bin v in
-        let hex = dec_to_hex v in
-        print_endline
-          (r ^ "\t | "
-          ^ (v |> string_of_int |> fill_string_rev 10 ' ')
-          ^ "| " ^ fill_string_rev 40 ' ' bin ^ "| "
-          ^ fill_string_rev 15 ' ' hex);
-        print t
-  in
-  print registers
-
-let visited_registers rfile =
-  List.filter (fun el -> snd (snd el) = true) (RegisterFile.bindings rfile)
-
-let pp_registers registerfile =
-  let registers = registerfile |> visited_registers in
-  print_endline
-    ("Register |"
-    ^ fill_string_rev 10 ' ' " Decimal"
-    ^ " | "
-    ^ fill_string_rev 40 ' ' "Binary"
-    ^ "|"
-    ^ fill_string_rev 15 ' ' " Hexadecimal");
-  let rec print rs =
     match rs with
     | [] -> ()
     | (r, v) :: t ->
@@ -82,17 +54,6 @@ let pp_registers registerfile =
   print registers
 
 let gen_register n = "x" ^ string_of_int (((n + 1) mod 31) + 1)
-
-let rec gen_imm lower_bound upper_bound =
-  let i = Random.int32 upper_bound in
-  if i >= lower_bound && i < upper_bound then i
-  else gen_imm upper_bound lower_bound
-
-let prep rfile n =
-  let rnum = gen_register n in
-  let imm = gen_imm (-2048l) 2047l in
-  let open RegisterFile in
-  add rnum (imm, true) rfile
 
 let get_register r rfile =
   try

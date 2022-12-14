@@ -6,7 +6,7 @@ val fill_string : int -> char -> string -> string
 
 val pow : int -> int -> int
 (** [pow a n] takes in an integer base [a] and an integer exponent [n] and calculates the 
-    mathematical value of the base to the exponent. *)
+    mathematical value of [a] exponent [n]. *)
 
 val dec_to_bin : int -> string
 (** [dec_to_bin num] takes in an integer [num] in decimal form and converts it to its
@@ -16,6 +16,9 @@ val dec_to_bin : int -> string
 val dec_to_hex : int -> string
 (** [dec_to_hex num] takes in an integer [num] in decimal form and converts it to its
     equivalent hexademical representation as a string.*)
+
+val gen_imm : Int32.t -> Int32.t -> Int32.t
+(** [gen_imm n hi lo] returns a random int between [lo] and [hi] inclusive. *)
 
 val split_instruction : string -> string * string list
 (** [split_instruction instruct] takes in an instruction [instruct] and separates the 
