@@ -6,6 +6,7 @@ open ProcessInstructions
 open GenerateInstructions
 
 exception NoSuchFile of string
+(** Raised when the file does not exist in [data/]  *)
 
 let data_dir_prefix = "data" ^ Filename.dir_sep
 let quit_msg = "Hope you had fun! 😃 Bye! 👋👋🏽\n\n"
@@ -16,12 +17,19 @@ let executed_msg = "All instructions executed.\n"
 let valid_test_file = "\tPlease choose a test file with valid instructions \n"
 let end_prompt = "\tPress [m] to return to main menu or any other key to quit\n"
 
-(** [ansi_print style s] prints s after applying [style] to it*)
+(** [ansi_print style s] prints s after applying [style] to it. *)
 let ansi_print style = ANSITerminal.print_string style
 
+(** [ansi_print style s] prints s in green. *)
 let ansi_print_green s = ansi_print [ ANSITerminal.green ] s
+
+(** [ansi_print style s] prints s in red. *)
 let ansi_print_red s = ansi_print [ ANSITerminal.red ] s
+
+(** [ansi_print style s] prints s in yellow. *)
 let ansi_print_yellow s = ansi_print [ ANSITerminal.yellow ] s
+
+(** [ansi_print style s] prints s in blue. *)
 let ansi_print_blue s = ansi_print [ ANSITerminal.blue ] s
 
 let gen_ops =
@@ -76,7 +84,8 @@ let rec eval_pattern n output =
           eval_pattern n output)
 
 (** [eval_step n output] prints out the current state of 
-    the register and memory at index [n] in [output]. *)
+    the register and memory at index [n] in [output] and returns the 
+    index of the next register and memory state. *)
 and eval_step n output =
   if n < List.length output then (
     ansi_print_green "\nRegister File\n";
@@ -98,7 +107,7 @@ and eval_step n output =
         exit 0)
 
 (** [eval_insn_file_format insns] evaluates all instructions in an uploaded file. 
-    Wrong (or wrongly formatted) instructions are prompted for fixing.  *)
+    Raises [WrongFormat i] if an invalid or not supported RISC-V instruction is encountered. *)
 and eval_insn_file_format insns =
   try
     let output = process_file_insns insns in
@@ -114,7 +123,9 @@ and eval_insn_file_format insns =
     ansi_print_yellow valid_test_file;
     eval_insn_file_format (get_insns_from_file ())
 
-(** [get_insns_from_file ()] requests the name of an existent test file in [data/]. *)
+(** [get_insns_from_file ()] requests the name of an existent test file in [data/] from which 
+    it extracts the instructions.
+    Raises [FileDoesNotExist] if file does not exist.  *)
 and get_insns_from_file () =
   ansi_print_yellow ">> ";
   match read_line () with
@@ -135,7 +146,7 @@ and get_insns_from_file () =
         get_insns_from_file ())
 
 (** [eval_insn_step_format (rfile, mem)] handles the simuated execution of instructions
-    one after another. Wrong instructions are prompted. *)
+    one after another. *)
 and eval_insn_step_format (rfile, mem) =
   ansi_print_yellow ">> ";
   match read_line () with
@@ -232,8 +243,11 @@ and gen_insns_handler () =
           ansi_print_yellow "\tPlease enter valid command \n";
           gen_insns_handler ())
 
-(** [process opt] displays the main menu which provides currently-supported
-    features or functionalities.  *)
+(** [process opt] launches the functionality the user wants to access based
+    on the value of [opt]: 
+    - ["1"] for test file upload and execution.contents.contents
+    - ["2"] for simulated step-by-step execution
+    - ["3"] for tests generation. *)
 and process opt =
   try
     match opt with
