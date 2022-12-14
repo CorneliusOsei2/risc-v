@@ -30,6 +30,8 @@ let compare_int32 n1 n2 =
   let n = compare n1 n2 in
   if n = 1 then 0l else 1l
 
+(** [eval_r_insns rd rs1 rs2 rfile op] evalues instruction type [op],  and puts
+    it into [rd]*)
 let eval_r_insns rd rs1 rs2 rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs1 rfile, get_register rs2 rfile) in

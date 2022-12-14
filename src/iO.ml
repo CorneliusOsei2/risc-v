@@ -15,7 +15,6 @@ let file_to_list file =
     loop []
   with _ -> raise FileDoesNotExist
 
-(* TODO:  Write spec *)
 let rec print_lst oc = function
   | [] -> ()
   | h :: t ->
