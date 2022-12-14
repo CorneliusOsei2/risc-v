@@ -1,3 +1,5 @@
+(** Implements a RISC-V Processor Register File. *)
+
 module RegisterFile : Map.S
 (** [RegisterFile] simulates a CPU's 32-bit register file using a TreeMap.
     Registers are labeled from x0 to x31.*)

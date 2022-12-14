@@ -1,3 +1,6 @@
+(** Implements functions for extracting instructions from file
+   and writing instructions to a file. *)
+
 exception FileDoesNotExist
 (** Raised when an invalid or non-existent file is encoutered. *)
 
