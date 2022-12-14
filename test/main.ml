@@ -111,7 +111,6 @@ module RegisterTests = struct
   let upper_bound = pow 2 31 - 1 |> of_int
   let rfile5 = update_register "x7" (Int32.to_int lower_bound) rfile
   let rfile6 = update_register "x8" (Int32.to_int upper_bound) rfile
-  let x = if true then pp_registers rfile1
 
   (** [test_register name r expected_output] constructs an OUnit test named
     [name] that asserts the quality of [expected_output] with
@@ -148,8 +147,8 @@ module RegisterTests = struct
         "edge register test to test min representation of a register is -2^31"
         "x4" rfile4 (-2147483648l);
       test_register "random register lower bound test" "x7" rfile5 lower_bound;
-      test_register "random register upper bound test" "x8" rfile6 upper_bound;
-      test_pp_registers "random pp_register test" rfile1 ();
+      test_register "random register upper bound test" "x8" rfile6 upper_bound
+      (* test_pp_registers "random pp_register test" rfile1 (); *);
     ]
 end
 
@@ -194,8 +193,8 @@ module MemoryTests = struct
       test_memory
         "random memory test that tests if a memory address with an existing \
          value is properly updated"
-        15 mem4 78l;
-      test_pp_memory "random pp_memory test" mem1 ();
+        15 mem4 78l
+      (* test_pp_memory "random pp_memory test" mem1 (); *);
     ]
 
   (* let memory_tests =
@@ -214,6 +213,7 @@ let _ = Memory.(init () |> pp_memory)
 (************************************ Process Instructions Tests *********************************** *)
 module ProcessInstructionsTests = struct
   include RegisterTests
+  include MemoryTests
 
   (*[test_register_stype name r mem expected output] constructs an OUnit test
     named [name] that asserts the value of register [r] in the register file in
@@ -236,15 +236,6 @@ module ProcessInstructionsTests = struct
     assert_equal
       (Memory.get_memory addr (snd mem))
       expected_output ~printer:Int32.to_string
-
-  (*[test_process_file_insns name lst expected output] constructs an OUnit test
-     named [name] that converts a list of string instructions [lst] into a list
-     of tuples of the register file and memory with [process_file_insns lst]*)
-  let test_process_file_insns (name : string) (lst : string list)
-      (expected_output :
-        ((int32 * bool) RegisterFile.t * (int32 * bool) Memory.Memory.t) list) :
-      test =
-    name >:: fun _ -> assert_equal (process_file_insns lst) expected_output
 
   (*[test_process_step_insns name i r m expected output] constructs an OUnit test
        named [name] that converts a string instruction [i] with register file [r]
@@ -359,40 +350,42 @@ module ProcessInstructionsTests = struct
 
   let instr_list =
     [
-      "addi x1, x1, 9"
-      (* "addi x2, x1, 10" *)
-      (* (* "add x3, x1, x2";
-            "addi x4, x4, 2047";
-            "sub x5, x3, x1" *)
-         (* "and x6, x5, x1";
-            "addi x7, x7, 3";
-            "addi x8, x8, 10";
-            "or x9, x7, x8";
-            "xor x10, x7, x8" *)
-         (* "sw x18, 12(x17)";
-            "sb x21, 12(x1)";
-            "lw x22, 5(x2)"; *); *);
+      "addi x1, x1, 9";
+      "addi x2, x1, 10";
+      "add x3, x1, x2";
+      "addi x4, x4, 204";
+      "sub x5, x3, x1";
+      "and x6, x5, x1";
+      "addi x7, x7, 3";
+      "srl x8, x4, x7";
+      "or x9, x7, x8";
+      "xor x10, x7, x8";
+      "sw x4, 7(x1)";
+      "sw x8, 5(x7)";
+      "sb x8, 19(x1)";
+      "lw x21, 5(x7)";
     ]
 
-  let file_list =
+  let tuple_list = process_file_insns instr_list
+  let reg_list n = List.nth (List.map (fun out -> fst out) tuple_list) n
+  let mem_list n = List.nth (List.map (fun out -> snd out) tuple_list) n
+
+  let process_file_insns_tests =
     [
-      (rfile1, mem)
-      (* (rfile2, mem) *)
-      (* (rfile3, mem);
-         (rfile4, mem);
-         (rfile5, mem) *)
-      (* (rfile6, mem);
-         (rfile7, mem);
-         (rfile8, mem);
-         (rfile9, mem);
-         (rfile10, mem) *)
-      (* (rfile10, snd mem1);
-         (rfile10, snd mem2);
-         (rfile10, snd mem3); *);
+      test_register "file test" "x1" (reg_list 0) 9l;
+      test_register "file test" "x2" (reg_list 0) 19l;
+      test_register "file test" "x3" (reg_list 0) 28l;
+      test_register "file test" "x4" (reg_list 0) 204l;
+      test_register "file test" "x5" (reg_list 0) 19l;
+      test_register "file test" "x6" (reg_list 0) 1l;
+      test_register "file test" "x7" (reg_list 0) 3l;
+      test_register "file test" "x8" (reg_list 0) 25l;
+      test_register "file test" "x9" (reg_list 0) 27l;
+      test_register "file test" "x10" (reg_list 0) 26l;
+      test_memory "file test" 16 (mem_list 0) 204l;
+      test_memory "file test" 28 (mem_list 0) 25l;
+      test_register "file test" "x21" (reg_list 0) 25l;
     ]
-
-  let process_file_insns_tests = []
-  (* [ test_process_file_insns "file test" instr_list file_list ] *)
 
   let process_step_insns_tests =
     [
