@@ -1,3 +1,5 @@
+(** Implements functions to execute supported RISC-V instructions. *)
+
 val rtype : string list
 (** Suported R-type instruction instructions: add, and, or, xor, sll, srl, slt. *)
 

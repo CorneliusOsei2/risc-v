@@ -1,3 +1,5 @@
+(** Implements a RISC-V Processor Memory. *)
+
 module Memory : Map.S
 (** Simulates exec_gen's 32-bit memory. Memory addresses are word-aligned. *)
 

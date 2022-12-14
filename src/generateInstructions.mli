@@ -1,3 +1,5 @@
+(** Implements functions to generate supported RISC-V instructions. *)
+
 val gen_rtype : string -> int -> unit
 (** [gen_rtype op n acc] generates [n] [op] instructions. [op] is an R-type
   instruction.*)
