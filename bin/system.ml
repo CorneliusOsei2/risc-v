@@ -288,7 +288,7 @@ and main () =
 let () =
   ansi_print
     [ ANSITerminal.red; ANSITerminal.Background White ]
-    "\n\n Welcome to The RISC-V Tests Executer and Generator. \n";
+    "\n\n Welcome to The RISC-V Tests Executor and Generator. \n";
   ansi_print_yellow
     "\n\
      You can return to the Main Menu at any time with [m] or [menu]\n\
