@@ -4,6 +4,7 @@ open ProcessInstructions
 open Utilities
 
 let acc = ref []
+(* Accumulates generated instructions.  *)
 
 let rec gen_rtype op n =
   if n mod 15 = 0 then ()

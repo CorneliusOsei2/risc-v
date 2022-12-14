@@ -202,15 +202,6 @@ module MemoryTests = struct
         15 mem4 78l
       (* test_pp_memory "random pp_memory test" mem1 (); *);
     ]
-
-  (* let memory_tests =
-     let _ = GenerateInstructions.gen_itype "subi" 15 [] in
-     [
-       test_memory "init () values" 0 mem 0;
-       test_memory "update memory" 0 mem1 5;
-       test_memory "update memory" 1 mem2 2;
-       test_memory "update memory" 15 mem3 5;
-     ] *)
 end
 (************************************ Memory Tests *********************************** *)
 
@@ -244,9 +235,8 @@ module ProcessInstructionsTests = struct
       expected_output ~printer:Int32.to_string
 
   (*[test_process_step_insns name i r m expected output] constructs an OUnit test
-       named [name] that converts a string instruction [i] with register file [r]
-       and memory [m] into a tuple of an updated register file and memory with
-       [process_step_insns]*)
+       named [name] that asserts the value of [ProcessInstructions.process_step_insns i r m]
+      with [expected_output]. *)
   let test_process_step_insns (name : string) (i : string)
       (r : (int32 * bool) RegisterFile.t) (m : (int32 * bool) Memory.Memory.t)
       (expected_output :
