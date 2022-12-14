@@ -1,5 +1,5 @@
 module Memory : Map.S
-(** Simulates processor's 32-bit memory. Memory addresses are word-aligned. *)
+(** Simulates exec_gen's 32-bit memory. Memory addresses are word-aligned. *)
 
 val init : unit -> (Int32.t * bool) Memory.t
 (** [init ()] is a memory with all memory addresses initialized to 0.*)
