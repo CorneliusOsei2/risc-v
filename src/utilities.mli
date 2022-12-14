@@ -31,8 +31,6 @@ val string_of_insn : string * string list -> string
 val list_of_string : string -> string list
 (** [ist_of_string s] converts the string representation to a list [l]*)
 
-val gen_ops : unit -> string
-
 val register_check : string -> bool
 (** [register_check s] returns true if s is a valid register number. 
     Valid register numbers start with [x] followed by digits [0-31]  *)
