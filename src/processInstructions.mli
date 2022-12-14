@@ -1,14 +1,14 @@
 val rtype : string list
-(** Suported R-type instruction operators *)
+(** Suported R-type instruction instructions. *)
 
 val itype : string list
-(** Suported I-type instruction operators. *)
+(** Suported I-type instruction instructions. *)
 
 val stype : string list
-(** Suported S-type instruction operators. *)
+(** Suported S-type instruction instructions. *)
 
 val utype : string list
-(** Suported U-type instruction operators. *)
+(** Suported U-type instruction instructions. *)
 
 exception WrongFormat of int
 (** Raised when an invalid or not currently-supported RISC-V instruction is encoutered. 

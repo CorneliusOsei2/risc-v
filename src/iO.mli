@@ -1,7 +1,7 @@
 exception FileDoesNotExist
 
 val file_to_list : string -> string list
-(** [file_to_list filename] parses the content of [filename] .txt file into 
+(** [file_to_list filename] parses the content of [filename].txt into 
    a list.*)
 
 val list_to_file : string list -> unit
