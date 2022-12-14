@@ -47,6 +47,19 @@ module UtilityTests = struct
     name >:: fun _ ->
     assert_equal expected_output (pow a n) ~printer:string_of_int
 
+  (*[test_string_of_list name lst expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [string_of_list lst]*)
+  let test_string_of_list (name : string) (lst : string list)
+      (expected_output : string) : test =
+    name >:: fun _ ->
+    assert_equal expected_output (string_of_list lst) ~printer:String.escaped
+
+  (*[test_list_of_string name s expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [list_of_string s]*)
+  let test_list_of_string (name : string) (s : string)
+      (expected_output : string list) : test =
+    name >:: fun _ -> assert_equal expected_output (list_of_string s)
+
   let split_riu_instruction_tests =
     [
       test_split_instruction "no extra whitespaces" "add x1, x2, x3"
@@ -73,6 +86,7 @@ module UtilityTests = struct
         ("sw", [ "x2"; "0x45"; "x4" ]);
       test_split_stype "binary" "sw x3, 0b10111(x6)"
         ("sw", [ "x3"; "0b10111"; "x6" ]);
+      test_split_stype "decimal" "sb x3, 55(x6)" ("sb", [ "x3"; "55"; "x6" ]);
     ]
 
   let valid_register_tests =
@@ -105,6 +119,15 @@ module UtilityTests = struct
       test_pow "2^10" 2 10 1024;
     ]
 
+  let string_list_tests =
+    [
+      test_string_of_list "non-empty string" [ "1"; "2"; "3" ] "[1, 2, 3]";
+      test_string_of_list "empty list" [] "[]";
+      test_list_of_string "string to list" "1, 2, 3" [ "1"; "2"; "3" ];
+      test_list_of_string "string of registers to list" "x10, x12, x11"
+        [ "x10"; "x12"; "x11" ];
+    ]
+
   let tests =
     List.flatten
       [
@@ -113,6 +136,7 @@ module UtilityTests = struct
         valid_register_tests;
         fill_strings_tests;
         pow_tests;
+        string_list_tests;
       ]
 end
 
@@ -439,22 +463,22 @@ module ProcessInstructionsTests = struct
 
   let process_step_insns_tests =
     [
-      test_process_step_insns "step test" "add x3, x1, x2" rfile2 mem
+      test_process_step_insns "step add test" "add x3, x1, x2" rfile2 mem
         (rfile3, mem);
-      test_process_step_insns "step test" "addi x4, x4, 2047" rfile3 mem
+      test_process_step_insns "step addi test" "addi x4, x4, 2047" rfile3 mem
         (rfile4, mem);
-      test_process_step_insns "step test" "sub x5, x3, x1" rfile4 mem
+      test_process_step_insns "step sub test" "sub x5, x3, x1" rfile4 mem
         (rfile5, mem);
-      test_process_step_insns "step test" "sll x11, x7, x8" rfile10 mem
+      test_process_step_insns "step sll test" "sll x11, x7, x8" rfile10 mem
         (rfile11, mem);
-      test_process_step_insns "step test" "xor x10, x7, x8" rfile9 mem
+      test_process_step_insns "step xor test" "xor x10, x7, x8" rfile9 mem
         (rfile10, mem);
-      test_process_step_insns "step test" "sw x18, 12(x17)" rfile20 mem mem1;
-      test_process_step_insns "step test" "sb x9, 2(x23)" rfile22 (snd mem3)
+      test_process_step_insns "step sw test" "sw x18, 12(x17)" rfile20 mem mem1;
+      test_process_step_insns "step sb test" "sb x9, 2(x23)" rfile22 (snd mem3)
         mem4;
-      test_process_step_insns "step test" "lw x22, 5(x2)" rfile21 (snd mem2)
+      test_process_step_insns "step lw test" "lw x22, 5(x2)" rfile21 (snd mem2)
         mem3;
-      test_process_step_insns "step test" "lb x24, 2(x23)" rfile22 (snd mem4)
+      test_process_step_insns "step lb test" "lb x24, 2(x23)" rfile22 (snd mem4)
         mem5;
     ]
 end
