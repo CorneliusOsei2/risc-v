@@ -1,8 +1,10 @@
 val fill_string : int -> char -> string -> string
-(** [fill_string n c v] is v with [n - len(v)] [c] characters padded to the front.*)
+(** [fill_string n c v] is v with [n - len(v)] [c] characters padded to the front.
+    Requires [len(v)] must be greater than or equal to [n]. *)
 
 val fill_string_rev : int -> char -> string -> string
-(** [fill_string_rev n c v] is v with [n - len(v)] [c] characters padded to the back.*)
+(** [fill_string_rev n c v] is v with [n - len(v)] [c] characters padded to the back.
+  Requires [len(v)] must be greater than or equal to [n]  *)
 
 val pow : int -> int -> int
 (** [pow a n] is [a] exponent [n]. *)
