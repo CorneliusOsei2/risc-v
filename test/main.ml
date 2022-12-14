@@ -289,10 +289,16 @@ module ProcessInstructionsTests = struct
 
   let process_step_insns_tests =
     [
-      test_process_step_insns "step test" "addi x1 x1 9" rfile mem (rfile1, mem);
-      test_process_step_insns "step test" "sub x2 x1 3" rfile mem (rfile2, mem);
-      test_process_step_insns "step test" "andi x2 x1 3" rfile mem (rfile3, mem);
-      test_process_step_insns "step test" "sll x2 x1 3" rfile mem (rfile4, mem);
+      test_process_step_insns "step test" "addi x1, x1, 9" rfile mem
+        (rfile1, mem);
+      test_process_step_insns "step test" "addi x2, x0, 7" rfile mem
+        (rfile2, mem)
+      (* test_process_step_insns "step test" "sub x2, x1, x3" rfile mem
+           (rfile2, mem);
+         test_process_step_insns "step test" "andi x2, x1, 3" rfile mem
+           (rfile3, mem);
+         test_process_step_insns "step test" "sll x2, x1, x3" rfile mem
+           (rfile4, mem); *);
     ]
 end
 
