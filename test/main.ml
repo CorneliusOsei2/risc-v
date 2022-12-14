@@ -146,6 +146,78 @@ end
 
 let _ = Memory.(init |> pp_memory)
 
+(************************************ Process Instructions Tests *********************************** *)
+module ProcessInstructionsTests = struct
+  include RegisterTests
+
+  let rfile = Registers.init
+  let rfile1 = update_register "x1" 9 rfile
+  let rfile2 = process_itype "addi" "x2" "x1" "10" rfile1
+  let rfile3 = process_rtype "add" "x3" "x1" "x2" rfile2
+  let rfile4 = process_itype "addi" "x4" "x4" "2047" rfile3
+  let rfile5 = process_rtype "sub" "x5" "x3" "x1" rfile4
+  let rfile6 = process_rtype "and" "x6" "x5" "x1" rfile5
+  let rfile7 = process_itype "addi" "x7" "x7" "3" rfile6
+  let rfile8 = process_itype "addi" "x8" "x8" "10" rfile7
+  let rfile9 = process_rtype "or" "x9" "x7" "x8" rfile8
+  let rfile10 = process_rtype "xor" "x10" "x7" "x8" rfile9
+  let rfile11 = process_rtype "sll" "x11" "x7" "x8" rfile10
+  let rfile12 = process_rtype "srl" "x12" "x8" "x7" rfile11
+  let rfile13 = process_itype "addi" "x13" "x13" "-25" rfile12
+  let rfile14 = process_rtype "slt" "x14" "x13" "x14" rfile13
+  let rfile15 = process_rtype "sltu" "x15" "x13" "x14" rfile14
+  let rfile16 = process_itype "addi" "x16" "x16" "300" rfile15
+  let rfile17 = process_itype "andi" "x17" "x16" "159" rfile16
+  let rfile18 = process_itype "ori" "x18" "x16" "48" rfile17
+  let rfile19 = process_itype "xori" "x19" "x18" "174" rfile18
+  let rfile20 = process_itype "addi" "x20" "x20" "-2048" rfile19
+  (* let rfile21 = process_itype "slli" "x21" "x7" "101" rfile20 *)
+
+  let process_optype_tests =
+    [
+      test_register
+        "non-edge case of addi with positive offset where we first initialize \
+         an empty register"
+        "x1" rfile1 9l;
+      test_register
+        "non-edge case of addi with positive offset where we use the value in \
+         1 register to initialize another register"
+        "x2" rfile2 19l;
+      test_register
+        "non-edge case where we test that the values manipulated by previous \
+         operations on previous register files still holds for the new \
+         register file"
+        "x1" rfile2 9l;
+      test_register
+        "edge case where we test that the maximum integer that addi operations \
+         can represent is 2^11 - 1 "
+        "x4" rfile4 2047l;
+      test_register
+        "edge case where we test that the minimum integer the addi operations \
+         can represent is -2^11 "
+        "x20" rfile20 (-2048l);
+      test_register "non-edge case of the add operation" "x3" rfile3 28l;
+      test_register "non-edge case of the sub operation" "x5" rfile5 19l;
+      test_register "non-edge case of the add operation" "x6" rfile6 1l;
+      test_register "non-edge case of the or operation" "x9" rfile9 11l;
+      test_register "non-edge case of the xor operation" "x10" rfile10 9l;
+      test_register "non-edge case of the sll operation" "x11" rfile11 3072l;
+      test_register "non-edge case of the srl operation" "x12" rfile12 1l;
+      test_register
+        "non-edge case of the slt operation where we compare two signed \
+         integers"
+        "x14" rfile14 1l;
+      test_register
+        "non-edge case of the sltu operation where we compare two unsigned \
+         integers"
+        "x15" rfile15 0l;
+      test_register "non-edge case of the andi operation" "x17" rfile17 12l;
+      test_register "non-edge case of the ori operation" "x18" rfile18 316l;
+      test_register "non-edge case of the xori operation" "x19" rfile19 402l
+      (* test_register "non-edge case of the slli operation" "x21" rfile21 11l; *);
+    ]
+end
+
 let suite =
   "test suite for A2"
   >::: List.flatten
@@ -153,6 +225,7 @@ let suite =
            UtilityTests.tests;
            IOTests.file_to_list_tests;
            RegisterTests.register_tests (* MemoryTests.memory_tests; *);
+           ProcessInstructionsTests.process_optype_tests;
          ]
 
 let _ = run_test_tt_main suite
