@@ -3,13 +3,20 @@
 build:
 	dune build
 
+bisect: bisect-clean
+	-dune exec --instrument-with bisect_ppx --force test/main.exe
+	bisect-ppx-report html
+
+bisect-clean:
+	rm -rf _coverage bisect*.coverage
+	
 code:
 	-dune build
 	code .
 	! dune build --watch
 
 install:
-	opam install -y utop ounit2 ocamlformat ANSITerminal
+	opam install -y utop ounit2 ocamlformat ANSITerminal bisect
 
 utop:
 	OCAMLRUNPARAM=b dune utop src

@@ -11,7 +11,7 @@ let mem_bitmask = 255l
 let max_i = 2047l
 let min_i = -2048l
 let max_u = 524287l
-let min_u = -524288
+let min_u = -524288l
 
 exception WrongFormat of int
 exception NotWordAligned
