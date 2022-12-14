@@ -1,5 +1,5 @@
 open OUnit2
-open Processor
+open ExecGen
 open Registers
 open Utilities
 open IO
@@ -410,7 +410,7 @@ module ProcessInstructionsTests = struct
 end
 
 let suite =
-  "test suite for Processor"
+  "test suite for ExecGen"
   >::: List.flatten
          [
            UtilityTests.tests;

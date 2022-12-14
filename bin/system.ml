@@ -1,4 +1,4 @@
-open Processor
+open ExecGen
 open Registers
 open Utilities
 open IO
@@ -32,7 +32,7 @@ let ansi_print_yellow s = ansi_print [ ANSITerminal.yellow ] s
 (** [ansi_print style s] prints s in blue. *)
 let ansi_print_blue s = ansi_print [ ANSITerminal.blue ] s
 
-let gen_ops =
+let ops_string =
   "\n\
    \tI-Type:\n\
    \t1. addi    2. andi    3. ori    4. xori  \n\
@@ -179,7 +179,7 @@ and gen_specific_insns_handler () =
      \tYou can choose multiple operations by separating their numbers with a \
      comma.\n\
      \tRegisters will be initialized with [addi] instructions first\n";
-  ansi_print_yellow gen_ops;
+  ansi_print_yellow ops_string;
   ansi_print_blue ">> ";
   match read_line () with
   | exception End_of_file -> ()

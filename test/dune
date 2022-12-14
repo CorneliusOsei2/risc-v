@@ -1,4 +1,3 @@
 (executable
  (name main)
- (libraries Processor ounit2 stdint)
-)
+ (libraries ExecGen ounit2 stdint))
