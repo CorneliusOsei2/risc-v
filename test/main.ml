@@ -147,7 +147,7 @@ end
 let _ = Memory.(init |> pp_memory)
 
 let suite =
-  "test suite for A2"
+  "test suite for Processor"
   >::: List.flatten
          [
            UtilityTests.tests;

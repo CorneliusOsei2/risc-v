@@ -14,4 +14,4 @@ val gen_utype : string -> int -> unit
 (** [gen_itype op n acc] generates n U-type (op) instructions.*)
 
 val gen_swtype : string -> int -> unit
-(** [gen_swtype op n acc] generates n U-type (op) instructions.*)
+(** [gen_swtype op n acc] generates n S-type (op) instructions.*)
