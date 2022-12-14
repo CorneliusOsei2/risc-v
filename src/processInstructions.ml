@@ -30,16 +30,17 @@ let compare_int32 n1 n2 =
   let n = compare n1 n2 in
   if n = 1 then 0l else 1l
 
-(** [eval_r_insns rd rs1 rs2 rfile op] evaluates [op] r-type instructions with 
-    registers [rs1] and [rs2] and puts it into [rd]*)
+(** [eval_shift_r_insns rd rs1 rs2 rfile op] evaluates [op] R-type instructions with 
+    source registers [rs1], [rs2], destination register [rd] and register file [rfile]. *)
 let eval_r_insns rd rs1 rs2 rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs1 rfile, get_register rs2 rfile) in
   let res = op in1 in2 in
   update_register rd (Int32.to_int res) rfile
 
-(** [eval_i_insns rd rs imm rfile op ] evaluates [op] i-type instructions with 
-    registers [rs] and immediate [imm] and puts it into [rd]*)
+(** [eval_i_insns rd rs imm rfile op] evaluates [op] I-type instructions with 
+    source register [rs], immediate [imm], destination register [rd] and
+   register file [rfile]. *)
 let eval_i_insns rd rs imm rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs rfile, of_string imm) in
@@ -48,16 +49,17 @@ let eval_i_insns rd rs imm rfile op =
     let res = op in1 in2 in
     update_register rd (Int32.to_int res) rfile |> update_register "x0" 0
 
-(** [eval_shift_r_insns rd rs1 rs2 rfile op] evaluates shift [op] r-type instructions with 
-    source registers [rs1], [rs2] and destination register [rd]*)
+(** [eval_shift_r_insns rd rs1 rs2 rfile op] evaluates [op] R-type (shift) instructions 
+  with source registers [rs1], [rs2], destination register [rd] and register file [rfile].*)
 let eval_shift_r_insns rd rs1 rs2 rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs1 rfile, get_register rs2 rfile) in
   let res = op in1 (to_int in2) in
   update_register rd (Int32.to_int res) rfile |> update_register "x0" 0
 
-(** [eval_shift_i_insns rd rs imm rfile op] evaluates [op] shift i-type instructions with 
-    register [rs] and immediate [imm] and destination register [rd]*)
+(** [eval_shift_r_insns rd rs1 rs2 rfile op] evaluates [op] I-type (shift) instructions 
+  with source register [rs], immediate [imm], destination register [rd] and register file 
+  [rfile].*)
 let eval_shift_i_insns rd rs imm rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs rfile, of_string imm) in
@@ -66,8 +68,9 @@ let eval_shift_i_insns rd rs imm rfile op =
     let res = op in1 (to_int in2) in
     update_register rd (Int32.to_int res) rfile |> update_register "x0" 0
 
-(** [eval_store_insns op rs1 offset rs2 rfile mem] updates the memory 
-    addresses for s-type sw and sb instructions.*)
+(** [eval_store_insns op rs1 offset rs2 rfile mem] evaluates an [op] S-type (store) 
+  instruction with registers [rs1] [rs2], register file [rfile] and memory [mem].
+  The supported store instructions are [sw] and [sb]. *)
 let eval_store_insns op rs1 offset rs2 rfile mem =
   let open Int32 in
   let v = get_register rs1 rfile in
@@ -84,8 +87,9 @@ let eval_store_insns op rs1 offset rs2 rfile mem =
     |> Memory.update_memory (addr + 2) byte_three
     |> Memory.update_memory (addr + 3) byte_four
 
-(** [ eval_load_insns op rs1 offset rs2 rfile mem ] updates the register[rd] 
-    after executing the load instruction: lw, lb.*)
+(** [eval_load_insns op rs1 offset rs2 rfile mem] evaluates an [op] S-type (load) 
+  instruction with registers [rs1] [rs2], register file [rfile] and memory [mem].
+  The supported store instructions are [lw] and [lb]. *)
 let eval_load_insns op rs1 offset rs2 rfile mem =
   let open Int32 in
   let addr = int_of_string offset + to_int (get_register rs2 rfile) in
