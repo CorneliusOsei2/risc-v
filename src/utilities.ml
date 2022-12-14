@@ -6,7 +6,7 @@ let rec pow a n =
   | 0 -> 1
   | 1 -> a
   | _ ->
-      let rem = a mod n in
+      let rem = n mod 2 in
       let half = pow a (n / 2) in
       if rem = 1 then a * half * half else half * half
 
