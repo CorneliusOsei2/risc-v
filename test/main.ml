@@ -171,6 +171,18 @@ module ProcessInstructionsTests = struct
       (Memory.get_memory addr (snd reg_mem))
       expected_output ~printer:Int32.to_string
 
+  let test_process_file_insns (name : string) (lst : string list)
+      (expected_output :
+        ((int32 * bool) RegisterFile.t * (int32 * bool) Memory.Memory.t) list) :
+      test =
+    name >:: fun _ -> assert_equal (process_file_insns lst) expected_output
+
+  let test_process_step_insns (name : string) (i : string)
+      (r : (int32 * bool) RegisterFile.t) (m : (int32 * bool) Memory.Memory.t)
+      (expected_output :
+        (int32 * bool) RegisterFile.t * (int32 * bool) Memory.Memory.t) : test =
+    name >:: fun _ -> assert_equal (process_step_insns i r m) expected_output
+
   let rfile = Registers.init
   let rfile1 = process_itype "addi" "x1" "x1" "9" rfile
   let rfile2 = process_itype "addi" "x2" "x1" "10" rfile1
@@ -259,7 +271,7 @@ module ProcessInstructionsTests = struct
         "non-edge case of lw operation in which we check the value of the \
          register destination  which should be changed"
         "x22" reg_mem3 316l;
-      test_memory_stype (*failing for some reason - should be 316 but is 60*)
+      test_memory_stype
         "non-edge case of lw operation in which we check the value at the \
          memory address which should be unchanged"
         24 reg_mem3 60l;
@@ -272,6 +284,16 @@ module ProcessInstructionsTests = struct
          register destination  which should be changed"
         "x24" reg_mem5 11l;
     ]
+
+  let process_file_insns_tests = []
+
+  let process_step_insns_tests =
+    [
+      test_process_step_insns "step test" "addi x1 x1 9" rfile mem (rfile1, mem);
+      test_process_step_insns "step test" "sub x2 x1 3" rfile mem (rfile2, mem);
+      test_process_step_insns "step test" "andi x2 x1 3" rfile mem (rfile3, mem);
+      test_process_step_insns "step test" "sll x2 x1 3" rfile mem (rfile4, mem);
+    ]
 end
 
 let suite =
@@ -282,6 +304,8 @@ let suite =
            IOTests.file_to_list_tests;
            RegisterTests.register_tests (* MemoryTests.memory_tests; *);
            ProcessInstructionsTests.process_optype_tests;
+           ProcessInstructionsTests.process_file_insns_tests;
+           ProcessInstructionsTests.process_step_insns_tests;
          ]
 
 let _ = run_test_tt_main suite
