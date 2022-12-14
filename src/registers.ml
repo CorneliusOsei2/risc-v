@@ -31,9 +31,11 @@ let pp_registers registerfile =
   let registers = registerfile |> visited_registers in
   print_endline
     ("Register |"
-    ^ pp_string 10 ' ' " Decimal"
-    ^ " | " ^ pp_string 40 ' ' "Binary" ^ "|"
-    ^ pp_string 15 ' ' " Hexadecimal");
+    ^ fill_string_rev 10 ' ' " Decimal"
+    ^ " | "
+    ^ fill_string_rev 40 ' ' "Binary"
+    ^ "|"
+    ^ fill_string_rev 15 ' ' " Hexadecimal");
   let rec print rs =
     let open Int32 in
     match rs with
@@ -44,8 +46,9 @@ let pp_registers registerfile =
         let hex = dec_to_hex v in
         print_endline
           (r ^ "\t | "
-          ^ (v |> string_of_int |> pp_string 10 ' ')
-          ^ "| " ^ pp_string 40 ' ' bin ^ "| " ^ pp_string 15 ' ' hex);
+          ^ (v |> string_of_int |> fill_string_rev 10 ' ')
+          ^ "| " ^ fill_string_rev 40 ' ' bin ^ "| "
+          ^ fill_string_rev 15 ' ' hex);
         print t
   in
   print registers
@@ -57,9 +60,11 @@ let pp_registers registerfile =
   let registers = registerfile |> visited_registers in
   print_endline
     ("Register |"
-    ^ pp_string 10 ' ' " Decimal"
-    ^ " | " ^ pp_string 40 ' ' "Binary" ^ "|"
-    ^ pp_string 15 ' ' " Hexadecimal");
+    ^ fill_string_rev 10 ' ' " Decimal"
+    ^ " | "
+    ^ fill_string_rev 40 ' ' "Binary"
+    ^ "|"
+    ^ fill_string_rev 15 ' ' " Hexadecimal");
   let rec print rs =
     match rs with
     | [] -> ()
@@ -69,8 +74,9 @@ let pp_registers registerfile =
         let hex = dec_to_hex v in
         print_endline
           (r ^ "\t | "
-          ^ (v |> string_of_int |> pp_string 10 ' ')
-          ^ "| " ^ pp_string 40 ' ' bin ^ "| " ^ pp_string 15 ' ' hex);
+          ^ (v |> string_of_int |> fill_string_rev 10 ' ')
+          ^ "| " ^ fill_string_rev 40 ' ' bin ^ "| "
+          ^ fill_string_rev 15 ' ' hex);
         print t
   in
   print registers
