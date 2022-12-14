@@ -57,6 +57,7 @@ let gen_specific_insns ops =
     | [] -> ()
     | h :: t ->
         (match h with
+        | "1" | "addi" -> gen_itype "andi" 1
         | "2" | "andi" -> gen_itype "andi" 1
         | "3" | "ori" -> gen_itype "ori" 1
         | "4" | "xori" -> gen_itype "xori" 1
@@ -79,7 +80,7 @@ let gen_specific_insns ops =
 
         helper t
   in
-  helper ops;
+  helper (List.filter (fun op -> op <> "1" || op <> "addi") ops);
   gen_itype "addi" 1;
   list_to_file !acc;
   acc := []

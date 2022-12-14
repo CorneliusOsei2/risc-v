@@ -88,9 +88,6 @@ let prep rfile n =
   let open RegisterFile in
   add rnum (imm, true) rfile
 
-let rec prep_registers n rfile =
-  if n < 0 then rfile else prep rfile n |> prep_registers (n - 1)
-
 let get_register r rfile =
   try
     let open RegisterFile in

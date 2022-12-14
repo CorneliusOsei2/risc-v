@@ -1,5 +1,2 @@
-addi x1, x1, 6
-addi x2, x1, 1000
-add x3, x1, x2
-sll x4, x1, x2
-srl x5, x2, x1
+addi x1, x1, 123
+slli x2, x1, -1

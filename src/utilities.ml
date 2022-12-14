@@ -89,19 +89,6 @@ let string_of_list lst =
 
 let list_of_string s = s |> String.split_on_char ',' |> List.map String.trim
 
-let gen_ops () =
-  "\n\
-   \tI-Type:\n\
-   \t1. addi    2. andi    3. ori    4. xori  \n\
-   \t5. slli    6. srli    7. slti\n\n\
-   \tR-Type:\n\
-   \t8. add    9. and    10. or    11. xor   \n\
-   \t12. sll   13. srl   14. slt\n\n\
-   \tS-Type:\n\
-   \t15. sw    16. sb    17. lw    18. lb\n\n\
-   \tU-Type:\n\
-   \t19. lui\n\n"
-
 let register_check r =
   if String.length r < 2 then false
   else if String.starts_with "x" r then

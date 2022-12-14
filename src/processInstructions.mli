@@ -10,15 +10,18 @@ val stype : string list
 val utype : string list
 (* Suported U-type instruction operators *)
 
-val min_i : int32
-val max_i : int32
-
 exception WrongFormat of int
 exception NotWordAligned
 exception IncorrectRTypeFormat of int
 exception IncorrectITypeFormat of int
 exception IncorrectUTypeFormat of int
 exception IncorrectSTypeFormat of int
+
+val min_i : int32
+(* Minimum immediate for I-Type instruction *)
+
+val max_i : int32
+(* Maximum immediate for I-Type instruction *)
 
 val process_rtype :
   string ->
@@ -67,8 +70,8 @@ val process_file_insns :
   string list ->
   ((Int32.t * bool) Registers.RegisterFile.t * (Int32.t * bool) Memory.Memory.t)
   list
-(** [process_rtype insns] processes input instructions from the test file and returns
-  and returns the states of the register after each instruction execution
+(** [process_file_insns insns] processes [insns] from the test file and
+   returns a list of the resulting states of [rfile] and [mem].
 *)
 
 val process_step_insns :
@@ -76,3 +79,6 @@ val process_step_insns :
   (Int32.t * bool) Registers.RegisterFile.t ->
   (Int32.t * bool) Memory.Memory.t ->
   (Int32.t * bool) Registers.RegisterFile.t * (Int32.t * bool) Memory.Memory.t
+(** [process_step_insns insn rfile mem] executes [insn] using the states of [rfile] and [mem]
+  and returns the resulting states of [rfile] and [mem].
+*)
