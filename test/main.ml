@@ -84,22 +84,23 @@ module UtilityTests = struct
     [
       test_split_stype "valid sw instruction" "sw x2, 0x45(x4)"
         ("sw", [ "x2"; "0x45"; "x4" ]);
-      test_split_stype "binary" "sw x3, 0b10111(x6)"
+      test_split_stype "binary immediate" "sw x3, 0b10111(x6)"
         ("sw", [ "x3"; "0b10111"; "x6" ]);
-      test_split_stype "decimal" "sb x3, 55(x6)" ("sb", [ "x3"; "55"; "x6" ]);
+      test_split_stype "decimal immediate" "sb x3, 55(x6)"
+        ("sb", [ "x3"; "55"; "x6" ]);
     ]
 
   let valid_register_tests =
     [
-      test_valid_register "valid" "x13" true;
-      test_valid_register "invalid" "x145" false;
-      test_valid_register "invalid" "x-145" false;
-      test_valid_register "valid" "13x" false;
-      test_valid_register "invalid - whitespace string" " " false;
-      test_valid_register "valid" "x1" true;
-      test_valid_register "invalid" "xop" false;
-      test_valid_register "invalid" "..." false;
-      test_valid_register "invalid - empty" "" false;
+      test_valid_register "valid register" "x13" true;
+      test_valid_register "invalid register" "x145" false;
+      test_valid_register "invalid register" "x-145" false;
+      test_valid_register "valid register" "13x" false;
+      test_valid_register "invalid register - whitespace string" " " false;
+      test_valid_register "valid register" "x1" true;
+      test_valid_register "invalid register" "xop" false;
+      test_valid_register "invalid register" "..." false;
+      test_valid_register "invalid register - empty" "" false;
     ]
 
   let fill_strings_tests =
