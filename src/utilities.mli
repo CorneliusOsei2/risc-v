@@ -1,3 +1,5 @@
+(** Implements utility functions used by the processor.  *)
+
 val fill_string : int -> char -> string -> string
 (** [fill_string n c v] is v with [n - len(v)] [c] characters padded to the front.
     Requires [len(v)] must be greater than or equal to [n]. *)
