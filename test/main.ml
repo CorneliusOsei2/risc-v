@@ -68,14 +68,32 @@ end
 
 (************************************ IO Tests *********************************** *)
 
-(** [test_file_to_list name file expected_output] constructs an OUnit test named
-    [name] that asserts the quality of [expected_output] with
-    [file_to_list file]. *)
-let test_file_to_list (name : string) (file : string)
-    (expected_output : string list) : test =
-  name >:: fun _ -> assert_equal expected_output (file_to_list file)
-
 module IOTests = struct
+  (** [test_file_to_list name file expected_output] constructs an OUnit test named
+    [name] that converts a txt file [file] to a string list with
+    [file_to_list file]. *)
+  let test_file_to_list (name : string) (file : string)
+      (expected_output : string list) : test =
+    name >:: fun _ -> assert_equal expected_output (file_to_list file)
+
+  (** [test_list_to_file name list expected_output] constructs an OUnit test named
+    [name] that converts a string list [lst] to a txt file with
+    [list_to_file]. *)
+  let test_list_to_file (name : string) (list : string list)
+      (expected_output : unit) : test =
+    name >:: fun _ -> assert_equal expected_output (list_to_file list)
+
+  let test = "data" ^ Filename.dir_sep ^ "test.txt"
+
+  let io_tests =
+    [
+      test_file_to_list "test that converts file to list" test
+        [ "addi x4, x1, 352"; "addi x1, x1, 15"; "sw x1, 8(x4)" ];
+      test_list_to_file "test that converts list to file"
+        [ "addi x4, x1, 352"; "addi x1, x1, 15"; "sw x1, 8(x4)" ]
+        ();
+    ]
+
   let data_dir_prefix = "data" ^ Filename.dir_sep
   let e1 = [ "addi x1, x1, 6"; "addi x1, x1, 6"; "addi x1, x1, 6" ]
   let file_to_list_tests = []
@@ -347,8 +365,8 @@ module ProcessInstructionsTests = struct
          (rfile10, snd mem3); *);
     ]
 
-  (* let process_file_insns_tests =
-     [ test_process_file_insns "file test" instr_list file_list ] *)
+  let process_file_insns_tests = []
+  (* [ test_process_file_insns "file test" instr_list file_list ] *)
 
   let process_step_insns_tests =
     [
@@ -378,11 +396,12 @@ let suite =
          [
            UtilityTests.tests;
            IOTests.file_to_list_tests;
-           RegisterTests.register_tests (* MemoryTests.memory_tests; *);
+           RegisterTests.register_tests;
            ProcessInstructionsTests.process_optype_tests;
-           (* ProcessInstructionsTests.process_file_insns_tests; *)
+           ProcessInstructionsTests.process_file_insns_tests;
            ProcessInstructionsTests.process_step_insns_tests;
            MemoryTests.memory_tests;
+           IOTests.io_tests;
          ]
 
 let _ = run_test_tt_main suite
