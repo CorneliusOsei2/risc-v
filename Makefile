@@ -21,7 +21,7 @@ install:
 utop:
 	OCAMLRUNPARAM=b dune utop src
 
-processor:
+execgen:
 	dune clean
 	OCAMLRUNPARAM=b dune exec bin/system.exe
 
@@ -32,7 +32,7 @@ test:
 clean:
 	dune clean
 	rm bisect*
-	rm -f risc_v_processor_generator.zip
+	rm -f risc_v_exec_gen_generator.zip
 
 check:
 	@bash check.sh
@@ -47,8 +47,8 @@ opendoc: doc
 	@bash opendoc.sh
 
 zip:
-	rm -f risc_v_processor_generator.zip
-	zip -r risc_v_processor_generator.zip . -x@exclude.lst
+	rm -f risc_v_exec_gen_generator.zip
+	zip -r risc_v_exec_gen_generator.zip . -x@exclude.lst
 
 
 
