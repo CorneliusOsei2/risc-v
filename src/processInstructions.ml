@@ -48,12 +48,16 @@ let eval_i_insns rd rs imm rfile op =
     let res = op in1 in2 in
     update_register rd (Int32.to_int res) rfile |> update_register "x0" 0
 
+(** [eval_shift_r_insns rd rs1 rs2 rfile op] evaluates shift r-type instructions [op] with 
+    registers [rs1], [rs2] and puts it into [rd]*)
 let eval_shift_r_insns rd rs1 rs2 rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs1 rfile, get_register rs2 rfile) in
   let res = op in1 (to_int in2) in
   update_register rd (Int32.to_int res) rfile |> update_register "x0" 0
 
+(** [eval_shift_i_insns rd rs imm rfile op] evaluates shift i-type instructions [op] with 
+    register [rs] and immediate [imm] and puts it into [rd]*)
 let eval_shift_i_insns rd rs imm rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs rfile, of_string imm) in
@@ -63,7 +67,7 @@ let eval_shift_i_insns rd rs imm rfile op =
     update_register rd (Int32.to_int res) rfile |> update_register "x0" 0
 
 (** [eval_store_insns op rs1 offset rs2 rfile mem] updates the memory 
-    addresses for s-type instructions.*)
+    addresses for s-type sw and sb instructions.*)
 let eval_store_insns op rs1 offset rs2 rfile mem =
   let open Int32 in
   let v = get_register rs1 rfile in
@@ -80,6 +84,8 @@ let eval_store_insns op rs1 offset rs2 rfile mem =
     |> Memory.update_memory (addr + 2) byte_three
     |> Memory.update_memory (addr + 3) byte_four
 
+(** [ eval_load_insns op rs1 offset rs2 rfile mem ] updates the memory 
+    addresses for s-type instructions: lw, lb.*)
 let eval_load_insns op rs1 offset rs2 rfile mem =
   let open Int32 in
   let addr = int_of_string offset + to_int (get_register rs2 rfile) in
