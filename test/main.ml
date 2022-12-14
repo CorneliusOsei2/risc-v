@@ -17,24 +17,35 @@ module UtilityTests = struct
     name >:: fun _ ->
     assert_equal expected_output (split_instruction n) ~printer:string_of_insn
 
+  (*[test_split_stype name n expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [split_stype n]*)
   let test_split_stype (name : string) (n : string)
       (expected_output : string * string list) : test =
     name >:: fun _ ->
     assert_equal expected_output (split_stype n) ~printer:string_of_insn
 
+  (*[test_valid_register name r expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [register_check r]*)
   let test_valid_register (name : string) (r : string) (expected_output : bool)
       : test =
     name >:: fun _ -> assert_equal expected_output (register_check r)
 
+  (*[test_fill_string name n c v expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [fill_string n c v]*)
   let test_fill_string (name : string) n c v (expected_output : string) : test =
     name >:: fun _ -> assert_equal expected_output (fill_string n c v)
 
+  (*[test_fill_string_rev name n c v expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [fill_string_rev n c v]*)
   let test_fill_string_rev (name : string) n c v (expected_output : string) :
       test =
     name >:: fun _ -> assert_equal expected_output (fill_string_rev n c v)
 
+  (*[test_pow name a n expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [pow a n]*)
   let test_pow (name : string) a n (expected_output : int) : test =
-    name >:: fun _ -> assert_equal expected_output (pow a n)
+    name >:: fun _ ->
+    assert_equal expected_output (pow a n) ~printer:string_of_int
 
   let split_riu_instruction_tests =
     [
@@ -74,11 +85,35 @@ module UtilityTests = struct
       test_valid_register "valid" "x1" true;
       test_valid_register "invalid" "xop" false;
       test_valid_register "invalid" "..." false;
+      test_valid_register "invalid - empty" "" false;
+    ]
+
+  let fill_strings_tests =
+    [
+      test_fill_string "pad with whitespace" 8 ' ' "hello" "   hello";
+      test_fill_string "pad front with 0s" 4 '0' "99" "0099";
+      test_fill_string "pad front with 0s" 4 ' ' "" "    ";
+      test_fill_string_rev "pad back with 0s" 5 '0' "99" "99000";
+      test_fill_string_rev "pad back with 1s" 10 '1' "0" "0111111111";
+    ]
+
+  let pow_tests =
+    [
+      test_pow "2^5" 2 5 32;
+      test_pow "-2^5" ~-2 5 ~-32;
+      test_pow "3^2" 3 2 9;
+      test_pow "2^10" 2 10 1024;
     ]
 
   let tests =
     List.flatten
-      [ split_riu_instruction_tests; split_stype_tests; valid_register_tests ]
+      [
+        split_riu_instruction_tests;
+        split_stype_tests;
+        valid_register_tests;
+        fill_strings_tests;
+        pow_tests;
+      ]
 end
 
 (************************************ IO Tests *********************************** *)
