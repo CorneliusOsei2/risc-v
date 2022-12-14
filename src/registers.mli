@@ -7,13 +7,6 @@ val init : (Int32.t * bool) RegisterFile.t
 val pp_registers : (Int32.t * bool) RegisterFile.t -> unit
 (** [pp_registers rfile] pretty prints the register file [rfile]*)
 
-val prep_registers :
-  int -> (Int32.t * bool) RegisterFile.t -> (Int32.t * bool) RegisterFile.t
-(** [prep_registers n rfile] initializes the [n] registers of an input register file 
-[rfile] to random integers and returns a new register file with those integers.contents
-  The registers are chosen in a consecutive order.
-*)
-
 val gen_register : int -> string
 (** [gen_register n] a random register identifier x[n] *)
 

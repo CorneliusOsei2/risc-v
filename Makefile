@@ -30,8 +30,14 @@ clean:
 check:
 	@bash check.sh
 
+doc:
+	dune build @doc
+
 finalcheck:
 	@bash check.sh final
+
+opendoc: doc
+	@bash opendoc.sh
 
 zip:
 	rm -f risc_v_processor_generator.zip
