@@ -10,8 +10,8 @@ let stype = [ "sw"; "sb"; "lw"; "lb" ]
 let mem_bitmask = 255l
 let max_i = 2047l
 let min_i = -2048l
-let max_u = 4096l (* TODO:*)
-let min_u = -4097 (* TODO:*)
+let max_u = 524287l
+let min_u = -524288
 
 exception WrongFormat of int
 exception NotWordAligned
