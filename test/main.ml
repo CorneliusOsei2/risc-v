@@ -26,6 +26,16 @@ module UtilityTests = struct
       : test =
     name >:: fun _ -> assert_equal expected_output (register_check r)
 
+  let test_fill_string (name : string) n c v (expected_output : string) : test =
+    name >:: fun _ -> assert_equal expected_output (fill_string n c v)
+
+  let test_fill_string_rev (name : string) n c v (expected_output : string) :
+      test =
+    name >:: fun _ -> assert_equal expected_output (fill_string_rev n c v)
+
+  let test_pow (name : string) a n (expected_output : int) : test =
+    name >:: fun _ -> assert_equal expected_output (pow a n)
+
   let split_riu_instruction_tests =
     [
       test_split_instruction "no extra whitespaces" "add x1, x2, x3"
@@ -59,9 +69,8 @@ module UtilityTests = struct
       test_valid_register "valid" "x13" true;
       test_valid_register "invalid" "x145" false;
       test_valid_register "invalid" "x-145" false;
-      test_valid_register "valid" "13x" true;
+      test_valid_register "valid" "13x" false;
       test_valid_register "invalid - whitespace string" " " false;
-      test_valid_register "invalid" " " false;
       test_valid_register "valid" "x1" true;
       test_valid_register "invalid" "xop" false;
       test_valid_register "invalid" "..." false;
