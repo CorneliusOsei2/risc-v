@@ -1,27 +1,49 @@
 val rtype : string list
-(* Suported R-type instruction operators *)
+(** Suported R-type instruction operators *)
 
 val itype : string list
-(* Suported I-type instruction operators *)
+(** Suported I-type instruction operators. *)
 
 val stype : string list
-(* Suported S-type instruction operators *)
+(** Suported S-type instruction operators. *)
 
 val utype : string list
-(* Suported U-type instruction operators *)
+(** Suported U-type instruction operators. *)
 
 exception WrongFormat of int
+(** Raised when an invalid or not currently-supported RISC-V instruction is encoutered. 
+  It carries the instruction number (particularly useful in a test file). *)
+
 exception NotWordAligned
+(** Raised when a memory address involving a word is not word-aligned. *)
+
 exception IncorrectRTypeFormat of int
+(** Raised when an invalid or not currently-supported R-Type instruction is encoutered.
+  It carries the instruction number (particularly useful in a test file). *)
+
 exception IncorrectITypeFormat of int
+(** Raised when an invalid or not currently-supported I-Type instruction is encoutered.
+  It carries the instruction number (particularly useful in a test file). *)
+
 exception IncorrectUTypeFormat of int
+(** Raised when an invalid or not currently-supported U-Type instruction is encoutered. 
+  It carries the instruction number (particularly useful in a test file). *)
+
 exception IncorrectSTypeFormat of int
+(** Raised when an invalid or not currently-supported S-Type instruction is encoutered. 
+  It carries the instruction number (particularly useful in a test file). *)
 
 val min_i : int32
-(* Minimum immediate for I-Type instruction *)
+(** Minimum immediate value (2's complement) for I-Type instruction *)
 
 val max_i : int32
-(* Maximum immediate for I-Type instruction *)
+(** Maximum immediate value (2's complement) for I-Type instruction *)
+
+val min_u : int32
+(** Minimum immediate value (2's complement) for U-Type instruction *)
+
+val max_u : int32
+(** Maximum immediate value (2's complement) for U-Type instruction *)
 
 val process_rtype :
   string ->
