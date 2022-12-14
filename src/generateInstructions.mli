@@ -26,3 +26,4 @@ val gen_swtype : string -> int -> unit
 val gen_sbtype : string -> int -> unit
 (** [gen_swtype op n acc] generates [n] [op] instructions. [op] is either [sb] or
   [lb] S-type instruction.*)
+

@@ -297,7 +297,7 @@ module ProcessInstructionsTests = struct
 end
 
 let suite =
-  "test suite for A2"
+  "test suite for Processor"
   >::: List.flatten
          [
            UtilityTests.tests;
