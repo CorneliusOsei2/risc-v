@@ -11,7 +11,7 @@ end
 
 module RegisterFile = Map.Make (StringComp)
 
-let init =
+let init () =
   let open RegisterFile in
   let empty_file = empty in
   let rec helper rom n =

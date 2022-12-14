@@ -9,7 +9,7 @@ end
 
 module Memory = Map.Make (MemoryKey)
 
-let init =
+let init () =
   let open Memory in
   let empty_rom = empty in
   let rec helper rom n =
