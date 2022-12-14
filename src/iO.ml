@@ -15,6 +15,8 @@ let file_to_list file =
     loop []
   with _ -> raise FileDoesNotExist
 
+(* [print_lst oc] is a helper function of [list_to_file lst]. Every element of
+   the list [lst] is printed as a line of the opened txt file [oc] *)
 let rec print_lst oc = function
   | [] -> ()
   | h :: t ->
