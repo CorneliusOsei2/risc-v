@@ -296,7 +296,6 @@ module ProcessInstructionsTests = struct
         (rfile4, mem);
       test_process_step_insns "step test" "sub x5, x3, x1" rfile4 mem
         (rfile5, mem);
-
     ]
 end
 

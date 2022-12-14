@@ -1,14 +1,14 @@
 val rtype : string list
-(** Suported R-type instruction instructions. *)
+(** Suported R-type instruction instructions: add, and, or, xor, sll, srl, slt. *)
 
 val itype : string list
-(** Suported I-type instruction instructions. *)
+(** Suported I-type instruction instructions: addi, andi, ori, xori, slli, srli, slti. *)
 
 val stype : string list
-(** Suported S-type instruction instructions. *)
+(** Suported S-type instruction instructions: sw, sb, lw, lb. *)
 
 val utype : string list
-(** Suported U-type instruction instructions. *)
+(** Suported U-type instruction instructions: lui. *)
 
 exception WrongFormat of int
 (** Raised when an invalid or not currently-supported RISC-V instruction is encoutered. 
@@ -34,16 +34,16 @@ exception IncorrectSTypeFormat of int
   It carries the instruction number (particularly useful in a test file). *)
 
 val min_i : int32
-(** Minimum immediate value (2's complement) for I-Type instruction *)
+(** Minimum immediate value (2's complement) for I-Type instruction. *)
 
 val max_i : int32
-(** Maximum immediate value (2's complement) for I-Type instruction *)
+(** Maximum immediate value (2's complement) for I-Type instruction. *)
 
 val min_u : int32
-(** Minimum immediate value (2's complement) for U-Type instruction *)
+(** Minimum immediate value (2's complement) for U-Type instruction. *)
 
 val max_u : int32
-(** Maximum immediate value (2's complement) for U-Type instruction *)
+(** Maximum immediate value (2's complement) for U-Type instruction. *)
 
 val process_rtype :
   string ->
@@ -54,7 +54,7 @@ val process_rtype :
   (Int32.t * bool) Registers.RegisterFile.t
 (** [process_rtype op rd rs1 rs2 rfile] processes the R-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register
-     [op] as the operator and [rfile] as the register file *)
+     [op] as the operator and [rfile] as the register file. *)
 
 val process_itype :
   string ->
@@ -65,7 +65,7 @@ val process_itype :
   (Int32.t * bool) Registers.RegisterFile.t
 (** [process_itype op rd rs1 imm rfile] processes the I-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register
-     [op] as the operator and [rfile] as the register file *)
+     [op] as the operator and [rfile] as the register file. *)
 
 val process_utype :
   string ->
@@ -74,7 +74,7 @@ val process_utype :
   (Int32.t * bool) Registers.RegisterFile.t
 (** [process_utype op rd rs1 rs2 rfile] processes the U-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register
-     [op] as the operator and [rfile] as the register file *)
+     [op] as the operator and [rfile] as the register file. *)
 
 val process_stype :
   string ->
@@ -86,7 +86,7 @@ val process_stype :
   (Int32.t * bool) Registers.RegisterFile.t * (Int32.t * bool) Memory.Memory.t
 (** [process_stype op rd rs1 rs2 rfile] processes the S-format instruction
      with [rs1] and [rs2] as source registers, [rd] as the destination register
-     [op] as the operator and [rfile] as the register file *)
+     [op] as the operator and [rfile] as the register file. *)
 
 val process_file_insns :
   string list ->

@@ -1,4 +1,5 @@
 exception FileDoesNotExist
+(** Raised when an invalid or non-existent file is encoutered. *)
 
 val file_to_list : string -> string list
 (** [file_to_list filename] parses the content of [filename].txt into 
