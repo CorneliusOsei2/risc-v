@@ -232,9 +232,11 @@ and gen_insns_handler () =
           ansi_print_yellow "\tPlease enter valid command \n";
           gen_insns_handler ())
 
-and process f =
+(** [process opt] displays the main menu which provides currently-supported
+    features or functionalities.  *)
+and process opt =
   try
-    match f with
+    match opt with
     | "1" ->
         ansi_print_red "PROMPT";
         ansi_print_blue "\tEnter the name of test file\n";
@@ -257,8 +259,8 @@ and process f =
     ansi_print_red ("Your [sw] instructions are not word-aligned." ^ return_msg);
     main ()
 
-(** [main ()] displays the main meny which provides currently-supported
-    features or functionalities.  *)
+(** [main ()] displays the main menu which provides currently-supported
+    features or functionalities. It also prompts user for which feature they want to exploit *)
 and main () =
   ansi_print_red "MENU";
   ansi_print_blue "\tWhat would you like to do? \n";
@@ -267,9 +269,7 @@ and main () =
      \t2. Run instructions step by step. \n\
      \t3. Auto-generate instructions.\n";
   ansi_print_blue ">> ";
-  match read_line () with
-  | exception End_of_file -> ()
-  | file_name -> process file_name
+  match read_line () with exception End_of_file -> () | opt -> process opt
 
 let () =
   ansi_print
