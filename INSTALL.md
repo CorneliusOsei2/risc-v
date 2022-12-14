@@ -7,7 +7,7 @@ Build the program for running:
 -make build
 
 Run the program:
--make exec_gen
+-make execgen
 
 Clean up generated files:
 -make clean
