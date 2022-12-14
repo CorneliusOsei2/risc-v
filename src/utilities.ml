@@ -42,6 +42,11 @@ let dec_to_hex num =
   let hex = dec_to_hex_helper n "" in
   "0x" ^ fill_string 8 (if is_neg then 'f' else '0') hex
 
+let rec gen_imm lower_bound upper_bound =
+  let i = Random.int32 upper_bound in
+  if i >= lower_bound && i < upper_bound then i
+  else gen_imm upper_bound lower_bound
+
 let split_instruction instruct =
   let s = String.trim instruct in
   let op_idx = String.index_from s 0 ' ' in
