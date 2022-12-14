@@ -21,7 +21,10 @@ exception IncorrectUTypeFormat of int
 exception IncorrectSTypeFormat of int
 
 let ins_track = ref 0
+(* Instruction counter  *)
 
+(** [compare_int32 n1 n2] compares [n1] and [n2] using Stdlib.compare but returns an 
+  [int32] value instead of [int] value *)
 let compare_int32 n1 n2 =
   let open Int32 in
   let n = compare n1 n2 in
@@ -154,7 +157,7 @@ let rec process_insns insns acc rfile mem =
         ins_track := !ins_track + 1;
         let op, rgs = split_instruction h in
         if List.exists (fun x -> x = op) rtype then
-          (* R-Type Instructions *)
+          (* R-Type Instructions: op rd rs1 rs2 *)
           try
             let rd, rs1, rs2 =
               (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
@@ -165,7 +168,7 @@ let rec process_insns insns acc rfile mem =
               new_register_state mem
           with _ -> raise (IncorrectRTypeFormat !ins_track)
         else if List.exists (fun x -> x = op) itype then
-          (* I-Type Instructions *)
+          (* I-Type Instructions: op rd rs imm *)
           try
             let rd, rs1, imm =
               (List.nth rgs 0, List.nth rgs 1, List.nth rgs 2)
@@ -187,7 +190,7 @@ let rec process_insns insns acc rfile mem =
           with _ -> raise (IncorrectSTypeFormat !ins_track)
         else if List.exists (fun x -> x = op) utype then
           try
-            (* U-Type Instructions: op rs1 offset(rs2) *)
+            (* U-Type Instructions: op rs1 imm *)
             let op, rgs = split_instruction h in
             let rd, imm = (List.nth rgs 0, List.nth rgs 1) in
             let new_register_state = process_utype rd imm rfile in

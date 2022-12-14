@@ -1,5 +1,6 @@
 module RegisterFile : Map.S
-(** [RegisterFile] simulates a CPU's 32-bit register file using a TreeMap.*)
+(** [RegisterFile] simulates a CPU's 32-bit register file using a TreeMap.
+    Registers are labeled from x0 to x31.*)
 
 val init : unit -> (Int32.t * bool) RegisterFile.t
 (** [init] is a 32-bit register file with all 32 registers initialized to 0.*)
