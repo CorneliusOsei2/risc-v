@@ -78,7 +78,7 @@ module IOTests = struct
 
   (** [test_list_to_file name list expected_output] constructs an OUnit test named
     [name] that converts a string list [lst] to a txt file with
-    [list_to_file]. *)
+    [list_to_file list]. *)
   let test_list_to_file (name : string) (list : string list)
       (expected_output : unit) : test =
     name >:: fun _ -> assert_equal expected_output (list_to_file list)
@@ -105,14 +105,13 @@ module RegisterTests = struct
   let rfile = Registers.init ()
   let rfile1 = update_register "x1" 5 rfile
   let rfile2 = update_register "x2" 7 rfile
-  let rfile3 = update_register "x3" 56 rfile
-  let rfile4 = update_register "x4" 112 rfile
-  let rfile5 = update_register "x5" 320 rfile
-  let rfile6 = update_register "x6" 97 rfile
+  let rfile3 = update_register "x3" 2147483648 rfile
+  let rfile4 = update_register "x4" (-2147483648) rfile
   let lower_bound = (pow 2 31 - 1) * -1 |> of_int
   let upper_bound = pow 2 31 - 1 |> of_int
-  let rfile7 = update_register "x7" (Int32.to_int lower_bound) rfile
-  let rfile8 = update_register "x8" (Int32.to_int upper_bound) rfile
+  let rfile5 = update_register "x7" (Int32.to_int lower_bound) rfile
+  let rfile6 = update_register "x8" (Int32.to_int upper_bound) rfile
+  let x = if true then pp_registers rfile1
 
   (** [test_register name r expected_output] constructs an OUnit test named
     [name] that asserts the quality of [expected_output] with
@@ -122,17 +121,35 @@ module RegisterTests = struct
     name >:: fun _ ->
     assert_equal expected_output (get_register r rfile) ~printer:Int32.to_string
 
+  (** [test_gen_register name i expected_output] constructs an OUnit test named
+    [name] that tests an integer [i] converts to string "xi" with
+     [Registers.gen_register i] *)
+  let test_gen_register (name : string) (i : int) (expected_output : string) :
+      test =
+    name >:: fun _ ->
+    assert_equal expected_output (gen_register i) ~printer:Fun.id
+
+  (** [test_pp_registers name rfile expected_output] constructs an OUnit test named
+    [name] that tests whether  a register file will be printed with
+     [Registers.pp_registers rfile] *)
+  let test_pp_registers (name : string) (rfile : (int32 * bool) RegisterFile.t)
+      (expected_output : unit) : test =
+    name >:: fun _ -> assert_equal expected_output (pp_registers rfile)
+
   let register_tests =
     [
       test_register "init () values" "x1" rfile 0l;
-      test_register "update register" "x1" rfile1 5l;
-      test_register "update register" "x2" rfile2 7l;
-      test_register "update register" "x3" rfile3 56l;
-      test_register "update register" "x4" rfile4 112l;
-      test_register "update register" "x5" rfile5 320l;
-      test_register "update register" "x6" rfile6 97l;
-      test_register "lower bound" "x7" rfile7 lower_bound;
-      test_register "upper bound" "x8" rfile8 upper_bound;
+      test_register "random register update test" "x1" rfile1 5l;
+      test_register "random register update test" "x2" rfile2 7l;
+      test_register
+        "edge register test to test max representation of a register is 2^31"
+        "x3" rfile3 2147483648l;
+      test_register
+        "edge register test to test min representation of a register is -2^31"
+        "x4" rfile4 (-2147483648l);
+      test_register "random register lower bound test" "x7" rfile5 lower_bound;
+      test_register "random register upper bound test" "x8" rfile6 upper_bound;
+      test_pp_registers "random pp_register test" rfile1 ();
     ]
 end
 
@@ -155,9 +172,17 @@ module MemoryTests = struct
       (Memory.get_memory addr mem)
       expected_output ~printer:Int32.to_string
 
+  (** [test_pp_memory name rfile expected_output] constructs an OUnit test named
+    [name] that tests whether  a register file will be printed with
+     [Registers.pp_registers rfile] *)
+  let test_pp_memory (name : string) (mem : (int32 * bool) Memory.Memory.t)
+      (expected_output : unit) : test =
+    name >:: fun _ -> assert_equal expected_output (Memory.pp_memory mem)
+
   let memory_tests =
     [
-      test_memory "random memory test" 0 mem1 5l;
+      test_memory "init memory test" 0 mem 0l;
+      test_memory "random memory update test" 0 mem1 5l;
       test_memory
         "edge memory test to test that the maximum value a memory address can \
          represent is 2^31"
@@ -170,6 +195,7 @@ module MemoryTests = struct
         "random memory test that tests if a memory address with an existing \
          value is properly updated"
         15 mem4 78l;
+      test_pp_memory "random pp_memory test" mem1 ();
     ]
 
   (* let memory_tests =
@@ -333,25 +359,25 @@ module ProcessInstructionsTests = struct
 
   let instr_list =
     [
-      "addi x1, x1, 9";
-      "addi x2, x1, 10"
-      (* "add x3, x1, x2";
-         "addi x4, x4, 2047";
-         "sub x5, x3, x1" *)
-      (* "and x6, x5, x1";
-         "addi x7, x7, 3";
-         "addi x8, x8, 10";
-         "or x9, x7, x8";
-         "xor x10, x7, x8" *)
-      (* "sw x18, 12(x17)";
-         "sb x21, 12(x1)";
-         "lw x22, 5(x2)"; *);
+      "addi x1, x1, 9"
+      (* "addi x2, x1, 10" *)
+      (* (* "add x3, x1, x2";
+            "addi x4, x4, 2047";
+            "sub x5, x3, x1" *)
+         (* "and x6, x5, x1";
+            "addi x7, x7, 3";
+            "addi x8, x8, 10";
+            "or x9, x7, x8";
+            "xor x10, x7, x8" *)
+         (* "sw x18, 12(x17)";
+            "sb x21, 12(x1)";
+            "lw x22, 5(x2)"; *); *);
     ]
 
   let file_list =
     [
-      (rfile1, mem);
-      (rfile2, mem)
+      (rfile1, mem)
+      (* (rfile2, mem) *)
       (* (rfile3, mem);
          (rfile4, mem);
          (rfile5, mem) *)
