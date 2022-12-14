@@ -1,3 +1,700 @@
-addi x4, x1, 352
-addi x1, x1, 15
-sw x1, 8(x4)
+add x3, x4, 1569
+add x4, x5, 1812
+add x5, x6, 1467
+add x6, x7, 339
+add x7, x8, 1084
+add x8, x9, 1403
+add x9, x10, 1623
+add x10, x11, 1405
+add x11, x12, 2031
+add x12, x13, 1999
+add x13, x14, 587
+add x14, x15, 1403
+add x15, x16, 428
+add x16, x17, 919
+sub x3, x4, 1891
+sub x4, x5, 495
+sub x5, x6, 1492
+sub x6, x7, 1799
+sub x7, x8, 1950
+sub x8, x9, 968
+sub x9, x10, 1637
+sub x10, x11, 1872
+sub x11, x12, 1290
+sub x12, x13, 1641
+sub x13, x14, 1953
+sub x14, x15, 1468
+sub x15, x16, 1679
+sub x16, x17, 1492
+and x3, x4, 239
+and x4, x5, 298
+and x5, x6, 939
+and x6, x7, 393
+and x7, x8, 859
+and x8, x9, 1734
+and x9, x10, 381
+and x10, x11, 590
+and x11, x12, 1601
+and x12, x13, 1772
+and x13, x14, 1646
+and x14, x15, 809
+and x15, x16, 1928
+and x16, x17, 130
+or x3, x4, 817
+or x4, x5, 1057
+or x5, x6, 1089
+or x6, x7, 63
+or x7, x8, 1503
+or x8, x9, 217
+or x9, x10, 1224
+or x10, x11, 1294
+or x11, x12, 1817
+or x12, x13, 19
+or x13, x14, 914
+or x14, x15, 141
+or x15, x16, 1667
+or x16, x17, 1830
+xor x3, x4, 31
+xor x4, x5, 272
+xor x5, x6, 44
+xor x6, x7, 2006
+xor x7, x8, 181
+xor x8, x9, 318
+xor x9, x10, 902
+xor x10, x11, 1589
+xor x11, x12, 554
+xor x12, x13, 1991
+xor x13, x14, 916
+xor x14, x15, 1548
+xor x15, x16, 805
+xor x16, x17, 1506
+nor x3, x4, 1238
+nor x4, x5, 1355
+nor x5, x6, 2033
+nor x6, x7, 328
+nor x7, x8, 2042
+nor x8, x9, 1877
+nor x9, x10, 277
+nor x10, x11, 2038
+nor x11, x12, 470
+nor x12, x13, 1526
+nor x13, x14, 1468
+nor x14, x15, 1663
+nor x15, x16, 71
+nor x16, x17, 114
+sll x3, x4, 169
+sll x4, x5, 1448
+sll x5, x6, 1522
+sll x6, x7, 489
+sll x7, x8, 1347
+sll x8, x9, 345
+sll x9, x10, 1699
+sll x10, x11, 901
+sll x11, x12, 1639
+sll x12, x13, 1319
+sll x13, x14, 1396
+sll x14, x15, 943
+sll x15, x16, 84
+sll x16, x17, 2030
+srl x3, x4, 1406
+srl x4, x5, 1490
+srl x5, x6, 1336
+srl x6, x7, 19
+srl x7, x8, 1936
+srl x8, x9, 1817
+srl x9, x10, 984
+srl x10, x11, 800
+srl x11, x12, 1979
+srl x12, x13, 1271
+srl x13, x14, 1834
+srl x14, x15, 142
+srl x15, x16, 1573
+srl x16, x17, 577
+slt x3, x4, 95
+slt x4, x5, 1591
+slt x5, x6, 1486
+slt x6, x7, 1344
+slt x7, x8, 1126
+slt x8, x9, 1365
+slt x9, x10, 681
+slt x10, x11, 1918
+slt x11, x12, 1810
+slt x12, x13, 2030
+slt x13, x14, 608
+slt x14, x15, 287
+slt x15, x16, 770
+slt x16, x17, 1799
+sltu x3, x4, 1553
+sltu x4, x5, 1954
+sltu x5, x6, 407
+sltu x6, x7, 1101
+sltu x7, x8, 1277
+sltu x8, x9, 1751
+sltu x9, x10, 1987
+sltu x10, x11, 434
+sltu x11, x12, 768
+sltu x12, x13, 398
+sltu x13, x14, 2041
+sltu x14, x15, 231
+sltu x15, x16, 733
+sltu x16, x17, 156
+add x3, x4, x5
+add x4, x5, x6
+add x5, x6, x7
+add x6, x7, x8
+add x7, x8, x9
+add x8, x9, x10
+add x9, x10, x11
+add x10, x11, x12
+add x11, x12, x13
+add x12, x13, x14
+add x13, x14, x15
+add x14, x15, x16
+add x15, x16, x17
+add x16, x17, x18
+sub x3, x4, x5
+sub x4, x5, x6
+sub x5, x6, x7
+sub x6, x7, x8
+sub x7, x8, x9
+sub x8, x9, x10
+sub x9, x10, x11
+sub x10, x11, x12
+sub x11, x12, x13
+sub x12, x13, x14
+sub x13, x14, x15
+sub x14, x15, x16
+sub x15, x16, x17
+sub x16, x17, x18
+and x3, x4, x5
+and x4, x5, x6
+and x5, x6, x7
+and x6, x7, x8
+and x7, x8, x9
+and x8, x9, x10
+and x9, x10, x11
+and x10, x11, x12
+and x11, x12, x13
+and x12, x13, x14
+and x13, x14, x15
+and x14, x15, x16
+and x15, x16, x17
+and x16, x17, x18
+or x3, x4, x5
+or x4, x5, x6
+or x5, x6, x7
+or x6, x7, x8
+or x7, x8, x9
+or x8, x9, x10
+or x9, x10, x11
+or x10, x11, x12
+or x11, x12, x13
+or x12, x13, x14
+or x13, x14, x15
+or x14, x15, x16
+or x15, x16, x17
+or x16, x17, x18
+xor x3, x4, x5
+xor x4, x5, x6
+xor x5, x6, x7
+xor x6, x7, x8
+xor x7, x8, x9
+xor x8, x9, x10
+xor x9, x10, x11
+xor x10, x11, x12
+xor x11, x12, x13
+xor x12, x13, x14
+xor x13, x14, x15
+xor x14, x15, x16
+xor x15, x16, x17
+xor x16, x17, x18
+nor x3, x4, x5
+nor x4, x5, x6
+nor x5, x6, x7
+nor x6, x7, x8
+nor x7, x8, x9
+nor x8, x9, x10
+nor x9, x10, x11
+nor x10, x11, x12
+nor x11, x12, x13
+nor x12, x13, x14
+nor x13, x14, x15
+nor x14, x15, x16
+nor x15, x16, x17
+nor x16, x17, x18
+sll x3, x4, x5
+sll x4, x5, x6
+sll x5, x6, x7
+sll x6, x7, x8
+sll x7, x8, x9
+sll x8, x9, x10
+sll x9, x10, x11
+sll x10, x11, x12
+sll x11, x12, x13
+sll x12, x13, x14
+sll x13, x14, x15
+sll x14, x15, x16
+sll x15, x16, x17
+sll x16, x17, x18
+srl x3, x4, x5
+srl x4, x5, x6
+srl x5, x6, x7
+srl x6, x7, x8
+srl x7, x8, x9
+srl x8, x9, x10
+srl x9, x10, x11
+srl x10, x11, x12
+srl x11, x12, x13
+srl x12, x13, x14
+srl x13, x14, x15
+srl x14, x15, x16
+srl x15, x16, x17
+srl x16, x17, x18
+slt x3, x4, x5
+slt x4, x5, x6
+slt x5, x6, x7
+slt x6, x7, x8
+slt x7, x8, x9
+slt x8, x9, x10
+slt x9, x10, x11
+slt x10, x11, x12
+slt x11, x12, x13
+slt x12, x13, x14
+slt x13, x14, x15
+slt x14, x15, x16
+slt x15, x16, x17
+slt x16, x17, x18
+sltu x3, x4, x5
+sltu x4, x5, x6
+sltu x5, x6, x7
+sltu x6, x7, x8
+sltu x7, x8, x9
+sltu x8, x9, x10
+sltu x9, x10, x11
+sltu x10, x11, x12
+sltu x11, x12, x13
+sltu x12, x13, x14
+sltu x13, x14, x15
+sltu x14, x15, x16
+sltu x15, x16, x17
+sltu x16, x17, x18
+add x3, 24(x0)
+add x4, 16(x0)
+add x5, 8(x0)
+add x6, 8(x0)
+add x7, 12(x0)
+add x8, 0(x0)
+add x9, 4(x0)
+add x10, 4(x0)
+add x11, 16(x0)
+add x12, 16(x0)
+add x13, 0(x0)
+add x14, 24(x0)
+add x15, 20(x0)
+add x16, 4(x0)
+sub x3, 24(x0)
+sub x4, 24(x0)
+sub x5, 8(x0)
+sub x6, 16(x0)
+sub x7, 0(x0)
+sub x8, 0(x0)
+sub x9, 24(x0)
+sub x10, 20(x0)
+sub x11, 16(x0)
+sub x12, 16(x0)
+sub x13, 20(x0)
+sub x14, 8(x0)
+sub x15, 16(x0)
+sub x16, 16(x0)
+and x3, 0(x0)
+and x4, 4(x0)
+and x5, 8(x0)
+and x6, 20(x0)
+and x7, 8(x0)
+and x8, 12(x0)
+and x9, 20(x0)
+and x10, 8(x0)
+and x11, 0(x0)
+and x12, 24(x0)
+and x13, 24(x0)
+and x14, 4(x0)
+and x15, 16(x0)
+and x16, 8(x0)
+or x3, 4(x0)
+or x4, 16(x0)
+or x5, 24(x0)
+or x6, 8(x0)
+or x7, 0(x0)
+or x8, 20(x0)
+or x9, 8(x0)
+or x10, 16(x0)
+or x11, 20(x0)
+or x12, 4(x0)
+or x13, 20(x0)
+or x14, 20(x0)
+or x15, 8(x0)
+or x16, 4(x0)
+xor x3, 8(x0)
+xor x4, 4(x0)
+xor x5, 24(x0)
+xor x6, 16(x0)
+xor x7, 20(x0)
+xor x8, 20(x0)
+xor x9, 12(x0)
+xor x10, 4(x0)
+xor x11, 0(x0)
+xor x12, 16(x0)
+xor x13, 0(x0)
+xor x14, 24(x0)
+xor x15, 12(x0)
+xor x16, 16(x0)
+nor x3, 12(x0)
+nor x4, 24(x0)
+nor x5, 12(x0)
+nor x6, 16(x0)
+nor x7, 20(x0)
+nor x8, 0(x0)
+nor x9, 24(x0)
+nor x10, 12(x0)
+nor x11, 16(x0)
+nor x12, 8(x0)
+nor x13, 8(x0)
+nor x14, 8(x0)
+nor x15, 0(x0)
+nor x16, 24(x0)
+sll x3, 20(x0)
+sll x4, 16(x0)
+sll x5, 20(x0)
+sll x6, 0(x0)
+sll x7, 16(x0)
+sll x8, 20(x0)
+sll x9, 0(x0)
+sll x10, 24(x0)
+sll x11, 4(x0)
+sll x12, 24(x0)
+sll x13, 20(x0)
+sll x14, 0(x0)
+sll x15, 0(x0)
+sll x16, 12(x0)
+srl x3, 8(x0)
+srl x4, 20(x0)
+srl x5, 4(x0)
+srl x6, 12(x0)
+srl x7, 12(x0)
+srl x8, 0(x0)
+srl x9, 0(x0)
+srl x10, 16(x0)
+srl x11, 4(x0)
+srl x12, 8(x0)
+srl x13, 16(x0)
+srl x14, 8(x0)
+srl x15, 12(x0)
+srl x16, 16(x0)
+slt x3, 16(x0)
+slt x4, 8(x0)
+slt x5, 24(x0)
+slt x6, 12(x0)
+slt x7, 4(x0)
+slt x8, 24(x0)
+slt x9, 12(x0)
+slt x10, 20(x0)
+slt x11, 4(x0)
+slt x12, 16(x0)
+slt x13, 4(x0)
+slt x14, 8(x0)
+slt x15, 8(x0)
+slt x16, 8(x0)
+sltu x3, 4(x0)
+sltu x4, 16(x0)
+sltu x5, 16(x0)
+sltu x6, 12(x0)
+sltu x7, 0(x0)
+sltu x8, 16(x0)
+sltu x9, 4(x0)
+sltu x10, 20(x0)
+sltu x11, 16(x0)
+sltu x12, 12(x0)
+sltu x13, 4(x0)
+sltu x14, 0(x0)
+sltu x15, 16(x0)
+sltu x16, 0(x0)
+add x3, 16(x0)
+add x4, 8(x0)
+add x5, 8(x0)
+add x6, 20(x0)
+add x7, 0(x0)
+add x8, 8(x0)
+add x9, 4(x0)
+add x10, 24(x0)
+add x11, 8(x0)
+add x12, 4(x0)
+add x13, 24(x0)
+add x14, 4(x0)
+add x15, 12(x0)
+add x16, 16(x0)
+sub x3, 26(x0)
+sub x4, 0(x0)
+sub x5, 12(x0)
+sub x6, 24(x0)
+sub x7, 0(x0)
+sub x8, 20(x0)
+sub x9, 4(x0)
+sub x10, 12(x0)
+sub x11, 20(x0)
+sub x12, 8(x0)
+sub x13, 24(x0)
+sub x14, 24(x0)
+sub x15, 16(x0)
+sub x16, 16(x0)
+and x3, 26(x0)
+and x4, 0(x0)
+and x5, 12(x0)
+and x6, 0(x0)
+and x7, 24(x0)
+and x8, 24(x0)
+and x9, 8(x0)
+and x10, 8(x0)
+and x11, 8(x0)
+and x12, 20(x0)
+and x13, 24(x0)
+and x14, 12(x0)
+and x15, 24(x0)
+and x16, 12(x0)
+or x3, 0(x0)
+or x4, 8(x0)
+or x5, 12(x0)
+or x6, 24(x0)
+or x7, 24(x0)
+or x8, 20(x0)
+or x9, 24(x0)
+or x10, 8(x0)
+or x11, 4(x0)
+or x12, 8(x0)
+or x13, 12(x0)
+or x14, 24(x0)
+or x15, 4(x0)
+or x16, 16(x0)
+xor x3, 5(x0)
+xor x4, 12(x0)
+xor x5, 16(x0)
+xor x6, 0(x0)
+xor x7, 4(x0)
+xor x8, 8(x0)
+xor x9, 24(x0)
+xor x10, 0(x0)
+xor x11, 24(x0)
+xor x12, 20(x0)
+xor x13, 20(x0)
+xor x14, 20(x0)
+xor x15, 20(x0)
+xor x16, 8(x0)
+nor x3, 10(x0)
+nor x4, 12(x0)
+nor x5, 16(x0)
+nor x6, 8(x0)
+nor x7, 20(x0)
+nor x8, 12(x0)
+nor x9, 12(x0)
+nor x10, 16(x0)
+nor x11, 4(x0)
+nor x12, 16(x0)
+nor x13, 12(x0)
+nor x14, 16(x0)
+nor x15, 8(x0)
+nor x16, 20(x0)
+sll x3, 3(x0)
+sll x4, 24(x0)
+sll x5, 0(x0)
+sll x6, 16(x0)
+sll x7, 4(x0)
+sll x8, 24(x0)
+sll x9, 4(x0)
+sll x10, 20(x0)
+sll x11, 0(x0)
+sll x12, 0(x0)
+sll x13, 4(x0)
+sll x14, 20(x0)
+sll x15, 8(x0)
+sll x16, 24(x0)
+srl x3, 7(x0)
+srl x4, 0(x0)
+srl x5, 0(x0)
+srl x6, 12(x0)
+srl x7, 12(x0)
+srl x8, 12(x0)
+srl x9, 20(x0)
+srl x10, 0(x0)
+srl x11, 12(x0)
+srl x12, 16(x0)
+srl x13, 4(x0)
+srl x14, 4(x0)
+srl x15, 12(x0)
+srl x16, 8(x0)
+slt x3, 8(x0)
+slt x4, 0(x0)
+slt x5, 12(x0)
+slt x6, 0(x0)
+slt x7, 12(x0)
+slt x8, 12(x0)
+slt x9, 0(x0)
+slt x10, 24(x0)
+slt x11, 20(x0)
+slt x12, 12(x0)
+slt x13, 0(x0)
+slt x14, 0(x0)
+slt x15, 12(x0)
+slt x16, 16(x0)
+sltu x3, 21(x0)
+sltu x4, 16(x0)
+sltu x5, 20(x0)
+sltu x6, 4(x0)
+sltu x7, 0(x0)
+sltu x8, 20(x0)
+sltu x9, 16(x0)
+sltu x10, 12(x0)
+sltu x11, 8(x0)
+sltu x12, 12(x0)
+sltu x13, 12(x0)
+sltu x14, 12(x0)
+sltu x15, 8(x0)
+sltu x16, 20(x0)
+add x3, 703
+add x4, 833
+add x5, 383
+add x6, 1777
+add x7, 492
+add x8, 1037
+add x9, 712
+add x10, 493
+add x11, 1887
+add x12, 710
+add x13, 993
+add x14, 1169
+add x15, 775
+add x16, 1662
+sub x3, 760
+sub x4, 1599
+sub x5, 1089
+sub x6, 1890
+sub x7, 1370
+sub x8, 1806
+sub x9, 21
+sub x10, 648
+sub x11, 66
+sub x12, 826
+sub x13, 340
+sub x14, 34
+sub x15, 313
+sub x16, 1788
+and x3, 614
+and x4, 853
+and x5, 172
+and x6, 776
+and x7, 444
+and x8, 1812
+and x9, 285
+and x10, 1014
+and x11, 393
+and x12, 889
+and x13, 2004
+and x14, 906
+and x15, 1472
+and x16, 207
+or x3, 618
+or x4, 1798
+or x5, 1973
+or x6, 1000
+or x7, 1908
+or x8, 122
+or x9, 641
+or x10, 2038
+or x11, 1364
+or x12, 1801
+or x13, 1378
+or x14, 1220
+or x15, 1610
+or x16, 1823
+xor x3, 1598
+xor x4, 968
+xor x5, 1621
+xor x6, 458
+xor x7, 780
+xor x8, 793
+xor x9, 757
+xor x10, 1581
+xor x11, 1495
+xor x12, 1385
+xor x13, 1015
+xor x14, 848
+xor x15, 1861
+xor x16, 377
+nor x3, 1446
+nor x4, 940
+nor x5, 982
+nor x6, 1284
+nor x7, 526
+nor x8, 1854
+nor x9, 952
+nor x10, 1749
+nor x11, 159
+nor x12, 1004
+nor x13, 777
+nor x14, 573
+nor x15, 1032
+nor x16, 347
+sll x3, 2013
+sll x4, 466
+sll x5, 795
+sll x6, 1362
+sll x7, 706
+sll x8, 1100
+sll x9, 948
+sll x10, 111
+sll x11, 632
+sll x12, 607
+sll x13, 1468
+sll x14, 1158
+sll x15, 1739
+sll x16, 1761
+srl x3, 1138
+srl x4, 897
+srl x5, 1002
+srl x6, 1736
+srl x7, 712
+srl x8, 873
+srl x9, 62
+srl x10, 831
+srl x11, 1956
+srl x12, 214
+srl x13, 885
+srl x14, 1253
+srl x15, 1712
+srl x16, 1781
+slt x3, 1767
+slt x4, 427
+slt x5, 1921
+slt x6, 417
+slt x7, 1311
+slt x8, 277
+slt x9, 302
+slt x10, 1013
+slt x11, 1160
+slt x12, 1551
+slt x13, 1659
+slt x14, 994
+slt x15, 1603
+slt x16, 1626
+sltu x3, 189
+sltu x4, 126
+sltu x5, 1409
+sltu x6, 930
+sltu x7, 836
+sltu x8, 310
+sltu x9, 1059
+sltu x10, 1743
+sltu x11, 841
+sltu x12, 1330
+sltu x13, 1599
+sltu x14, 539
+sltu x15, 570
+sltu x16, 1801
