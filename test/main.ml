@@ -84,7 +84,7 @@ end
 (************************************ Registers Tests *********************************** *)
 
 module RegisterTests = struct
-  let rfile = Registers.init
+  let rfile = Registers.init ()
   let rfile1 = update_register "x1" 5 rfile
   let rfile2 = update_register "x2" 7 rfile
   let rfile3 = update_register "x3" 56 rfile
@@ -106,7 +106,7 @@ module RegisterTests = struct
 
   let register_tests =
     [
-      test_register "init values" "x1" rfile 0l;
+      test_register "init () values" "x1" rfile 0l;
       test_register "update register" "x1" rfile1 5l;
       test_register "update register" "x2" rfile2 7l;
       test_register "update register" "x3" rfile3 56l;
@@ -120,7 +120,7 @@ end
 
 (************************************ Memory Tests *********************************** *)
 (*
-   let mem = memory_init
+   let mem = memory_init ()
    let mem1 = update_memory 0 5 mem
    let mem2 = update_memory 1 2 mem
    let mem3 = update_memory 15 5 mem
@@ -141,7 +141,7 @@ end
      let memory_tests =
        let _ = GenerateInstructions.gen_itype "subi" 15 [] in
        [
-         test_memory "init values" 0 mem 0;
+         test_memory "init () values" 0 mem 0;
          test_memory "update memory" 0 mem1 5;
          test_memory "update memory" 1 mem2 2;
          test_memory "update memory" 15 mem3 5;
@@ -149,26 +149,26 @@ end
    end *)
 (************************************ Memory Tests *********************************** *)
 
-let _ = Memory.(init |> pp_memory)
+let _ = Memory.(init () |> pp_memory)
 
 (************************************ Process Instructions Tests *********************************** *)
 module ProcessInstructionsTests = struct
   include RegisterTests
 
   let test_register_stype (name : string) (r : string)
-      (reg_mem : (int32 * bool) RegisterFile.t * (int32 * bool) Memory.Memory.t)
+      (mem : (int32 * bool) RegisterFile.t * (int32 * bool) Memory.Memory.t)
       (expected_output : int32) : test =
     name >:: fun _ ->
     assert_equal
-      (get_register r (fst reg_mem))
+      (get_register r (fst mem))
       expected_output ~printer:Int32.to_string
 
   let test_memory_stype (name : string) (addr : int)
-      (reg_mem : (int32 * bool) RegisterFile.t * (int32 * bool) Memory.Memory.t)
+      (mem : (int32 * bool) RegisterFile.t * (int32 * bool) Memory.Memory.t)
       (expected_output : int32) : test =
     name >:: fun _ ->
     assert_equal
-      (Memory.get_memory addr (snd reg_mem))
+      (Memory.get_memory addr (snd mem))
       expected_output ~printer:Int32.to_string
 
   let test_process_file_insns (name : string) (lst : string list)
@@ -183,7 +183,7 @@ module ProcessInstructionsTests = struct
         (int32 * bool) RegisterFile.t * (int32 * bool) Memory.Memory.t) : test =
     name >:: fun _ -> assert_equal (process_step_insns i r m) expected_output
 
-  let rfile = Registers.init
+  let rfile = Registers.init ()
   let rfile1 = process_itype "addi" "x1" "x1" "9" rfile
   let rfile2 = process_itype "addi" "x2" "x1" "10" rfile1
   let rfile3 = process_rtype "add" "x3" "x1" "x2" rfile2
@@ -206,25 +206,25 @@ module ProcessInstructionsTests = struct
   let rfile20 = process_itype "addi" "x20" "x20" "-2048" rfile19
   let rfile21 = process_itype "addi" "x21" "x21" "256" rfile20
   let rfile22 = process_itype "addi" "x23" "x23" "14" rfile20
-  let mem = Memory.init
-  let reg_mem1 = process_stype "sw" "x18" "12" "x17" rfile20 mem
-  let reg_mem2 = process_stype "sb" "x21" "12" "x1" rfile21 (snd reg_mem1)
-  let reg_mem3 = process_stype "lw" "x22" "5" "x2" rfile21 (snd reg_mem2)
-  let reg_mem4 = process_stype "sb" "x9" "2" "x23" rfile22 (snd reg_mem3)
-  let reg_mem5 = process_stype "lb" "x24" "2" "x23" rfile22 (snd reg_mem4)
+  let mem = Memory.init ()
+  let mem1 = process_stype "sw" "x18" "12" "x17" rfile20 mem
+  let mem2 = process_stype "sb" "x21" "12" "x1" rfile21 (snd mem1)
+  let mem3 = process_stype "lw" "x22" "5" "x2" rfile21 (snd mem2)
+  let mem4 = process_stype "sb" "x9" "2" "x23" rfile22 (snd mem3)
+  let mem5 = process_stype "lb" "x24" "2" "x23" rfile22 (snd mem4)
 
   let process_optype_tests =
     [
       test_register
-        "non-edge case of addi with positive offset where we first initialize \
-         an empty register"
+        "random case of addi with positive offset where we first initialize an \
+         empty register"
         "x1" rfile1 9l;
       test_register
-        "non-edge case of addi with positive offset where we use the value in \
-         1 register to initialize another register"
+        "random case of addi with positive offset where we use the value in 1 \
+         register to initialize another register"
         "x2" rfile2 19l;
       test_register
-        "non-edge case where we test that the values manipulated by previous \
+        "random case where we test that the values manipulated by previous \
          operations on previous register files still holds for the new \
          register file"
         "x1" rfile2 9l;
@@ -236,63 +236,66 @@ module ProcessInstructionsTests = struct
         "edge case where we test that the minimum integer that an itype \
          operation can represent is -2^11 "
         "x20" rfile20 (-2048l);
-      test_register "non-edge case of the add operation" "x3" rfile3 28l;
-      test_register "non-edge case of the sub operation" "x5" rfile5 19l;
-      test_register "non-edge case of the add operation" "x6" rfile6 1l;
-      test_register "non-edge case of the or operation" "x9" rfile9 11l;
-      test_register "non-edge case of the xor operation" "x10" rfile10 9l;
-      test_register "non-edge case of the sll operation" "x11" rfile11 3072l;
-      test_register "non-edge case of the srl operation" "x12" rfile12 1l;
+      test_register "random case of the add operation" "x3" rfile3 28l;
+      test_register "random case of the sub operation" "x5" rfile5 19l;
+      test_register "random case of the add operation" "x6" rfile6 1l;
+      test_register "random case of the or operation" "x9" rfile9 11l;
+      test_register "random case of the xor operation" "x10" rfile10 9l;
+      test_register "random case of the sll operation" "x11" rfile11 3072l;
+      test_register "random case of the srl operation" "x12" rfile12 1l;
       test_register
-        "non-edge case of the slt operation where we compare two signed \
-         integers"
+        "random case of the slt operation where we compare two signed integers"
         "x14" rfile14 1l;
       test_register
-        "non-edge case of the sltu operation where we compare two unsigned \
+        "random case of the sltu operation where we compare two unsigned \
          integers"
         "x15" rfile15 0l;
-      test_register "non-edge case of the andi operation" "x17" rfile17 12l;
-      test_register "non-edge case of the ori operation" "x18" rfile18 316l;
-      test_register "non-edge case of the xori operation" "x19" rfile19 402l;
+      test_register "random case of the andi operation" "x17" rfile17 12l;
+      test_register "random case of the ori operation" "x18" rfile18 316l;
+      test_register "random case of the xori operation" "x19" rfile19 402l;
       test_memory_stype
-        "non-edge case of sw operation in which we check the updated value at \
+        "random case of sw operation in which we check the updated value at \
          the memory address"
-        24 reg_mem1 60l;
+        24 mem1 60l;
       test_register_stype
-        "non-edge case of sw operation in which we check the value of the \
+        "random case of sw operation in which we check the value of the \
          register destination  which should be unchanged"
-        "x18" reg_mem1 316l;
+        "x18" mem1 316l;
       test_memory_stype
         "edge case of store operation in which we check that the max \
          representation of store byte is 2^8 - 1 since it wraps values greater \
          than this"
-        21 reg_mem2 0l;
+        21 mem2 0l;
       test_register_stype
-        "non-edge case of lw operation in which we check the value of the \
+        "random case of lw operation in which we check the value of the \
          register destination  which should be changed"
-        "x22" reg_mem3 316l;
+        "x22" mem3 316l;
       test_memory_stype
-        "non-edge case of lw operation in which we check the value at the \
-         memory address which should be unchanged"
-        24 reg_mem3 60l;
+        "random case of lw operation in which we check the value at the memory \
+         address which should be unchanged"
+        24 mem3 60l;
       test_memory_stype
-        "non-edge case of sb operation in which we check the value of the \
+        "random case of sb operation in which we check the value of the \
          register destination  which should be changed"
-        16 reg_mem4 11l;
+        16 mem4 11l;
       test_register_stype
-        "non-edge case of lb operation in which we check the value of the \
+        "random case of lb operation in which we check the value of the \
          register destination  which should be changed"
-        "x24" reg_mem5 11l;
+        "x24" mem5 11l;
     ]
 
   let process_file_insns_tests = []
 
   let process_step_insns_tests =
     [
-      test_process_step_insns "step test" "addi x1 x1 9" rfile mem (rfile1, mem);
-      test_process_step_insns "step test" "sub x2 x1 3" rfile mem (rfile2, mem);
-      test_process_step_insns "step test" "andi x2 x1 3" rfile mem (rfile3, mem);
-      test_process_step_insns "step test" "sll x2 x1 3" rfile mem (rfile4, mem);
+      test_process_step_insns "step test" "addi x1, x1, 9" rfile mem
+        (rfile1, mem);
+      test_process_step_insns "step test" "add x3, x1, x2" rfile2 mem
+        (rfile3, mem);
+      test_process_step_insns "step test" "addi x4, x4, 2047" rfile3 mem
+        (rfile4, mem);
+      test_process_step_insns "step test" "sub x5, x3, x1" rfile4 mem
+        (rfile5, mem);
     ]
 end
 

@@ -1,7 +1,7 @@
 module Memory : Map.S
 (* Simulates processor's memory. Memory addresses are word-aligned. *)
 
-val init : (Int32.t * bool) Memory.t
+val init : unit -> (Int32.t * bool) Memory.t
 (** [init] is a memory with all memory addresses initialized to 0.*)
 
 val pp_memory : (Int32.t * bool) Memory.t -> unit

@@ -245,7 +245,7 @@ and process opt =
         ansi_print_red "PROMPT";
         ansi_print_blue
           "\tEnter the instruction. Hit the Return Key when done\n";
-        eval_insn_step_format (Registers.init, Memory.init)
+        eval_insn_step_format (Registers.init (), Memory.init ())
     | "3" -> gen_insns_handler ()
     | "m" | "menu" -> main ()
     | "q" | "quit" ->
