@@ -49,7 +49,7 @@ let eval_shift_r_insns rd rs1 rs2 rfile op =
 
 let eval_shift_i_insns rd rs imm rfile op =
   let open Int32 in
-  let in1, in2 = (get_register rs rfile, of_string rs) in
+  let in1, in2 = (get_register rs rfile, of_string imm) in
   if in2 > max_i || in2 < min_i then raise (IncorrectITypeFormat !ins_track)
   else
     let res = op in1 (to_int in2) in
