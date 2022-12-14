@@ -30,14 +30,16 @@ let compare_int32 n1 n2 =
   let n = compare n1 n2 in
   if n = 1 then 0l else 1l
 
-(** [eval_r_insns rd rs1 rs2 rfile op] evalues instruction type [op],  and puts
-    it into [rd]*)
+(** [eval_r_insns rd rs1 rs2 rfile op] evaluates r-type instructions [op] with 
+    registers [rs1] and [rs2] and puts it into [rd]*)
 let eval_r_insns rd rs1 rs2 rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs1 rfile, get_register rs2 rfile) in
   let res = op in1 in2 in
   update_register rd (Int32.to_int res) rfile
 
+(** [eval_i_insns rd rs imm rfile op ] evaluates i-type instructions [op] with 
+    registers [rs] and immediate [imm] and puts it into [rd]*)
 let eval_i_insns rd rs imm rfile op =
   let open Int32 in
   let in1, in2 = (get_register rs rfile, of_string imm) in
@@ -60,6 +62,8 @@ let eval_shift_i_insns rd rs imm rfile op =
     let res = op in1 (to_int in2) in
     update_register rd (Int32.to_int res) rfile |> update_register "x0" 0
 
+(** [eval_store_insns op rs1 offset rs2 rfile mem] updates the memory 
+    addresses for s-type instructions.*)
 let eval_store_insns op rs1 offset rs2 rfile mem =
   let open Int32 in
   let v = get_register rs1 rfile in
