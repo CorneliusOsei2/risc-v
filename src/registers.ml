@@ -61,3 +61,5 @@ let get_register r rfile =
     let open RegisterFile in
     fst (find r rfile)
   with Not_found -> failwith "Invalud register"
+
+let get_rval v = Int32.to_int v

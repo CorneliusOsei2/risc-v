@@ -4,9 +4,10 @@ open ProcessInstructions
 open Utilities
 
 let acc = ref []
+(* Accumulates generated instructions.  *)
 
 let rec gen_rtype op n =
-  if n mod 15 = 0 then ()
+  if n mod 3 = 0 then ()
   else
     let rd = gen_register n in
     let rs1 = gen_register (n + 1) in
@@ -15,7 +16,7 @@ let rec gen_rtype op n =
     gen_rtype op (n + 1)
 
 let rec gen_itype op n =
-  if n mod 15 = 0 then ()
+  if n mod 3 = 0 then ()
   else
     let rd = gen_register n in
     let rs1 = gen_register (n + 1) in
@@ -24,7 +25,7 @@ let rec gen_itype op n =
     gen_itype op (n + 1)
 
 let rec gen_swtype op n =
-  if n mod 15 = 0 then ()
+  if n mod 3 = 0 then ()
   else
     let rd = gen_register n in
     let rs1 = "x0" in
@@ -34,7 +35,7 @@ let rec gen_swtype op n =
     gen_swtype op (n + 1)
 
 let rec gen_sbtype op n =
-  if n mod 15 = 0 then ()
+  if n mod 3 = 0 then ()
   else
     let rd = gen_register n in
     let rs1 = "x0" in
@@ -44,7 +45,7 @@ let rec gen_sbtype op n =
     gen_swtype op (n + 1)
 
 let rec gen_utype op n =
-  if n mod 15 = 0 then ()
+  if n mod 3 = 0 then ()
   else
     let rd = gen_register n in
     let imm = gen_imm (Int32.of_int ~-2048) 2047l in
@@ -86,10 +87,10 @@ let gen_specific_insns ops =
   acc := []
 
 let rec gen_insns () =
-  ignore (List.map (fun op -> gen_itype op 1) rtype);
+  ignore (List.map (fun op -> gen_itype op 1) itype);
   ignore (List.map (fun op -> gen_rtype op 1) rtype);
-  ignore (List.map (fun op -> gen_swtype op 1) rtype);
-  ignore (List.map (fun op -> gen_sbtype op 1) rtype);
-  ignore (List.map (fun op -> gen_utype op 1) rtype);
+  ignore (List.map (fun op -> gen_swtype op 1) [ "sw"; "sw" ]);
+  ignore (List.map (fun op -> gen_sbtype op 1) [ "sb"; "lb" ]);
+  ignore (List.map (fun op -> gen_utype op 1) utype);
   list_to_file (List.rev !acc);
   acc := []

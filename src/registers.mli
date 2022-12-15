@@ -17,6 +17,9 @@ val get_register : string -> (Int32.t * bool) RegisterFile.t -> Int32.t
 (** [get_register r rfile] returns the integer value stored at [r] in register 
     [rfile].*)
 
+val get_rval : Int32.t -> int
+(** get_rval[n] is the integer value of [n] stored at register. *)
+
 val update_register :
   string ->
   int ->
