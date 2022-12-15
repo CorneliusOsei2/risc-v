@@ -60,6 +60,20 @@ module UtilityTests = struct
       (expected_output : string list) : test =
     name >:: fun _ -> assert_equal expected_output (list_of_string s)
 
+  (*[test_dec_to_hex name i expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [dec_to_hex i]*)
+  let test_dec_to_hex (name : string) (i : int) (expected_output : string) :
+      test =
+    name >:: fun _ ->
+    assert_equal expected_output (dec_to_hex i) ~printer:Fun.id
+
+  (*[test_dec_to_bin name i expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [dec_to_bin i]*)
+  let test_dec_to_bin (name : string) (i : int) (expected_output : string) :
+      test =
+    name >:: fun _ ->
+    assert_equal expected_output (dec_to_bin i) ~printer:Fun.id
+
   let split_riu_instruction_tests =
     [
       test_split_instruction "no extra whitespaces" "add x1, x2, x3"
@@ -84,29 +98,30 @@ module UtilityTests = struct
     [
       test_split_stype "valid sw instruction" "sw x2, 0x45(x4)"
         ("sw", [ "x2"; "0x45"; "x4" ]);
-      test_split_stype "binary" "sw x3, 0b10111(x6)"
+      test_split_stype "binary immediate" "sw x3, 0b10111(x6)"
         ("sw", [ "x3"; "0b10111"; "x6" ]);
-      test_split_stype "decimal" "sb x3, 55(x6)" ("sb", [ "x3"; "55"; "x6" ]);
+      test_split_stype "decimal immediate" "sb x3, 55(x6)"
+        ("sb", [ "x3"; "55"; "x6" ]);
     ]
 
   let valid_register_tests =
     [
-      test_valid_register "valid" "x13" true;
-      test_valid_register "invalid" "x145" false;
-      test_valid_register "invalid" "x-145" false;
-      test_valid_register "valid" "13x" false;
-      test_valid_register "invalid - whitespace string" " " false;
-      test_valid_register "valid" "x1" true;
-      test_valid_register "invalid" "xop" false;
-      test_valid_register "invalid" "..." false;
-      test_valid_register "invalid - empty" "" false;
+      test_valid_register "valid register" "x13" true;
+      test_valid_register "invalid register" "x145" false;
+      test_valid_register "invalid register" "x-145" false;
+      test_valid_register "valid register" "13x" false;
+      test_valid_register "invalid register - whitespace string" " " false;
+      test_valid_register "valid register" "x1" true;
+      test_valid_register "invalid register" "xop" false;
+      test_valid_register "invalid register" "..." false;
+      test_valid_register "invalid register - empty" "" false;
     ]
 
   let fill_strings_tests =
     [
       test_fill_string "pad with whitespace" 8 ' ' "hello" "   hello";
       test_fill_string "pad front with 0s" 4 '0' "99" "0099";
-      test_fill_string "pad front with 0s" 4 ' ' "" "    ";
+      test_fill_string "pad front with whitespace" 4 ' ' "" "    ";
       test_fill_string_rev "pad back with 0s" 5 '0' "99" "99000";
       test_fill_string_rev "pad back with 1s" 10 '1' "0" "0111111111";
     ]
@@ -128,6 +143,26 @@ module UtilityTests = struct
         [ "x10"; "x12"; "x11" ];
     ]
 
+  let dec_to_hex_tests =
+    [
+      test_dec_to_hex "convert 0 to hex" 0 "0x00000000";
+      test_dec_to_hex "convert -250 to hex" (-250) "0x7fffff06";
+      test_dec_to_hex "convert 256 to hex" 256 "0x00000100";
+      test_dec_to_hex "convert 15 to hex" 25 "0x00000019";
+    ]
+
+  let dec_to_bin_tests =
+    [
+      test_dec_to_bin "convert 0 to binary" 0
+        "0b00000000000000000000000000000000";
+      test_dec_to_bin "convert -255 to binary" (-255)
+        "0b11111111111111111111111100000001";
+      test_dec_to_bin "convert 256 to binary" 256
+        "0b00000000000000000000000100000000";
+      test_dec_to_bin "convert 17 to binary" 17
+        "0b00000000000000000000000000010001";
+    ]
+
   let tests =
     List.flatten
       [
@@ -137,6 +172,8 @@ module UtilityTests = struct
         fill_strings_tests;
         pow_tests;
         string_list_tests;
+        dec_to_hex_tests;
+        dec_to_bin_tests;
       ]
 end
 
