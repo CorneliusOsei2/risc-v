@@ -60,6 +60,20 @@ module UtilityTests = struct
       (expected_output : string list) : test =
     name >:: fun _ -> assert_equal expected_output (list_of_string s)
 
+  (*[test_dec_to_hex name i expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [dec_to_hex i]*)
+  let test_dec_to_hex (name : string) (i : int) (expected_output : string) :
+      test =
+    name >:: fun _ ->
+    assert_equal expected_output (dec_to_hex i) ~printer:Fun.id
+
+  (*[test_dec_to_bin name i expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [dec_to_bin i]*)
+  let test_dec_to_bin (name : string) (i : int) (expected_output : string) :
+      test =
+    name >:: fun _ ->
+    assert_equal expected_output (dec_to_bin i) ~printer:Fun.id
+
   let split_riu_instruction_tests =
     [
       test_split_instruction "no extra whitespaces" "add x1, x2, x3"
@@ -129,6 +143,26 @@ module UtilityTests = struct
         [ "x10"; "x12"; "x11" ];
     ]
 
+  let dec_to_hex_tests =
+    [
+      test_dec_to_hex "convert 0 to hex" 0 "0x00000000";
+      test_dec_to_hex "convert -250 to hex" (-250) "0x7fffff06";
+      test_dec_to_hex "convert 256 to hex" 256 "0x00000100";
+      test_dec_to_hex "convert 15 to hex" 25 "0x00000019";
+    ]
+
+  let dec_to_bin_tests =
+    [
+      test_dec_to_bin "convert 0 to binary" 0
+        "0b00000000000000000000000000000000";
+      test_dec_to_bin "convert -255 to binary" (-255)
+        "0b11111111111111111111111100000001";
+      test_dec_to_bin "convert 256 to binary" 256
+        "0b00000000000000000000000100000000";
+      test_dec_to_bin "convert 17 to binary" 17
+        "0b00000000000000000000000000010001";
+    ]
+
   let tests =
     List.flatten
       [
@@ -138,6 +172,8 @@ module UtilityTests = struct
         fill_strings_tests;
         pow_tests;
         string_list_tests;
+        dec_to_hex_tests;
+        dec_to_bin_tests;
       ]
 end
 
