@@ -288,105 +288,91 @@ module ProcessInstructionsTests = struct
     name >:: fun _ -> assert_equal (process_step_insns i r m) expected_output
 
   let rfile = Registers.init ()
-  let rfile1 = process_itype "addi" "x1" "x1" "9" rfile
-  let rfile2 = process_itype "addi" "x2" "x1" "10" rfile1
-  let rfile3 = process_rtype "add" "x3" "x1" "x2" rfile2
-  let rfile4 = process_itype "addi" "x4" "x4" "2047" rfile3
-  let rfile5 = process_rtype "sub" "x5" "x3" "x1" rfile4
-  let rfile6 = process_rtype "and" "x6" "x5" "x1" rfile5
-  let rfile7 = process_itype "addi" "x7" "x7" "3" rfile6
-  let rfile8 = process_itype "addi" "x8" "x8" "10" rfile7
-  let rfile9 = process_rtype "or" "x9" "x7" "x8" rfile8
-  let rfile10 = process_rtype "xor" "x10" "x7" "x8" rfile9
-  let rfile11 = process_rtype "sll" "x11" "x7" "x8" rfile10
-  let rfile12 = process_rtype "srl" "x12" "x8" "x7" rfile11
-  let rfile13 = process_itype "addi" "x13" "x13" "-25" rfile12
-  let rfile14 = process_rtype "slt" "x14" "x13" "x14" rfile13
-  let rfile15 = process_rtype "sltu" "x15" "x13" "x14" rfile14
-  let rfile16 = process_itype "addi" "x16" "x16" "300" rfile15
-  let rfile17 = process_itype "andi" "x17" "x16" "159" rfile16
-  let rfile18 = process_itype "ori" "x18" "x16" "48" rfile17
-  let rfile19 = process_itype "xori" "x19" "x18" "174" rfile18
-  let rfile20 = process_itype "addi" "x20" "x20" "-2048" rfile19
-  let rfile21 = process_itype "addi" "x21" "x21" "256" rfile20
-  let rfile22 = process_itype "addi" "x23" "x23" "14" rfile20
-  let mem = Memory.init ()
-  let mem1 = process_stype "sw" "x18" "12" "x17" rfile20 mem
-  let mem2 = process_stype "sb" "x21" "12" "x1" rfile21 (snd mem1)
-  let mem3 = process_stype "lw" "x22" "5" "x2" rfile21 (snd mem2)
-  let mem4 = process_stype "sb" "x9" "2" "x23" rfile22 (snd mem3)
-  let mem5 = process_stype "lb" "x24" "2" "x23" rfile22 (snd mem4)
+  let rfile1, mem1 = process_step_insns "addi x3, x4, 1569" rfile mem
+  let rfile2, mem2 = process_step_insns "addi x4, x5, 1812" rfile mem
+  let rfile1, mem1 = process_step_insns "sub x4, x5, 495" rfile mem
+  let rfile1, mem1 = process_step_insns "and x3, x4, 239" rfile mem
+  let rfile1, mem1 = process_step_insns "and x6, x7, 393" rfile mem
+  let rfile1, mem1 = process_step_insns "sw x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
 
   let process_optype_tests =
-    [
-      test_register
-        "random case of addi with positive offset where we first initialize an \
-         empty register"
-        "x1" rfile1 9l;
-      test_register
-        "random case of addi with positive offset where we use the value in 1 \
-         register to initialize another register"
-        "x2" rfile2 19l;
-      test_register
-        "random case where we test that the values manipulated by previous \
-         operations on previous register files still holds for the new \
-         register file"
-        "x1" rfile2 9l;
-      test_register
-        "edge case where we test that the maximum integer that an itype \
-         operations can represent is 2^11 - 1 "
-        "x4" rfile4 2047l;
-      test_register
-        "edge case where we test that the minimum integer that an itype \
-         operation can represent is -2^11 "
-        "x20" rfile20 (-2048l);
-      test_register "random case of the add operation" "x3" rfile3 28l;
-      test_register "random case of the sub operation" "x5" rfile5 19l;
-      test_register "random case of the add operation" "x6" rfile6 1l;
-      test_register "random case of the or operation" "x9" rfile9 11l;
-      test_register "random case of the xor operation" "x10" rfile10 9l;
-      test_register "random case of the sll operation" "x11" rfile11 3072l;
-      test_register "random case of the srl operation" "x12" rfile12 1l;
-      test_register
-        "random case of the slt operation where we compare two signed integers"
-        "x14" rfile14 1l;
-      test_register
-        "random case of the sltu operation where we compare two unsigned \
-         integers"
-        "x15" rfile15 0l;
-      test_register "random case of the andi operation" "x17" rfile17 12l;
-      test_register "random case of the ori operation" "x18" rfile18 316l;
-      test_register "random case of the xori operation" "x19" rfile19 402l;
-      test_memory_stype
-        "random case of sw operation in which we check the updated value at \
-         the memory address"
-        24 mem1 60l;
-      test_register_stype
-        "random case of sw operation in which we check the value of the \
-         register destination  which should be unchanged"
-        "x18" mem1 316l;
-      test_memory_stype
-        "edge case of store operation in which we check that the max \
-         representation of store byte is 2^8 - 1 since it wraps values greater \
-         than this"
-        21 mem2 0l;
-      test_register_stype
-        "random case of lw operation in which we check the value of the \
-         register destination  which should be changed"
-        "x22" mem3 316l;
-      test_memory_stype
-        "random case of lw operation in which we check the value at the memory \
-         address which should be unchanged"
-        24 mem3 60l;
-      test_memory_stype
-        "random case of sb operation in which we check the value of the \
-         register destination  which should be changed"
-        16 mem4 11l;
-      test_register_stype
-        "random case of lb operation in which we check the value of the \
-         register destination  which should be changed"
-        "x24" mem5 11l;
-    ]
+    [ (* test_register
+           "random case of addi with positive offset where we first initialize an \
+            empty register"
+           "x1" rfile1 9l;
+         test_register
+           "random case of addi with positive offset where we use the value in 1 \
+            register to initialize another register"
+           "x2" rfile2 19l;
+         test_register
+           "random case where we test that the values manipulated by previous \
+            operations on previous register files still holds for the new \
+            register file"
+           "x1" rfile2 9l;
+         test_register
+           "edge case where we test that the maximum integer that an itype \
+            operations can represent is 2^11 - 1 "
+           "x3" rfile4 2047l;
+         test_register
+           "edge case where we test that the minimum integer that an itype \
+            operation can represent is -2^11 "
+           "x20" rfile20 (-2048l);
+         test_register "random case of the add operation" "x3" rfile3 28l;
+         test_register "random case of the sub operation" "x5" rfile5 19l;
+         test_register "random case of the add operation" "x6" rfile6 1l;
+         test_register "random case of the or operation" "x9" rfile9 11l;
+         test_register "random case of the xor operation" "x10" rfile10 9l;
+         test_register "random case of the sll operation" "x11" rfile11 3072l;
+         test_register "random case of the srl operation" "x12" rfile12 1l;
+         test_register
+           "random case of the slt operation where we compare two signed integers"
+           "x14" rfile14 1l;
+         test_register
+           "random case of the sltu operation where we compare two unsigned \
+            integers"
+           "x15" rfile15 0l;
+         test_register "random case of the andi operation" "x17" rfile17 12l;
+         test_register "random case of the ori operation" "x18" rfile18 316l;
+         test_register "random case of the xori operation" "x19" rfile19 402l;
+         test_memory_stype
+           "random case of sw operation in which we check the updated value at \
+            the memory address"
+           24 mem1 60l;
+         test_register_stype
+           "random case of sw operation in which we check the value of the \
+            register destination  which should be unchanged"
+           "x18" mem1 316l;
+         test_memory_stype
+           "edge case of store operation in which we check that the max \
+            representation of store byte is 2^8 - 1 since it wraps values greater \
+            than this"
+           21 mem2 0l;
+         test_register_stype
+           "random case of lw operation in which we check the value of the \
+            register destination  which should be changed"
+           "x22" mem3 316l;
+         test_memory_stype
+           "random case of lw operation in which we check the value at the memory \
+            address which should be unchanged"
+           24 mem3 60l;
+         test_memory_stype
+           "random case of sb operation in which we check the value of the \
+            register destination  which should be changed"
+           16 mem4 11l;
+         test_register_stype
+           "random case of lb operation in which we check the value of the \
+            register destination  which should be changed"
+           "x24" mem5 11l; *) ]
 
   let instr_list =
     [
@@ -429,23 +415,30 @@ module ProcessInstructionsTests = struct
 
   let process_step_insns_tests =
     [
-      test_process_step_insns "step test" "add x3, x1, x2" rfile2 mem
-        (rfile3, mem);
-      test_process_step_insns "step test" "addi x4, x4, 2047" rfile3 mem
-        (rfile4, mem);
-      test_process_step_insns "step test" "sub x5, x3, x1" rfile4 mem
-        (rfile5, mem);
-      test_process_step_insns "step test" "sll x11, x7, x8" rfile10 mem
-        (rfile11, mem);
-      test_process_step_insns "step test" "xor x10, x7, x8" rfile9 mem
-        (rfile10, mem);
-      test_process_step_insns "step test" "sw x18, 12(x17)" rfile20 mem mem1;
-      test_process_step_insns "step test" "sb x9, 2(x23)" rfile22 (snd mem3)
-        mem4;
-      test_process_step_insns "step test" "lw x22, 5(x2)" rfile21 (snd mem2)
-        mem3;
-      test_process_step_insns "step test" "lb x24, 2(x23)" rfile22 (snd mem4)
-        mem5;
+      test_register "" "x3" rfile 1569l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l
+      (*;
+        test_memory "" 0 mem 0l;
+        test_process_step_insns "step test" "add x3, x1, x2" rfile2 mem
+          (rfile3, mem);
+        test_process_step_insns "step test" "add x3, x1, x2" rfile2 mem
+          (rfile3, mem);
+        test_process_step_insns "step test" "addi x4, x4, 2047" rfile3 mem
+          (rfile4, mem);
+        test_process_step_insns "step test" "sub x5, x3, x1" rfile4 mem
+          (rfile5, mem);
+        test_process_step_insns "step test" "sll x11, x7, x8" rfile10 mem
+          (rfile11, mem);
+        test_process_step_insns "step test" "xor x10, x7, x8" rfile9 mem
+          (rfile10, mem);
+        (* test_process_step_insns "step test" "sw x18, 12(x17)" rfile20 mem mem1; *)
+        test_process_step_insns "step test" "sb x9, 2(x23)" rfile22 (snd mem3)
+          mem4;
+        test_process_step_insns "step test" "lw x22, 5(x2)" rfile21 (snd mem2)
+          mem3;
+        test_process_step_insns "step test" "lb x24, 2(x23)" rfile22 (snd mem4)
+          mem5; *);
     ]
 end
 
