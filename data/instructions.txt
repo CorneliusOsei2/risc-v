@@ -1,9 +1,11 @@
 addi x3, x4, 1569
 addi x4, x5, 1812
-andi x3, x4, 0x101
-andi x4, x5, 339
-slli x3, x4, 4
-slli x4, x5, 5
+sub x3, x4, x5
+ori x3, x4, 3
+ori x4, x5, 0x12
+xori x3, x4, 1623
+xori x4, x5, 1405
+xor x3, x4, x5
 srli x3, x4, 1
 srli x4, x5, 7
 add x3, x4, x5
@@ -22,15 +24,20 @@ sll x4, x5, x6
 srl x3, x4, x5
 sub x4, x5, x6
 and x3, x4, x5
-sw x4, 24(x0)
-sb x3, 16(x0)
-sb x4, 24(x0)
-lb x3, 30(x0)
-lb x4, 0(x0)
+sub x3, x4, x5
+ori x3, x4, 3
+ori x4, x5, 0x12
+xori x3, x4, 0x123
+xori x4, x5, 1405
+xor x3, x4, x5
+lui x3, 1637
+sltu x3, x4, x5
+sltu x4, x5, x6
+sw x3, 0(x0)
+xori x4, x5, 1405
+xor x3, x4, x5
 lui x3, 1637
 sltu x3, x4, x5
 sltu x4, x5, x6
 sw x3, 0(x0)
 sw x4, 24(x0)
-sw x3, 8(x0)
-lui x4, 1872
