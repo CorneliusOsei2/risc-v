@@ -314,21 +314,21 @@ module ProcessInstructionsTests = struct
 
   let rfile = Registers.init ()
   let rfile1, mem1 = process_step_insns "addi x3, x4, 1569" rfile mem
-  let rfile2, mem2 = process_step_insns "addi x4, x5, 1812" rfile mem
-  let rfile1, mem1 = process_step_insns "sub x4, x5, 495" rfile mem
-  let rfile1, mem1 = process_step_insns "and x3, x4, 239" rfile mem
-  let rfile1, mem1 = process_step_insns "and x6, x7, 393" rfile mem
-  let rfile1, mem1 = process_step_insns "sw x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
-  let rfile1, mem1 = process_step_insns "addi x3, x1, 2" rfile mem
+  let rfile2, mem2 = process_step_insns "addi x4, x5, 1812" rfile1 mem1
+  let rfile3, mem3 = process_step_insns "sub x4, x5, 495" rfile2 mem2
+  let rfile4, mem4 = process_step_insns "and x3, x4, 239" rfile3 mem3
+  let rfile5, mem5 = process_step_insns "and x6, x7, 393" rfile4 mem4
+  let rfile6, mem6 = process_step_insns "sw x3, x1, 2" rfile5 mem5
+  let rfile7, mem7 = process_step_insns "addi x3, x1, 2" rfile6 mem6
+  let rfile8, mem8 = process_step_insns "addi x3, x1, 2" rfile7 mem7
+  let rfile9, mem9 = process_step_insns "addi x3, x1, 2" rfile8 mem8
+  let rfile10, mem10 = process_step_insns "addi x3, x1, 2" rfile9 mem9
+  let rfile11, mem11 = process_step_insns "addi x3, x1, 2" rfile10 mem10
+  let rfile12, mem12 = process_step_insns "addi x3, x1, 2" rfile11 mem11
+  let rfile13, mem13 = process_step_insns "addi x3, x1, 2" rfile12 mem12
+  let rfile14, mem14 = process_step_insns "addi x3, x1, 2" rfile13 mem13
+  let rfile15, mem15 = process_step_insns "addi x3, x1, 2" rfile14 mem14
+  let rfile16, mem16 = process_step_insns "addi x3, x1, 2" rfile15 mem15
 
   let process_optype_tests =
     [ (* test_register
@@ -441,6 +441,35 @@ module ProcessInstructionsTests = struct
   let process_step_insns_tests =
     [
       test_register "" "x3" rfile 1569l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x3" rfile 1569l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
+      test_register "" "x4" rfile1 1812l;
+      test_memory "" 0 mem 12l;
       test_register "" "x4" rfile1 1812l;
       test_memory "" 0 mem 12l
       (*;
