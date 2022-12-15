@@ -107,7 +107,7 @@ module UtilityTests = struct
     [
       test_fill_string "pad with whitespace" 8 ' ' "hello" "   hello";
       test_fill_string "pad front with 0s" 4 '0' "99" "0099";
-      test_fill_string "pad front with 0s" 4 ' ' "" "    ";
+      test_fill_string "pad front with whitespace" 4 ' ' "" "    ";
       test_fill_string_rev "pad back with 0s" 5 '0' "99" "99000";
       test_fill_string_rev "pad back with 1s" 10 '1' "0" "0111111111";
     ]
