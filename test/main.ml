@@ -47,6 +47,19 @@ module UtilityTests = struct
     name >:: fun _ ->
     assert_equal expected_output (pow a n) ~printer:string_of_int
 
+  (*[test_string_of_list name lst expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [string_of_list lst]*)
+  let test_string_of_list (name : string) (lst : string list)
+      (expected_output : string) : test =
+    name >:: fun _ ->
+    assert_equal expected_output (string_of_list lst) ~printer:String.escaped
+
+  (*[test_list_of_string name s expected_output] constructs an OUnit test
+    named [name] that asserts the quality of expected output with [list_of_string s]*)
+  let test_list_of_string (name : string) (s : string)
+      (expected_output : string list) : test =
+    name >:: fun _ -> assert_equal expected_output (list_of_string s)
+
   let split_riu_instruction_tests =
     [
       test_split_instruction "no extra whitespaces" "add x1, x2, x3"
@@ -73,6 +86,7 @@ module UtilityTests = struct
         ("sw", [ "x2"; "0x45"; "x4" ]);
       test_split_stype "binary" "sw x3, 0b10111(x6)"
         ("sw", [ "x3"; "0b10111"; "x6" ]);
+      test_split_stype "decimal" "sb x3, 55(x6)" ("sb", [ "x3"; "55"; "x6" ]);
     ]
 
   let valid_register_tests =
@@ -105,6 +119,15 @@ module UtilityTests = struct
       test_pow "2^10" 2 10 1024;
     ]
 
+  let string_list_tests =
+    [
+      test_string_of_list "non-empty string" [ "1"; "2"; "3" ] "[1, 2, 3]";
+      test_string_of_list "empty list" [] "[]";
+      test_list_of_string "string to list" "1, 2, 3" [ "1"; "2"; "3" ];
+      test_list_of_string "string of registers to list" "x10, x12, x11"
+        [ "x10"; "x12"; "x11" ];
+    ]
+
   let tests =
     List.flatten
       [
@@ -113,6 +136,7 @@ module UtilityTests = struct
         valid_register_tests;
         fill_strings_tests;
         pow_tests;
+        string_list_tests;
       ]
 end
 
