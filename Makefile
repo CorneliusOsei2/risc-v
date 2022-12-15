@@ -46,6 +46,9 @@ finalcheck:
 opendoc: doc
 	@bash opendoc.sh
 
+pull:
+	git pull origin main
+	
 zip:
 	rm -f risc_v_exec_gen.zip
 	zip -r risc_v_exec_gen.zip . -x@exclude.lst
